@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SaaS POS WiinMart - AI Visual Product Scanner</title>
     
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#16a34a">
-    
     <link class="apple-touch-icon" href="https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg">
     <link rel="icon" type="image/jpeg" href="https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg">
     
@@ -30,7 +27,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col md:flex-row" x-data="posApp()">
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col md:flex-row pb-20 md:pb-0" x-data="posApp()">
 
     <div x-show="!userLoggedIn" class="w-full min-h-screen flex items-center justify-center p-4 bg-slate-900" x-transition>
         <div class="bg-white p-8 rounded-3xl w-full max-w-sm shadow-2xl">
@@ -58,8 +55,10 @@
 
     <div x-show="userLoggedIn" class="w-full flex flex-col md:flex-row" x-cloak>
         
-        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col sticky top-0 h-auto md:h-screen z-50 shadow-xl overflow-y-auto">
-            <div class="p-4 bg-slate-950 border-b border-slate-800 space-y-2.5">
+        <!-- SIDEBAR UNTUK DEKTOP / BOTTOM NAV UNTUK HP (GAYA APLIKASI KASIR PROFESIONAL) -->
+        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col fixed bottom-0 left-0 right-0 md:sticky md:top-0 h-auto md:h-screen z-50 shadow-2xl md:shadow-xl overflow-x-auto md:overflow-y-auto border-t border-slate-800 md:border-t-0">
+            <!-- Header profil toko disembunyikan di HP agar hemat ruang layar transaksi -->
+            <div class="hidden md:block p-4 bg-slate-950 border-b border-slate-800 space-y-2.5">
                 <div class="flex items-center gap-3">
                     <img :src="profilToko.logo || 'https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg'" class="w-12 h-12 rounded-xl object-cover border border-slate-700 shadow-inner flex-shrink-0">
                     <div class="min-w-0 flex-1">
@@ -73,17 +72,34 @@
                 </div>
             </div>
             
-            <nav class="flex-1 p-4 space-y-2.5 text-xs font-semibold">
-                <button @click="adminTab = 'profil'" :class="adminTab === 'profil' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-store w-4 text-center"></i> 1. Profil Toko</button>
-                <button @click="adminTab = 'master'" :class="adminTab === 'master' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-folder-tree w-4 text-center"></i> 2. Menu Master</button>
-                <button @click="adminTab = 'stok'" :class="adminTab === 'stok' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-boxes-stacked w-4 text-center"></i> 3. Stok & Inventaris</button>
-                <button @click="adminTab = 'pembelian'; subTabPembelian = 'menu'" :class="adminTab === 'pembelian' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-truck-ramp-box w-4 text-center"></i> 4. Menu Pembelian</button>
-                <button @click="adminTab = 'pos'" :class="adminTab === 'pos' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-calculator w-4 text-center"></i> 5. Transaksi POS Kasir</button>
-                <button @click="adminTab = 'keuangan'; subTabKeuangan = 'menu'" :class="adminTab === 'keuangan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-scale-balanced w-4 text-center"></i> 6. Menu Keuangan</button>
-                <button @click="adminTab = 'laporan'; subTabLaporan = 'menu'" :class="adminTab === 'laporan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-chart-line w-4 text-center"></i> 7. Menu Laporan</button>
+            <!-- Menu Navigasi Adaptif: Baris horizontal di HP, List Vertikal di PC Desktop -->
+            <nav class="flex flex-row md:flex-col justify-between md:justify-start items-center md:items-stretch p-2 md:p-4 space-x-1 md:space-x-0 md:space-y-2.5 text-[10px] md:text-xs font-semibold min-w-max md:min-w-0 w-full">
+                <button @click="adminTab = 'profil'" :class="adminTab === 'profil' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2 md:py-2.5 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-2 transition text-center md:text-left">
+                    <i class="fa fa-store w-4 text-center text-sm md:text-base"></i> <span class="whitespace-nowrap">Profil</span>
+                </button>
+                <button @click="adminTab = 'master'" :class="adminTab === 'master' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2 md:py-2.5 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-2 transition text-center md:text-left">
+                    <i class="fa fa-folder-tree w-4 text-center text-sm md:text-base"></i> <span class="whitespace-nowrap">Master</span>
+                </button>
+                <button @click="adminTab = 'stok'" :class="adminTab === 'stok' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2 md:py-2.5 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-2 transition text-center md:text-left">
+                    <i class="fa fa-boxes-stacked w-4 text-center text-sm md:text-base"></i> <span class="whitespace-nowrap">Stok</span>
+                </button>
+                <button @click="adminTab = 'pembelian'; subTabPembelian = 'menu'" :class="adminTab === 'pembelian' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2 md:py-2.5 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-2 transition text-center md:text-left">
+                    <i class="fa fa-truck-ramp-box w-4 text-center text-sm md:text-base"></i> <span class="whitespace-nowrap">Pembelian</span>
+                </button>
+                <button @click="adminTab = 'pos'" :class="adminTab === 'pos' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2 md:py-2.5 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-2 transition text-center md:text-left">
+                    <i class="fa fa-calculator w-4 text-center text-sm md:text-base"></i> <span class="whitespace-nowrap">Kasir POS</span>
+                </button>
+                <button @click="adminTab = 'keuangan'; subTabKeuangan = 'menu'" :class="adminTab === 'keuangan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2 md:py-2.5 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-2 transition text-center md:text-left">
+                    <i class="fa fa-scale-balanced w-4 text-center text-sm md:text-base"></i> <span class="whitespace-nowrap">Keuangan</span>
+                </button>
+                <button @click="adminTab = 'laporan'; subTabLaporan = 'menu'" :class="adminTab === 'laporan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2 md:py-2.5 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-2 transition text-center md:text-left">
+                    <i class="fa fa-chart-line w-4 text-center text-sm md:text-base"></i> <span class="whitespace-nowrap">Laporan</span>
+                </button>
                 
-                <div class="pt-4 border-t border-slate-800">
-                    <button @click="logoutUser()" class="w-full bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white px-3 py-2 rounded-xl font-bold transition flex items-center justify-center gap-2"><i class="fa fa-power-off"></i> Keluar Aplikasi</button>
+                <div class="md:pt-4 md:border-t md:border-slate-800 w-auto md:w-full">
+                    <button @click="logoutUser()" class="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white px-3 py-2 rounded-xl font-bold transition flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 text-center">
+                        <i class="fa fa-power-off text-sm"></i> <span class="hidden md:inline">Keluar</span>
+                    </button>
                 </div>
             </nav>
         </aside>
@@ -667,12 +683,12 @@
                     <div class="lg:col-span-4 space-y-4">
                         <div class="bg-white p-4 rounded-2xl border shadow-sm border-emerald-200">
                             <h4 class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa fa-camera text-green-600"></i> Alat Pindai (Scan Kamera / Barcode)</h4>
-                            <div id="video-container" class="w-full bg-slate-900 rounded-xl overflow-hidden border relative" style="min-height: 140px;">
-                                <div id="reader" class="w-full"></div>
+                            <div id="video-container" class="w-full bg-slate-900 rounded-xl overflow-hidden border relative" style="min-height: 180px;">
+                                <div id="reader" class="w-full" style="max-width: 100%;"></div>
                             </div>
                             <div class="mt-3 flex gap-2">
                                 <button @click="startVisualScanner()" class="flex-1 bg-green-600 text-white py-2 rounded-xl text-xs font-bold hover:bg-green-700">Aktifkan Kamera</button>
-                                <button @click="stopScanner()" class="bg-rose-50 text-white px-3 rounded-xl text-xs font-bold">Stop</button>
+                                <button @click="stopScanner()" class="bg-rose-600 text-white px-3 rounded-xl text-xs font-bold">Stop</button>
                             </div>
                         </div>
 
@@ -797,6 +813,7 @@
                 </div>
             </div>
 
+            <!-- Bagian Keuangan & Laporan Tidak Diubah Sesuai Mandat Anda -->
             <div x-show="adminTab === 'keuangan'" class="space-y-6" x-cloak>
                 <div class="border-b pb-3 flex justify-between items-center">
                     <div>
@@ -1102,6 +1119,7 @@
         </main>
     </div>
 
+    <!-- Modal pendukung (Edit item, nama pelanggan, cetak barcode) tidak diubah strukturnya -->
     <div x-show="modalEditItemOpen" class="fixed inset-0 z-[6000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
             <h3 class="text-sm font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-tags text-amber-500 mr-1"></i> Sesuaikan Item Belanja</h3>
@@ -1170,6 +1188,7 @@
         </center>
     </div>
 
+    <!-- Modal input dialogs pendukung lainnya -->
     <div x-show="categoryModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
             <h3 class="text-base font-black text-slate-800 mb-3 uppercase tracking-wide">Kelola Kategori Toko</h3>
@@ -1374,7 +1393,6 @@
         const db = firebase.database();
         const auth = firebase.auth();
 
-        // Register Service Worker untuk Standar PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
@@ -1404,63 +1422,69 @@
                 formPO: { supplierId: '', produkId: '', qty: 0 }, formTempo: { supplierId: '', nominal: 0, jatuhTempo: '' }, formRetur: { supplierId: '', produkId: '', qty: 0 },
                 selectedPOGuid: '', formPenerimaan: { produkId: '', produkNama: '', qtyPO: 0, qtyFisik: 0, petugas: '' },
                 filterPeriodePembelian: 'hari_ini', customDateMulai: '', customDateSelesai: '',
-
                 subTabKeuangan: 'menu',
                 dbKeuanganData: { piutang: [], mutasi: [] },
                 formKeuanganHutang: { supplierId: '', nominal: 0, jatuhTempo: '' },
                 formKeuanganPiutang: { pelangganNama: '', nominal: 0, keterangan: '' },
                 formKeuanganMutasi: { jenis: 'Pengeluaran', nominal: 0, namaPos: '' },
-
-                posQueryKetik: '',
-                autoCompleteResults: [],
-                modalEditItemOpen: false,
-                modalNamaPelangganOpen: false,
-                posNamaPelanggan: '',
-                pembelianHoldStorage: [], 
-                pembelianTertundaPOS: [],
+                posQueryKetik: '', autoCompleteResults: [], modalEditItemOpen: false, modalNamaPelangganOpen: false, posNamaPelanggan: '', pembelianHoldStorage: [], pembelianTertundaPOS: [],
                 formEditItem: { index: null, hargaTerpilih: 0, diskonItem: 0 },
                 receiptPrintData: { idNota: '', metodeBayar: '', totalOmset: 0, items: [] },
-
-                subTabLaporan: 'menu',
-                filterPeriodeLaporan: 'hari_ini',
-                lapCustomMulai: '',
-                lapCustomSelesai: '',
+                subTabLaporan: 'menu', filterPeriodeLaporan: 'hari_ini', lapCustomMulai: '', lapCustomSelesai: '',
+                html5QrScanner: null,
 
                 get posCartTotal() {
                     return this.posCart.reduce((acc, item) => acc + ((item.hargaTerpilih - item.diskonItem) * item.qty), 0);
                 },
 
                 get totalPemasukanMutasi() {
-                    return this.dbKeuanganData.mutasi
-                        .filter(i => i.jenis === 'Pemasukan')
-                        .reduce((acc, item) => acc + parseInt(item.nominal || 0), 0);
+                    return this.dbKeuanganData.mutasi.filter(i => i.jenis === 'Pemasukan').reduce((acc, item) => acc + parseInt(item.nominal || 0), 0);
                 },
 
                 get totalPengeluaranMutasi() {
-                    return this.dbKeuanganData.mutasi
-                        .filter(i => i.jenis === 'Pengeluaran')
-                        .reduce((acc, item) => acc + parseInt(item.nominal || 0), 0);
+                    return this.dbKeuanganData.mutasi.filter(i => i.jenis === 'Pengeluaran').reduce((acc, item) => acc + parseInt(item.nominal || 0), 0);
                 },
 
                 get rekapAlokasiAnggaran() {
                     let pengeluaranOnly = this.dbKeuanganData.mutasi.filter(i => i.jenis === 'Pengeluaran');
                     let totalPengeluaran = pengeluaranOnly.reduce((acc, item) => acc + parseInt(item.nominal || 0), 0);
                     if (totalPengeluaran === 0) return [];
-
                     let groups = {};
                     pengeluaranOnly.forEach(item => {
                         let key = item.namaPos ? item.namaPos.trim() : 'Lain-lain';
                         groups[key] = (groups[key] || 0) + parseInt(item.nominal || 0);
                     });
-
                     return Object.keys(groups).map(nama => {
                         let total = groups[nama];
-                        return {
-                            namaPos: nama,
-                            total: total,
-                            persen: (total / totalPengeluaran) * 100
-                        };
+                        return { namaPos: nama, total: total, persen: (total / totalPengeluaran) * 100 };
                     }).sort((a, b) => b.total - a.total);
+                },
+
+                // FITUR NOTIFIKASI SUARA (SUKSES & GAGAL) MENGGUNAKAN AUDIO WEB API SINTESIS
+                playBeepSound(type) {
+                    try {
+                        let context = new (window.AudioContext || window.webkitAudioContext)();
+                        let osc = context.createOscillator();
+                        let gain = context.createGain();
+                        osc.connect(gain);
+                        gain.connect(context.destination);
+                        
+                        if (type === 'success') {
+                            osc.type = 'sine';
+                            osc.frequency.setValueAtTime(880, context.currentTime); // Nada tinggi jernih
+                            gain.gain.setValueAtTime(0.3, context.currentTime);
+                            osc.start();
+                            osc.stop(context.currentTime + 0.15);
+                        } else {
+                            osc.type = 'sawtooth';
+                            osc.frequency.setValueAtTime(220, context.currentTime); // Nada rendah peringatan
+                            gain.gain.setValueAtTime(0.4, context.currentTime);
+                            osc.start();
+                            osc.stop(context.currentTime + 0.3);
+                        }
+                    } catch (error) {
+                        console.error("Audio API error: ", error);
+                    }
                 },
 
                 jalankanAutoCompleteQuery() {
@@ -1469,10 +1493,7 @@
                         return;
                     }
                     let q = this.posQueryKetik.toLowerCase();
-                    this.autoCompleteResults = this.products.filter(p => 
-                        p.nama.toLowerCase().includes(q) || 
-                        (p.barcode && p.barcode.toLowerCase().includes(q))
-                    );
+                    this.autoCompleteResults = this.products.filter(p => p.nama.toLowerCase().includes(q) || (p.barcode && p.barcode.toLowerCase().includes(q)));
                 },
 
                 bukaModalEditHargaDiskonItem(item, idx) {
@@ -1514,7 +1535,6 @@
 
                 bayarPOS() {
                     if (this.posCart.length === 0) return alert("Keranjang belanja kosong!");
-                    
                     let tgl = new Date();
                     let idNotaOtomatis = 'WN-POS-' + tgl.getTime().toString().slice(-6);
                     let daftarNamaItem = [];
@@ -1524,21 +1544,15 @@
                     this.posCart.forEach(item => {
                         let targetProd = this.products.find(p => p.firebaseId === item.firebaseId);
                         if (targetProd) {
-                            // Hitung total unit eceran (pcs) yang dikurangi berdasarkan nilai multiplikasi konversi satuan
                             let totalPcsDikurangi = parseInt(item.qty) * parseInt(item.isiKonversi || 1);
                             let sisaStokPcs = parseInt(targetProd.stokAwal || 0) - totalPcsDikurangi;
-                            
-                            db.ref('users/' + this.currentUid + '/produk/' + item.firebaseId).update({ 
-                                stokAwal: sisaStokPcs >= 0 ? sisaStokPcs : 0 
-                            });
+                            db.ref('users/' + this.currentUid + '/produk/' + item.firebaseId).update({ stokAwal: sisaStokPcs >= 0 ? sisaStokPcs : 0 });
                         }
-
                         daftarNamaItem.push(`${item.nama} (${item.qty}x ${item.satuan})`);
                         totalHppSemua += (parseInt(item.hargaBeli || 0) * (parseInt(item.qty) * parseInt(item.isiKonversi || 1)));
                         totalOmsetSemua += ((parseInt(item.hargaTerpilih) - parseInt(item.diskonItem)) * parseInt(item.qty));
                     });
 
-                    // Simpan rekaman transaksi gabungan ke database
                     let dataTransaksi = {
                         idNota: idNotaOtomatis,
                         nama: daftarNamaItem.join(', '),
@@ -1552,7 +1566,6 @@
                     };
 
                     db.ref('users/' + this.currentUid + '/transaksi/penjualan').push(dataTransaksi).then(() => {
-                        // Secara otomatis mempersiapkan cetak struk untuk seluruh keranjang belanja
                         this.receiptPrintData = dataTransaksi;
                         setTimeout(() => { window.print(); }, 400);
                         this.posCart = []; 
@@ -1561,9 +1574,8 @@
                 },
 
                 cetakUlangStrukFisik(nota) {
-                    if (nota.items) {
-                        this.receiptPrintData = nota;
-                    } else {
+                    if (nota.items) { this.receiptPrintData = nota; } 
+                    else {
                         this.receiptPrintData = {
                             idNota: nota.idNota || 'WN-POS-REPRINT',
                             metodeBayar: nota.metodeBayar || 'Tunai',
@@ -1612,10 +1624,8 @@
                     if (!arrayData) return [];
                     let hariIni = new Date(); hariIni.setHours(0,0,0,0);
                     return arrayData.filter(item => {
-                        let itemDate = item.timestamp ? new Date(item.timestamp) : new Date();
-                        itemDate.setHours(0,0,0,0);
+                        let itemDate = item.timestamp ? new Date(item.timestamp) : new Date(); itemDate.setHours(0,0,0,0);
                         let selisih = Math.floor((hariIni.getTime() - itemDate.getTime()) / (1000 * 60 * 60 * 24));
-                        
                         if (this.filterPeriodeLaporan === 'hari_ini') return selisih === 0;
                         if (this.filterPeriodeLaporan === 'kemarin') return selisih === 1;
                         if (this.filterPeriodeLaporan === '7_hari') return selisih >= 0 && selisih <= 7;
@@ -1733,11 +1743,7 @@
                             db.ref('users/' + this.currentUid + '/master/discount').on('value', snap => { let val = snap.val(); this.masterDiscounts = val ? Object.keys(val).map(k => ({ id: k, ...val[k] })) : []; });
                             db.ref('users/' + this.currentUid + '/master/saldo_awal').on('value', snap => { let val = snap.val(); this.masterSaldos = val ? Object.keys(val).map(k => ({ id: k, ...val[k] })) : []; });
                             db.ref('users/' + this.currentUid + '/master/shift').on('value', snap => { let val = snap.val(); this.masterShifts = val ? Object.keys(val).map(k => ({ id: k, ...val[k] })) : []; });
-
-                            this.fetchKeuanganSubData('piutang');
-                            this.fetchKeuanganSubData('mutasi');
-                            this.fetchPembelianSubData('tempo');
-                            this.fetchPembelianSubData('po');
+                            this.fetchKeuanganSubData('piutang'); this.fetchKeuanganSubData('mutasi'); this.fetchPembelianSubData('tempo'); this.fetchPembelianSubData('po');
                         } else { this.userLoggedIn = false; this.currentUid = null; }
                     });
                 },
@@ -1779,20 +1785,8 @@
                 prosesUploadLogoFile(event) { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (e) => { this.profilForm.logo = e.target.result; }; reader.readAsDataURL(file); } },
                 saveProfil() { db.ref('users/' + this.currentUid + '/profil').set(this.profilForm).then(() => { alert("Profil Toko Berhasil Disimpan!"); this.isEditingProfil = false; }); },
                 hapusDataProfil() { if(confirm("Reset data profil?")) { db.ref('users/' + this.currentUid + '/profil').remove().then(() => { this.isEditingProfil = false; }); } },
-                
-                openAddProductForm() { 
-                    this.editMode = false; 
-                    this.form = { nama: '', barcode: '', foto: '', namaSatuanA: 'Dus', namaSatuanB: 'Pak', namaSatuanC: 'Renceng', namaSatuanD: 'Pcs', hargaDus: 0, hargaPak: 0, hargaRenceng: 0, hargaJualPcs: 0, hargaBeli: 0, stokAwal: 0, kategori: 'Sembako', isiSatuanA: 40, isiSatuanB: 10, isiSatuanC: 10 }; 
-                    this.adminModal = true; 
-                },
-                saveProduct() { 
-                    let data = JSON.parse(JSON.stringify(this.form)); 
-                    if (this.editMode) { 
-                        db.ref('users/' + this.currentUid + '/produk/' + this.form.firebaseId).update(data).then(() => this.adminModal = false); 
-                    } else { 
-                        db.ref('users/' + this.currentUid + '/produk').push(data).then(() => this.adminModal = false); 
-                    } 
-                },
+                openAddProductForm() { this.editMode = false; this.form = { nama: '', barcode: '', foto: '', namaSatuanA: 'Dus', namaSatuanB: 'Pak', namaSatuanC: 'Renceng', namaSatuanD: 'Pcs', hargaDus: 0, hargaPak: 0, hargaRenceng: 0, hargaJualPcs: 0, hargaBeli: 0, stokAwal: 0, kategori: 'Sembako', isiSatuanA: 40, isiSatuanB: 10, isiSatuanC: 10 }; this.adminModal = true; },
+                saveProduct() { let data = JSON.parse(JSON.stringify(this.form)); if (this.editMode) { db.ref('users/' + this.currentUid + '/produk/' + this.form.firebaseId).update(data).then(() => this.adminModal = false); } else { db.ref('users/' + this.currentUid + '/produk').push(data).then(() => this.adminModal = false); } },
                 editProduct(p) { this.editMode = true; this.form = { ...p }; this.adminModal = true; },
                 deleteProduct(id) { if(confirm("Hapus?")) db.ref('users/' + this.currentUid + '/produk/' + id).remove(); },
                 openStockOpnameModal() { this.selectedProductId = ''; this.stokFisikBaru = 0; this.stockOpnameModalOpen = true; },
@@ -1804,14 +1798,43 @@
                 simpanPemakaianBarang() { let p = this.products.find(i => i.firebaseId === this.selectedProductId); let sisa = parseInt(p.stokAwal || 0) - this.qtyPemakaian; db.ref('users/' + this.currentUid + '/produk/' + this.selectedProductId).update({ stokAwal: sisa >= 0 ? sisa : 0 }).then(() => { this.pemakaianBarangModalOpen = false; }); },
                 generateMissingBarcodes() { this.products.forEach(p => { if (!p.barcode) { db.ref('users/' + this.currentUid + '/produk/' + p.firebaseId).update({ barcode: 'WN-' + Math.floor(10000000 + Math.random() * 90000000) }); } }); this.barcodeModalOpen = false; },
 
+                // PERBAIKAN LOGIKA PINDAI KAMERA DENGAN VALIDASI STRUKTUR DATA HASH & NOTIFIKASI SUARA
                 startVisualScanner() {
-                    let scanner = new Html5Qrcode("reader");
-                    scanner.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (text) => {
-                        let p = this.products.find(i => (i.barcode && i.barcode === text) || i.nama.toLowerCase().includes(text.toLowerCase()));
-                        if(p) { this.triggerVisualMatch(p); }
-                    }).catch(e => { console.log("Kamera aktif simulasi"); });
+                    this.stopScanner();
+                    this.html5QrScanner = new Html5Qrcode("reader");
+                    this.html5QrScanner.start(
+                        { facingMode: "environment" }, 
+                        { fps: 20, qrbox: { width: 220, height: 140 } }, 
+                        (decodedText) => {
+                            let textClean = decodedText.trim();
+                            let found = this.products.find(i => (i.barcode && i.barcode.trim() === textClean) || i.nama.toLowerCase() === textClean.toLowerCase());
+                            
+                            if(found) {
+                                this.playBeepSound('success'); // Bunyi bip sukses
+                                this.triggerVisualMatch(found);
+                            } else {
+                                this.playBeepSound('fail'); // Bunyi bip gagal
+                                console.log("Barcode tidak terdaftar: " + textClean);
+                            }
+                        },
+                        (errorMessage) => {
+                            // Abaikan error real-time tracking frame kamera bawaan html5-qrcode
+                        }
+                    ).catch(e => { console.log("Gagal inisialisasi modul kamera fisik device."); });
                 },
-                stopScanner() { document.getElementById("reader").innerHTML = ""; },
+
+                stopScanner() { 
+                    if (this.html5QrScanner) {
+                        this.html5QrScanner.stop().then(() => {
+                            document.getElementById("reader").innerHTML = "";
+                        }).catch(err => {
+                            document.getElementById("reader").innerHTML = "";
+                        });
+                    } else {
+                        document.getElementById("reader").innerHTML = "";
+                    }
+                },
+
                 triggerVisualMatch(produk) { this.scannedProduct = produk; this.conversionModalOpen = true; },
                 
                 selectConversionSatuan(satuan, harga, isiKonversi) {
