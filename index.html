@@ -58,7 +58,7 @@
 
     <div x-show="userLoggedIn" class="w-full flex flex-col md:flex-row" x-cloak>
         
-        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col sticky top-0 h-auto md:h-screen z-50 shadow-xl overflow-y-auto">
+        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col sticky top-0 h-auto md:h-screen max-h-[45vh] md:max-h-screen z-50 shadow-xl overflow-y-auto">
             <div class="p-4 bg-slate-950 border-b border-slate-800 space-y-2.5">
                 <div class="flex items-center gap-3">
                     <img :src="profilToko.logo || 'https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg'" class="w-12 h-12 rounded-xl object-cover border border-slate-700 shadow-inner flex-shrink-0">
@@ -119,9 +119,30 @@
                                 <span x-text="profilToko.wa || '-'"></span>
                             </p>
                         </div>
-                        <div class="border-t pt-2 mt-2">
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Teks Catatan Kaki Struk Pembelian</span>
-                            <p class="text-xs font-mono font-bold text-slate-600 mt-1 bg-slate-50 p-2.5 rounded-lg border" x-text="profilToko.footerStruk || 'Terima Kasih Atas Kunjungan Anda'"></p>
+                    </div>
+
+                    <!-- PENGATURAN STRUK PEMBELIAN -->
+                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-3 mt-4">
+                        <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5 uppercase"><i class="fa fa-print text-green-600"></i> Pengaturan Struk Pembelian</h4>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 mb-1">Lebar Kertas Struk</label>
+                                <select x-model="profilToko.lebarStruk" @change="saveStrukSetting()" class="w-full p-2 border rounded-xl bg-white text-xs font-medium">
+                                    <option value="58mm">Thermal 58mm</option>
+                                    <option value="80mm">Thermal 80mm</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 mb-1">Tampilkan Logo Toko</label>
+                                <select x-model="profilToko.showLogoReceipt" @change="saveStrukSetting()" class="w-full p-2 border rounded-xl bg-white text-xs font-medium">
+                                    <option value="ya">Ya, Tampilkan</option>
+                                    <option value="tidak">Tidak</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1">Pesan Kaki Struk (Footer)</label>
+                            <input type="text" x-model="profilToko.footerReceipt" @change="saveStrukSetting()" placeholder="Terima kasih atas kunjungan Anda" class="w-full p-2.5 border rounded-xl bg-white text-xs font-medium">
                         </div>
                     </div>
                 </div>
@@ -144,10 +165,6 @@
                             <label class="block font-bold mb-1 text-slate-500">Nomor Telepon / WhatsApp</label>
                             <input type="text" x-model="profilForm.wa" placeholder="Contoh: 0853..." class="w-full p-2.5 border rounded-xl bg-slate-50 focus:bg-white">
                         </div>
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-slate-500">Pengaturan Pesan Bawah Struk</label>
-                        <input type="text" x-model="profilForm.footerStruk" placeholder="Contoh: Terima Kasih, Barang Yang Sudah Dibeli Tidak Dapat Ditukar" class="w-full p-2.5 border rounded-xl bg-slate-50 focus:bg-white font-semibold">
                     </div>
                     
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
@@ -674,13 +691,13 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <div class="lg:col-span-4 space-y-4">
                         <div class="bg-white p-4 rounded-2xl border shadow-sm border-emerald-200">
-                            <h4 class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa fa-camera text-green-600"></i> Alat Pindai (Scan Kamera / Barcode)</h4>
+                            <h4 class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa fa-camera text-green-600"></i> Alat Pindai (Scan Kamera / Barcode / Foto)</h4>
                             <div id="video-container" class="w-full bg-slate-900 rounded-xl overflow-hidden border relative" style="min-height: 140px;">
                                 <div id="reader" class="w-full"></div>
                             </div>
                             <div class="mt-3 flex gap-2">
                                 <button @click="startVisualScanner()" class="flex-1 bg-green-600 text-white py-2 rounded-xl text-xs font-bold hover:bg-green-700">Aktifkan Kamera</button>
-                                <button @click="stopScanner()" class="bg-rose-50 text-slate-700 border border-slate-300 px-3 rounded-xl text-xs font-bold hover:bg-slate-100 transition">Stop</button>
+                                <button @click="stopScanner()" class="bg-rose-600 text-white px-3 rounded-xl text-xs font-bold">Stop</button>
                             </div>
                         </div>
 
@@ -727,7 +744,7 @@
                             <div class="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
                                 <template x-for="p in products" :key="p.firebaseId">
                                     <button @click="triggerVisualMatch(p)" class="p-1.5 border rounded-xl hover:border-green-500 transition flex items-center gap-2 bg-slate-50 text-left">
-                                        <img :src="p.foto || 'https://via.placeholder.com/150'" class="w-6 h-6 object-cover rounded flex-shrink-0">
+                                        <img :src="p.foto || 'https://via.placeholder.com/150'" class="w-6 h-6 object-cover rounded">
                                         <span class="truncate font-medium text-[11px]" x-text="p.nama"></span>
                                     </button>
                                 </template>
@@ -1080,7 +1097,7 @@
                     <div x-show="subTabLaporan === 'stok'" class="table-responsive">
                         <table id="tabel-arsip-laporan" class="w-full text-xs text-left">
                             <thead class="bg-slate-50 border-b font-bold text-slate-600"><tr><th class="p-3">Nama Komoditas Barang</th><th class="p-3">Kategori</th><th class="p-3 text-right">Harga HPP Beli</th><th class="p-3 text-center">Posisi Sisa Stok Fisik</th></tr></thead>
-                            <tbody><template x-for="p in products"><tr class="border-b"><td class="p-3 font-bold text-slate-800" x-text="p.nama"></td><td class="p-3 text-slate-500" x-text="p.kategori"></td><td class="p-3 text-right" x-text="formatRupiah(p.hargaBeli)"></td><td class="p-3 text-center font-black text-blue-600" x-text="p.stokAwal + ' pcs'"></td></tr></template></tbody>
+                            <tbody><template x-for="p in products" :key="p.firebaseId"><tr class="border-b"><td class="p-3 font-bold text-slate-800" x-text="p.nama"></td><td class="p-3 text-slate-500" x-text="p.kategori"></td><td class="p-3 text-right" x-text="formatRupiah(p.hargaBeli)"></td><td class="p-3 text-center font-black text-blue-600" x-text="p.stokAwal + ' pcs'"></td></tr></template></tbody>
                         </table>
                     </div>
 
@@ -1151,8 +1168,12 @@
         </div>
     </div>
 
-    <div id="print-receipt-area" class="hidden p-4 bg-white text-black font-mono text-[10px] w-64">
+    <!-- STRUK PEMBELIAN AREA PRINT -->
+    <div id="print-receipt-area" class="hidden p-4 bg-white text-black font-mono text-[10px]" :style="{ width: profilToko.lebarStruk === '80mm' ? '76mm' : '54mm' }">
         <center>
+            <template x-if="profilToko.showLogoReceipt === 'ya'">
+                <img :src="profilToko.logo || 'https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg'" style="width: 40px; height: 40px; border-radius: 8px; margin-bottom: 4px; object-cover;">
+            </template>
             <h2 style="font-size:14px; font-weight:bold;" x-text="profilToko.nama || 'WIINMART POS'"></h2>
             <p x-text="profilToko.alamat || 'Alamat Toko'"></p>
             <p x-text="'Telp: ' + (profilToko.wa || '-')"></p>
@@ -1174,7 +1195,7 @@
                 <span>TOTAL:</span>
                 <span x-text="formatRupiah(receiptPrintData.totalOmset)"></span>
             </div>
-            <p style="margin-top:10px; font-size:9px;" x-text="profilToko.footerStruk || 'Terima Kasih Atas Kunjungan Anda'"></p>
+            <p style="margin-top:10px; font-size:9px;" x-text="profilToko.footerReceipt || 'Terima Kekasih Atas Kunjungan Anda'"></p>
         </center>
     </div>
 
@@ -1399,8 +1420,8 @@
                 isEditMasterMode: false, currentEditMasterId: null,
                 categories: ['Sembako', 'Sabun', 'Snack', 'Bumbu', 'Makanan', 'Minuman', 'Mie instant'],
                 products: [], posCart: [], posMetodeBayar: 'Tunai',
-                profilToko: { nama: '', alamat: '', kota: '', wa: '', logo: '', footerStruk: 'Terima Kasih Atas Kunjungan Anda' },
-                profilForm: { nama: '', alamat: '', kota: '', wa: '', logo: '', footerStruk: '' },
+                profilToko: { nama: '', alamat: '', kota: '', wa: '', logo: '', lebarStruk: '58mm', footerReceipt: 'Terima Kasih Atas Kunjungan Anda', showLogoReceipt: 'ya' },
+                profilForm: { nama: '', alamat: '', kota: '', wa: '', logo: '' },
                 masterForm: { supplierNama: '', supplierKontak: '', pelangganNama: '', pelangganKontak: '' },
                 pembelianForm: { produkId: '', qty: 0, totalBiaya: 0 },
                 historiTransaksi: { penjualan: [], pembelian: [] },
@@ -1434,7 +1455,7 @@
                 lapCustomSelesai: '',
 
                 get posCartTotal() {
-                    return this.posCart.reduce((acc, item) => acc + ((parseInt(item.hargaTerpilih || 0) - parseInt(item.diskonItem || 0)) * parseInt(item.qty || 0)), 0);
+                    return this.posCart.reduce((acc, item) => acc + ((item.hargaTerpilih - item.diskonItem) * item.qty), 0);
                 },
 
                 get totalPemasukanMutasi() {
@@ -1531,7 +1552,7 @@
                     this.posCart.forEach(item => {
                         let targetProd = this.products.find(p => p.firebaseId === item.firebaseId);
                         if (targetProd) {
-                            let totalPcsDikurangi = parseInt(item.qty || 1) * parseInt(item.isiKonversi || 1);
+                            let totalPcsDikurangi = parseInt(item.qty) * parseInt(item.isiKonversi || 1);
                             let sisaStokPcs = parseInt(targetProd.stokAwal || 0) - totalPcsDikurangi;
                             
                             db.ref('users/' + this.currentUid + '/produk/' + item.firebaseId).update({ 
@@ -1540,8 +1561,8 @@
                         }
 
                         daftarNamaItem.push(`${item.nama} (${item.qty}x ${item.satuan})`);
-                        totalHppSemua += (parseInt(item.hargaBeli || 0) * (parseInt(item.qty || 1) * parseInt(item.isiKonversi || 1)));
-                        totalOmsetSemua += ((parseInt(item.hargaTerpilih || 0) - parseInt(item.diskonItem || 0)) * parseInt(item.qty || 1));
+                        totalHppSemua += (parseInt(item.hargaBeli || 0) * (parseInt(item.qty) * parseInt(item.isiKonversi || 1)));
+                        totalOmsetSemua += ((parseInt(item.hargaTerpilih) - parseInt(item.diskonItem)) * parseInt(item.qty));
                     });
 
                     let dataTransaksi = {
@@ -1731,8 +1752,17 @@
                             db.ref('users/' + this.currentUid + '/profil').on('value', snap => { 
                                 let val = snap.val(); 
                                 if(val) { 
-                                    this.profilToko = { ...this.profilToko, ...val }; 
-                                    this.profilForm = { ...this.profilForm, ...val }; 
+                                    this.profilToko = {
+                                        nama: val.nama || '',
+                                        alamat: val.alamat || '',
+                                        kota: val.kota || '',
+                                        wa: val.wa || '',
+                                        logo: val.logo || '',
+                                        lebarStruk: val.lebarStruk || '58mm',
+                                        footerReceipt: val.footerReceipt || 'Terima Kasih Atas Kunjungan Anda',
+                                        showLogoReceipt: val.showLogoReceipt || 'ya'
+                                    }; 
+                                    this.profilForm = { ...this.profilToko }; 
                                 } 
                             });
                             db.ref('users/' + this.currentUid + '/produk').on('value', snap => { let val = snap.val(); this.products = val ? Object.keys(val).map(k => ({ firebaseId: k, ...val[k] })) : []; });
@@ -1750,6 +1780,16 @@
                             this.fetchPembelianSubData('po');
                         } else { this.userLoggedIn = false; this.currentUid = null; }
                     });
+                },
+
+                saveStrukSetting() {
+                    if (this.currentUid) {
+                        db.ref('users/' + this.currentUid + '/profil').update({
+                            lebarStruk: this.profilToko.lebarStruk,
+                            footerReceipt: this.profilToko.footerReceipt,
+                            showLogoReceipt: this.profilToko.showLogoReceipt
+                        });
+                    }
                 },
 
                 fetchPembelianSubData(path) {
@@ -1816,10 +1856,16 @@
 
                 startVisualScanner() {
                     let scanner = new Html5Qrcode("reader");
-                    scanner.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (text) => {
-                        let p = this.products.find(i => (i.barcode && i.barcode.trim() === text.trim()) || i.nama.toLowerCase().includes(text.toLowerCase()));
-                        if(p) { this.triggerVisualMatch(p); }
-                    }).catch(e => { console.log("Kamera aktif simulasi"); });
+                    scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 260 }, (text) => {
+                        let p = this.products.find(i => (i.barcode && i.barcode.trim() === text.trim()) || i.nama.toLowerCase() === text.toLowerCase());
+                        if(p) { 
+                            this.triggerVisualMatch(p); 
+                        } else {
+                            // Validasi pemindaian visual gambar jika string barcode tidak cocok langsung
+                            let visualMatch = this.products.find(prod => prod.nama.toLowerCase().includes(text.toLowerCase()));
+                            if(visualMatch) this.triggerVisualMatch(visualMatch);
+                        }
+                    }).catch(e => { console.log("Kamera aktif"); });
                 },
                 stopScanner() { document.getElementById("reader").innerHTML = ""; },
                 triggerVisualMatch(produk) { this.scannedProduct = produk; this.conversionModalOpen = true; },
@@ -1844,7 +1890,7 @@
                     else { db.ref('users/' + this.currentUid + '/master/' + path).push(dataForm).then(() => { Object.keys(dataForm).forEach(key => dataForm[key] = ''); }); }
                 },
                 editMasterDataControl(tipe, item) { this.isEditMasterMode = true; this.currentEditMasterId = item.id; if (tipe === 'supplier') this.formSupplier = { nama: item.nama, kontak: item.kontak, alamat: item.alamat || '' }; },
-                resetMasterFormControl() { this.isEditMasterMode = false; this.currentEditMasterId = null; this.formSupplier = { nama: '', kontak: '', alamat: '' }; this.formPelangan = { nama: '', wa: '', tipe: 'Reguler' }; },
+                resetMasterFormControl() { this.isEditMasterMode = false; this.currentEditMasterId = null; this.formSupplier = { nama: '', kontak: '', alamat: '' }; },
                 hapusMaster(path, id) { if(confirm("Hapus?")) db.ref('users/' + this.currentUid + '/master/' + path + '/' + id).remove(); },
                 formatRupiah(num) { return 'Rp ' + (num ? parseInt(num).toLocaleString('id-ID') : '0'); }
             }
