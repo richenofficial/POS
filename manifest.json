@@ -1,0 +1,16 @@
+{
+  "name": "SaaS POS WiinMart",
+  "short_name": "WiinMart",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme-color": "#16a34a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
