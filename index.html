@@ -56,7 +56,7 @@
         </div>
     </div>
 
-    <div x-show="userLoggedIn" class="w-full flex flex-col md:flex-row" x-cloak>
+    <div x-show="userLoggedIn" class="w-full flex flex-col md:flex-row font-sans" x-cloak>
         
         <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col md:sticky top-0 h-auto md:h-screen z-50 shadow-xl overflow-y-auto">
             <div class="p-4 bg-slate-950 border-b border-slate-800 space-y-2.5">
@@ -92,15 +92,14 @@
             
             <div x-show="adminTab === 'profil'" class="bg-white p-6 rounded-2xl border shadow-sm max-w-xl" x-transition>
                 <div class="flex justify-between items-center mb-4 border-b pb-2">
-                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2"><i class="fa fa-store text-green-600"></i>1. Informasi Profil Bisnis & Struk</h3>
+                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2"><i class="fa fa-store text-green-600"></i>1. Informasi Profil Bisnis</h3>
                     <div class="flex gap-2">
                         <button x-show="!isEditingProfil" @click="isEditingProfil = true; profilForm = { ...profilToko }" class="text-[10px] bg-blue-50 text-blue-600 border border-blue-200 px-2.5 py-1 rounded-lg font-bold hover:bg-blue-100 transition"><i class="fa fa-edit mr-1"></i> Ubah Profil</button>
-                        <button @click="isEditingStruk = true" class="text-[10px] bg-amber-50 text-amber-600 border border-amber-200 px-2.5 py-1 rounded-lg font-bold hover:bg-amber-100 transition"><i class="fa fa-print mr-1"></i> Edit Struk</button>
                         <button @click="hapusDataProfil()" class="text-[10px] bg-red-50 text-red-600 border border-red-200 px-2 py-1 rounded-lg font-bold hover:bg-red-100 transition"><i class="fa fa-trash-can mr-1"></i> Reset Profil</button>
                     </div>
                 </div>
                 
-                <div x-show="!isEditingProfil && !isEditingStruk" class="space-y-4 text-xs">
+                <div x-show="!isEditingProfil" class="space-y-4 text-xs">
                     <div class="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border">
                         <img :src="profilToko.logo || 'https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg'" class="w-16 h-16 rounded-xl object-cover border shadow-sm flex-shrink-0">
                         <div class="min-w-0 flex-1">
@@ -120,12 +119,9 @@
                                 <span x-text="profilToko.wa || '-'"></span>
                             </p>
                         </div>
-                        <div class="border-t pt-2 mt-2 bg-slate-50 p-3 rounded-xl border">
-                            <span class="block text-[10px] font-bold text-amber-600 uppercase tracking-wider font-black"><i class="fa fa-print mr-1"></i>Format Header & Footer Cetak Struk</span>
-                            <p class="mt-1"><b>Header Nama Toko:</b> <span x-text="formatStruk.namaStruk || profilToko.nama"></span></p>
-                            <p class="mt-0.5"><b>Header Alamat:</b> <span x-text="formatStruk.alamatStruk || profilToko.alamat"></span></p>
-                            <p class="mt-0.5"><b>Header Telepon:</b> <span x-text="formatStruk.telpStruk || profilToko.wa"></span></p>
-                            <p class="mt-1 p-2 bg-white border rounded italic text-[11px] text-gray-600" x-text="formatStruk.footerMessage"></p>
+                        <div class="border-t pt-2 mt-2">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider"><i class="fa fa-gears text-slate-500 mr-1"></i>Teks Penutup Struk Pembelian</span>
+                            <p class="text-xs font-semibold text-slate-600 mt-1 bg-slate-50 p-2.5 rounded-lg border italic" x-text="pengaturanStruk.footerMessage"></p>
                         </div>
                     </div>
                 </div>
@@ -133,50 +129,43 @@
                 <div x-show="isEditingProfil" class="space-y-4 text-xs" x-cloak>
                     <div>
                         <label class="block font-bold mb-1 text-slate-500">Nama Toko Mitra</label>
-                        <input type="text" x-model="profilForm.nama" class="w-full p-2.5 border rounded-xl bg-slate-50 focus:bg-white focus:outline-green-500 font-semibold">
+                        <input type="text" x-model="profilForm.nama" placeholder="Contoh: Toko Berkah Jaya" class="w-full p-2.5 border rounded-xl bg-slate-50 focus:bg-white focus:outline-green-500 font-semibold">
                     </div>
                     <div>
                         <label class="block font-bold mb-1 text-slate-500">Alamat Lengkap Toko</label>
-                        <textarea rows="2" x-model="profilForm.alamat" class="w-full p-2.5 border rounded-xl bg-slate-50 focus:bg-white focus:outline-green-500 font-medium"></textarea>
+                        <textarea rows="2" x-model="profilForm.alamat" placeholder="Nama Jalan, RT/RW, Kecamatan" class="w-full p-2.5 border rounded-xl bg-slate-50 focus:bg-white focus:outline-green-500 font-medium"></textarea>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block font-bold mb-1 text-slate-500">Kota / Kabupaten</label>
-                            <input type="text" x-model="profilForm.kota" class="w-full p-2.5 border rounded-xl bg-slate-50">
+                            <input type="text" x-model="profilForm.kota" placeholder="Contoh: Bandung" class="w-full p-2.5 border rounded-xl bg-slate-50 focus:bg-white">
                         </div>
                         <div>
                             <label class="block font-bold mb-1 text-slate-500">Nomor Telepon / WhatsApp</label>
-                            <input type="text" x-model="profilForm.wa" class="w-full p-2.5 border rounded-xl bg-slate-50">
+                            <input type="text" x-model="profilForm.wa" placeholder="Contoh: 0853..." class="w-full p-2.5 border rounded-xl bg-slate-50 focus:bg-white">
                         </div>
                     </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-500"><i class="fa fa-print mr-1 text-green-600"></i>Pesan Kustom Bawah Struk (Footer)</label>
+                        <input type="text" x-model="pengaturanStruk.footerMessage" placeholder="Terima Kasih Atas Kunjungan Anda" class="w-full p-2.5 border rounded-xl bg-slate-50 focus:bg-white focus:outline-green-500 font-semibold">
+                    </div>
+                    
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                        <label class="block font-bold text-slate-600"><i class="fa fa-image text-green-600 mr-1"></i> Pengaturan Brand Logo Toko</label>
+                        <div>
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pilihan A: Upload File dari HP/Laptop</span>
+                            <input type="file" id="logoFileDevice" accept="image/*" @change="prosesUploadLogoFile($event)" class="w-full p-1.5 border rounded-lg bg-white text-xs text-gray-500 cursor-pointer">
+                        </div>
+                        <div class="flex items-center justify-center text-gray-400 font-bold text-[10px] uppercase">— ATAU —</div>
+                        <div>
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pilihan B: Tempel Tautan Link Gambar</span>
+                            <input type="text" x-model="profilForm.logo" placeholder="https://tautan-gambar-logo.jpg" class="w-full p-2.5 border rounded-xl bg-white focus:outline-green-500">
+                        </div>
+                    </div>
+                    
                     <div class="flex gap-2 pt-2">
-                        <button type="button" @click="isEditingProfil = false" class="w-1/3 bg-slate-200 py-3 rounded-xl font-bold uppercase">Batal</button>
-                        <button type="button" @click="saveProfil()" class="w-2/3 bg-green-600 text-white py-3 rounded-xl font-bold transition shadow-lg uppercase">Simpan</button>
-                    </div>
-                </div>
-
-                <!-- FORM EDIT STRUK KASIR -->
-                <div x-show="isEditingStruk" class="space-y-4 text-xs" x-cloak>
-                    <h4 class="font-bold text-amber-600 uppercase border-b pb-1 text-xs"><i class="fa fa-edit mr-1"></i> Pengaturan Kustom Teks Struk Pembelian</h4>
-                    <div>
-                        <label class="block font-bold mb-1 text-slate-500">Nama Toko pada Struk</label>
-                        <input type="text" x-model="formatStruk.namaStruk" class="w-full p-2.5 border rounded-xl bg-slate-50 focus:outline-amber-500 font-bold">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-slate-500">Alamat Toko pada Struk</label>
-                        <input type="text" x-model="formatStruk.alamatStruk" class="w-full p-2.5 border rounded-xl bg-slate-50 focus:outline-amber-500">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-slate-500">Nomor Telepon pada Struk</label>
-                        <input type="text" x-model="formatStruk.telpStruk" class="w-full p-2.5 border rounded-xl bg-slate-50 focus:outline-amber-500 font-mono">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-slate-500">Kalimat Penutup / Footer Struk</label>
-                        <input type="text" x-model="formatStruk.footerMessage" class="w-full p-2.5 border rounded-xl bg-slate-50 focus:outline-amber-500 italic">
-                    </div>
-                    <div class="flex gap-2 pt-2">
-                        <button type="button" @click="isEditingStruk = false" class="w-1/3 bg-slate-200 py-3 rounded-xl font-bold uppercase">Batal</button>
-                        <button type="button" @click="saveFormatStruk()" class="w-2/3 bg-amber-500 text-white py-3 rounded-xl font-bold shadow-lg uppercase">Perbarui Tampilan Struk</button>
+                        <button type="button" @click="isEditingProfil = false" class="w-1/3 bg-slate-200 hover:bg-slate-300 text-slate-700 py-3 rounded-xl font-bold transition uppercase tracking-wider">Batal</button>
+                        <button type="button" @click="saveProfil()" class="w-2/3 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold transition shadow-lg uppercase tracking-wider">Simpan & Perbarui</button>
                     </div>
                 </div>
             </div>
@@ -185,35 +174,55 @@
             <div x-show="adminTab === 'master'" class="space-y-6" x-cloak>
                 <div class="border-b pb-3 flex justify-between items-center">
                     <div>
-                        <h3 class="text-base font-black text-slate-900 tracking-wide uppercase flex items-center gap-2"><i class="fa fa-folder-tree text-green-600"></i> 2. Pusat Data Induk (Master Data)</h3>
+                        <h3 class="text-base font-black text-slate-900 tracking-wide uppercase flex items-center gap-2">
+                            <i class="fa fa-folder-tree text-green-600"></i> 2. Pusat Data Induk (Master Data)
+                        </h3>
                         <p class="text-xs text-slate-400 mt-0.5">Kelola konfigurasi dasar operasional dan data entitas toko Anda.</p>
                     </div>
-                    <button x-show="subTabMaster !== 'menu'" @click="subTabMaster = 'menu'; resetMasterFormControl()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition"><i class="fa fa-arrow-left mr-1"></i> Kembali ke Menu</button>
+                    <button x-show="subTabMaster !== 'menu'" @click="subTabMaster = 'menu'; resetMasterFormControl()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition">
+                        <i class="fa fa-arrow-left mr-1"></i> Kembali ke Menu
+                    </button>
                 </div>
                 
                 <div x-show="subTabMaster === 'menu'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 text-left">
                     <div @click="subTabMaster = 'supplier'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
                         <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-truck"></i></div>
-                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">MASTER SUPPLIER</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Kelola data seluruh mitra pemasok toko.</p></div>
+                        <div class="min-w-0 flex-1">
+                            <h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">MASTER SUPPLIER</h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Kelola data seluruh mitra pemasok toko.</p>
+                        </div>
                     </div>
                     <div @click="subTabMaster = 'pelanggan'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
                         <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-users"></i></div>
-                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">MASTER PELANGGAN</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Database member dan pembeli setia.</p></div>
+                        <div class="min-w-0 flex-1">
+                            <h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">MASTER PELANGGAN</h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Database member dan pembeli setia.</p>
+                        </div>
                     </div>
                     <div @click="subTabMaster = 'discount'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
                         <div class="w-14 h-14 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-tags"></i></div>
-                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">MASTER DISCOUNT</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Skema diskon barang dan promo belanja.</p></div>
+                        <div class="min-w-0 flex-1">
+                            <h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">MASTER DISCOUNT</h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Skema diskon barang dan promo belanja.</p>
+                        </div>
                     </div>
                     <div @click="subTabMaster = 'saldo'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
                         <div class="w-14 h-14 bg-rose-50 text-rose-500 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-money-bill-wave"></i></div>
-                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">MASTER SALDO AWAL</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Input saldo awal laci kasir per-shift.</p></div>
+                        <div class="min-w-0 flex-1">
+                            <h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">MASTER SALDO AWAL</h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Input saldo awal laci kasir per-shift.</p>
+                        </div>
                     </div>
                     <div @click="subTabMaster = 'shift'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
                         <div class="w-14 h-14 bg-indigo-50 text-indigo-500 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-clock"></i></div>
-                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">MASTER SHIFT</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Pengaturan jam operasional staff kasir.</p></div>
+                        <div class="min-w-0 flex-1">
+                            <h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">MASTER SHIFT</h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Pengaturan jam operasional staff kasir.</p>
+                        </div>
                     </div>
                 </div>
 
+                <!-- SUB-SECTIONS MASTER SUPPLIER -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6" x-show="subTabMaster === 'supplier'">
                     <div class="bg-white p-4 rounded-2xl border text-xs space-y-3">
                         <h4 class="font-bold text-slate-700 uppercase" x-text="isEditMasterMode ? 'Ubah Supplier' : 'Input Supplier Baru'"></h4>
@@ -243,6 +252,7 @@
                     </div>
                 </div>
 
+                <!-- MASTER PELANGGAN -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6" x-show="subTabMaster === 'pelanggan'">
                     <div class="bg-white p-4 rounded-2xl border text-xs space-y-3">
                         <h4 class="font-bold text-slate-700 uppercase" x-text="isEditMasterMode ? 'Ubah Member' : 'Input Pelanggan Baru'"></h4>
@@ -274,6 +284,7 @@
                     </div>
                 </div>
 
+                <!-- MASTER DISCOUNT -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6" x-show="subTabMaster === 'discount'">
                     <div class="bg-white p-4 rounded-2xl border text-xs space-y-3">
                         <h4 class="font-bold text-slate-700 uppercase" x-text="isEditMasterMode ? 'Ubah Aturan Diskon' : 'Input Aturan Diskon Berbelanja'"></h4>
@@ -303,6 +314,7 @@
                     </div>
                 </div>
 
+                <!-- MASTER SALDO AWAL -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6" x-show="subTabMaster === 'saldo'">
                     <div class="bg-white p-4 rounded-2xl border text-xs space-y-3">
                         <h4 class="font-bold text-slate-700 uppercase" x-text="isEditMasterMode ? 'Ubah Saldo Laci' : 'Input Modal Saldo Awal Laci'"></h4>
@@ -332,6 +344,7 @@
                     </div>
                 </div>
 
+                <!-- MASTER SHIFT STAFF -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6" x-show="subTabMaster === 'shift'">
                     <div class="bg-white p-4 rounded-2xl border text-xs space-y-3">
                         <h4 class="font-bold text-slate-700 uppercase" x-text="isEditMasterMode ? 'Ubah Jam Shift' : 'Daftarkan Jam Shift Pegawai'"></h4>
@@ -363,32 +376,62 @@
                 </div>
             </div>
 
-            <!-- TAB STOK & LOGISTIK -->
+            <!-- TAB MENU LOGISTIK STOK -->
             <div x-show="adminTab === 'stok'" class="space-y-4" x-cloak>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                     <div @click="categoryModalOpen = true" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition duration-200">
-                        <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-layer-group"></i></div>
-                        <div class="min-w-0"><h4 class="font-bold text-slate-900 text-sm tracking-wide uppercase">Input Kategori</h4><p class="text-[11px] text-slate-400 mt-0.5">Pengelompokan jenis barang toko.</p></div>
+                        <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-slate-900 text-sm tracking-wide uppercase">Input Kategori</h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-2">Pengelompokan jenis barang toko.</p>
+                        </div>
                     </div>
                     <div @click="openAddProductForm()" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition duration-200">
-                        <div class="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-plus"></i></div>
-                        <div class="min-w-0"><h4 class="font-bold text-slate-900 text-sm tracking-wide uppercase">Input Barang</h4><p class="text-[11px] text-slate-400 mt-0.5">Tambah item produk baru ke gudang.</p></div>
+                        <div class="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-slate-900 text-sm tracking-wide uppercase">Input Barang</h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-2">Tambah item produk baru ke gudang.</p>
+                        </div>
                     </div>
                     <div @click="openStockOpnameModal()" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition duration-200">
-                        <div class="w-14 h-14 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-boxes-packing"></i></div>
-                        <div class="min-w-0"><h4 class="font-bold text-slate-900 text-sm tracking-wide uppercase">Stock Opname</h4><p class="text-[11px] text-slate-400 mt-0.5">Sinkronisasi stok sistem dengan fisik.</p></div>
+                        <div class="w-14 h-14 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
+                            <i class="fa-solid fa-boxes-packing"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-slate-900 text-sm tracking-wide uppercase">Stock Opname</h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-2">Sinkronisasi stok sistem dengan fisik.</p>
+                        </div>
                     </div>
                     <div @click="openUbahHargaModal()" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition duration-200">
-                        <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-tags"></i></div>
-                        <div class="min-w-0"><h4 class="font-bold text-slate-900 text-sm tracking-wide uppercase">Ubah Harga</h4><p class="text-[11px] text-slate-400 mt-0.5">Penyesuaian harga beli & harga jual.</p></div>
+                        <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
+                            <i class="fa-solid fa-tags"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-slate-900 text-sm tracking-wide uppercase">Ubah Harga</h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-2">Penyesuaian harga beli & harga jual.</p>
+                        </div>
                     </div>
                     <div @click="openPemakaianBarangModal()" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition duration-200">
-                        <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-arrow-down-wide-short"></i></div>
-                        <div class="min-w-0"><h4 class="font-bold text-slate-900 text-sm tracking-wide uppercase">Pemakaian Barang</h4><p class="text-[11px] text-slate-400 mt-0.5">Pencatatan item rusak/dipakai internal.</p></div>
+                        <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
+                            <i class="fa-solid fa-arrow-down-wide-short"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-slate-900 text-sm tracking-wide uppercase">Pemakaian Barang</h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-2">Pencatatan item rusak/dipakai internal.</p>
+                        </div>
                     </div>
                     <div @click="barcodeModalOpen = true" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition duration-200">
-                        <div class="w-14 h-14 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-barcode"></i></div>
-                        <div class="min-w-0"><h4 class="font-bold text-slate-900 text-sm tracking-wide uppercase">Cetak Barcode</h4><p class="text-[11px] text-slate-400 mt-0.5">Buat otomatis kode barcode komoditas kosong.</p></div>
+                        <div class="w-14 h-14 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
+                            <i class="fa-solid fa-barcode"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-slate-900 text-sm tracking-wide uppercase">Cetak Barcode</h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-2">Buat otomatis kode barcode komoditas kosong.</p>
+                        </div>
                     </div>
                 </div>
 
@@ -415,11 +458,15 @@
                         <tbody>
                             <template x-for="p in products" :key="p.firebaseId">
                                 <tr class="border-b hover:bg-slate-50/50 text-xs">
-                                    <td class="p-3 w-16"><img :src="p.foto || 'https://via.placeholder.com/150?text=No+Image'" class="w-12 h-12 rounded-lg object-cover border"></td>
+                                    <td class="p-3 w-16">
+                                        <img :src="p.foto || 'https://via.placeholder.com/150?text=No+Image'" class="w-12 h-12 rounded-lg object-cover border">
+                                    </td>
                                     <td class="p-3">
                                         <span class="font-bold text-slate-800 block" x-text="p.nama"></span>
                                         <span class="text-[10px] text-blue-600 font-bold uppercase" x-text="'Skema Konversi: ' + (p.namaSatuanA || 'Dus') + ' ('+(p.isiSatuanA||1)+'x), ' + (p.namaSatuanB || 'Pak') + ' ('+(p.isiSatuanB||1)+'x), ' + (p.namaSatuanC || 'Renceng') + ' ('+(p.isiSatuanC||1)+'x), ' + (p.namaSatuanD || 'Pcs') + ' (1x)'"></span>
-                                        <template x-if="p.barcode"><span class="text-[9px] bg-slate-200 text-slate-700 px-1 py-0.5 rounded font-mono mt-0.5 inline-block" x-text="'Barcode: ' + p.barcode"></span></template>
+                                        <template x-if="p.barcode">
+                                            <span class="text-[9px] bg-slate-200 text-slate-700 px-1 py-0.5 rounded font-mono mt-0.5 inline-block" x-text="'Barcode: ' + p.barcode"></span>
+                                        </template>
                                     </td>
                                     <td class="p-3 text-slate-500" x-text="p.kategori"></td>
                                     <td class="p-3 text-right font-bold text-green-600" x-text="formatRupiah(p.hargaJualPcs)"></td>
@@ -435,7 +482,176 @@
                 </div>
             </div>
 
-            <!-- TAB TRANSAKSI POS KASIR -->
+            <!-- TAB MENU PEMBELIAN / KULAKAN -->
+            <div x-show="adminTab === 'pembelian'" class="space-y-6" x-cloak>
+                <div class="border-b pb-3 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-base font-black text-slate-900 tracking-wide uppercase flex items-center gap-2">
+                            <i class="fa fa-truck-ramp-box text-green-600"></i> 4. Menu Pengadaan & Pembelian (Kulakan)
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Kelola rantai pasokan komoditas grosir, manajemen utang dagang, retur barang rusak, dan validasi fisik barang masuk.</p>
+                    </div>
+                    <button x-show="subTabPembelian !== 'menu'" @click="subTabPembelian = 'menu'" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition">
+                        <i class="fa fa-arrow-left mr-1"></i> Kembali ke Menu Pembelian
+                    </button>
+                </div>
+
+                <div x-show="subTabPembelian === 'menu'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-left">
+                    <div @click="subTabPembelian = 'po'; fetchPembelianSubData('po')" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition pointer flex items-center gap-4 group">
+                        <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-file-signature"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">ORDER PEMBELIAN (PO)</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Daftar pesanan barang ke supplier.</p></div>
+                    </div>
+                    <div @click="subTabPembelian = 'langsung'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition pointer flex items-center gap-4 group">
+                        <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-square-poll-vertical"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">PEMBELIAN LANGSUNG</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Input nota masuk belanja tunai.</p></div>
+                    </div>
+                    <div @click="subTabPembelian = 'penerimaan'; fetchPembelianSubData('po')" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition pointer flex items-center gap-4 group">
+                        <div class="w-14 h-14 bg-sky-50 text-sky-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-truck"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">PENERIMAAN BARANG</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Verifikasi fisik barang PO yang datang.</p></div>
+                    </div>
+                    <div @click="subTabPembelian = 'tempo'; fetchPembelianSubData('tempo')" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition pointer flex items-center gap-4 group">
+                        <div class="w-14 h-14 bg-rose-50 text-rose-500 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-credit-card"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">PEMBELIAN TEMPO</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Catat kulakan kredit (timbul hutang).</p></div>
+                    </div>
+                    <div @click="subTabPembelian = 'riwayat'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition pointer flex items-center gap-4 group">
+                        <div class="w-14 h-14 bg-slate-100 text-slate-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-scroll"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">RIWAYAT NOTA</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Arsip data riwayat transaksi pasok.</p></div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border shadow-sm text-xs" x-show="subTabPembelian !== 'menu'">
+                    <div x-show="subTabPembelian === 'po'" class="space-y-4">
+                        <div class="flex justify-between border-b pb-2"><h4 class="font-bold text-sm text-slate-800 uppercase tracking-wide">Penerbitan Dokumen Purchase Order (PO)</h4></div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
+                                <h5 class="font-bold text-slate-700 uppercase border-b pb-1">Buat PO Baru</h5>
+                                <div><label class="block text-slate-400 mb-0.5 font-bold">Pilih Mitra Supplier</label>
+                                    <select x-model="formPO.supplierId" class="w-full p-2 border rounded-xl bg-white"><option value="">-- Pilih Supplier --</option><template x-for="s in masterSuppliers"><option :value="s.id" x-text="s.nama"></option></template></select>
+                                </div>
+                                <div><label class="block text-slate-400 mb-0.5 font-bold">Pilih Barang</label>
+                                    <select x-model="formPO.produkId" class="w-full p-2 border rounded-xl bg-white"><option value="">-- Pilih Produk --</option><template x-for="p in products"><option :value="p.firebaseId" x-text="p.nama"></option></template></select>
+                                </div>
+                                <div><label class="block text-slate-400 mb-0.5 font-bold">Jumlah Pesanan (Qty Pcs)</label><input type="number" x-model.number="formPO.qty" class="w-full p-2 border rounded-xl bg-white"></div>
+                                <button @click="simpanPembelianSubData('po')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-bold uppercase tracking-wider">Rilis Dokumen PO</button>
+                            </div>
+                            <div class="md:col-span-2 border rounded-xl overflow-hidden table-responsive">
+                                <table class="w-full text-left"><thead class="bg-slate-50 border-b text-slate-500 font-bold"><tr><th class="p-2.5">No PO</th><th class="p-2.5">Supplier</th><th class="p-2.5">Produk</th><th class="p-2.5 text-center">Qty</th><th class="p-2.5 text-center">Status</th></tr></thead>
+                                    <tbody><template x-for="item in dbPembelianData.po"><tr><td class="p-2.5 font-mono font-bold text-slate-600" x-text="item.noPO"></td><td class="p-2.5" x-text="item.supplierNama"></td><td class="p-2.5" x-text="item.produkNama"></td><td class="p-2.5 text-center font-bold" x-text="item.qty"></td><td class="p-2.5 text-center"><span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-amber-50 text-amber-600" x-text="item.status"></span></td></tr></template></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="subTabPembelian === 'langsung'" class="space-y-4">
+                        <div class="flex justify-between border-b pb-2"><h4 class="font-bold text-sm text-slate-800 uppercase tracking-wide">Pencatatan Belanja Masuk / Tunai Kontan</h4></div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
+                                <h5 class="font-bold text-slate-700 uppercase border-b pb-1">Input Nota Cash</h5>
+                                <div><label class="block text-slate-400 mb-0.5 font-bold">Komoditas Barang</label>
+                                    <select x-model="pembelianForm.produkId" class="w-full p-2 border rounded-xl bg-white"><option value="">-- Pilih Barang --</option><template x-for="p in products"><option :value="p.firebaseId" x-text="p.nama"></option></template></select>
+                                </div>
+                                <div><label class="block text-slate-400 mb-0.5 font-bold">Jumlah Kuantitas (Qty Pcs)</label><input type="number" x-model.number="pembelianForm.qty" class="w-full p-2 border rounded-xl bg-white"></div>
+                                <div><label class="block text-slate-400 mb-0.5 font-bold">Total Nilai Belanja (Rp)</label><input type="number" x-model.number="pembelianForm.totalBiaya" class="w-full p-2 border rounded-xl bg-white"></div>
+                                <button @click="eksekusiPembelianTunai()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl font-bold uppercase tracking-wider">Simpan & Masuk Stok</button>
+                            </div>
+                            <div class="md:col-span-2 bg-slate-50/50 p-4 rounded-xl border flex flex-col justify-center items-center text-center text-slate-400">
+                                <i class="fa fa-info-circle text-2xl text-emerald-500 mb-1"></i>
+                                <p class="font-bold text-slate-700">Otomatisasi Sistem Gudang WiinMart:</p>
+                                <p class="max-w-md mt-1 leading-relaxed text-[11px]">Setiap pengisian nota langsung tunai berhasil disimpan, sistem akan secara otomatis memotong dana kas pengeluaran kulakan serta menambahkan akumulasi kuantitas produk ke Menu Stok.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PENERIMAAN BARANG PO -->
+                    <div x-show="subTabPembelian === 'penerimaan'" class="space-y-4">
+                        <div class="flex justify-between border-b pb-2"><h4 class="font-bold text-sm text-slate-800 uppercase tracking-wide">Penerimaan & Verifikasi Fisik Kedatangan Barang PO</h4></div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
+                                <h5 class="font-bold text-slate-700 uppercase border-b pb-1">Form Cek Fisik</h5>
+                                <div><label class="block text-slate-400 mb-0.5 font-bold">Pilih Dokumen PO</label>
+                                    <select x-model="selectedPOGuid" @change="loadDataPOSelected()" class="w-full p-2 border rounded-xl bg-white">
+                                        <option value="">-- Pilih Dokumen PO --</option>
+                                        <template x-for="item in dbPembelianData.po.filter(i => i.status === 'Tertunda')">
+                                            <option :value="item.id" x-text="item.noPO + ' - ' + item.supplierNama"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="bg-white p-2.5 rounded-lg border space-y-1 font-medium text-slate-600 text-[11px]" x-show="selectedPOGuid">
+                                    <p>Produk Pesanan: <span class="font-bold text-slate-900" x-text="formPenerimaan.produkNama"></span></p>
+                                    <p>Estimasi Qty PO: <span class="font-bold text-blue-600" x-text="formPenerimaan.qtyPO + ' Pcs'"></span></p>
+                                </div>
+                                <div><label class="block text-slate-400 mb-0.5 font-bold">Qty Fisik Yang Datang (Pcs)</label><input type="number" x-model.number="formPenerimaan.qtyFisik" class="w-full p-2 border rounded-xl bg-white font-bold text-slate-800"></div>
+                                <div><label class="block text-slate-400 mb-0.5 font-bold">Nama Petugas Penerima</label><input type="text" x-model="formPenerimaan.petugas" placeholder="Nama checker gudang" class="w-full p-2 border rounded-xl bg-white"></div>
+                                <button @click="prosesKirimPenerimaanFisikPO()" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2 rounded-xl font-bold uppercase tracking-wider">Verifikasi & Tambah Stok</button>
+                            </div>
+                            <div class="md:col-span-2 border rounded-xl overflow-hidden table-responsive h-fit">
+                                <table class="w-full text-left">
+                                    <thead class="bg-slate-50 border-b text-slate-500 font-bold"><tr><th>No PO</th><th>Supplier</th><th>Produk</th><th class="text-center">Qty PO</th><th class="text-center">Qty Fisik</th><th class="text-center">Status</th></tr></thead>
+                                    <tbody>
+                                        <template x-for="item in dbPembelianData.po">
+                                            <tr class="border-b hover:bg-slate-50/30">
+                                                <td class="p-2.5 font-mono font-bold text-slate-700" x-text="item.noPO"></td><td class="p-2.5" x-text="item.supplierNama"></td><td class="p-2.5 font-semibold text-slate-800" x-text="item.produkNama"></td><td class="p-2.5 text-center font-bold text-slate-500" x-text="item.qty"></td><td class="p-2.5 text-center font-black text-emerald-600" x-text="item.qtyFisik || '-'"></td>
+                                                <td class="p-2.5 text-center"><span class="px-2 py-0.5 text-[10px] font-bold rounded-full" :class="item.status === 'Diterima' ? 'bg-green-50 text-green-600' : 'bg-amber-50 text-amber-600'" x-text="item.status"></span></td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KULAKAN KREDIT TEMPO -->
+                    <div x-show="subTabPembelian === 'tempo'" class="space-y-4">
+                        <div class="flex justify-between border-b pb-2"><h4 class="font-bold text-sm text-slate-800 uppercase tracking-wide">Pencatatan Kredit Kulakan & Buku Utang Dagang</h4></div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
+                                <h5 class="font-bold text-slate-700 uppercase border-b pb-1">Input Utang Baru</h5>
+                                <div><label class="block text-slate-400 mb-0.5 font-bold">Supplier Kreditur</label>
+                                    <select x-model="formTempo.supplierId" class="w-full p-2 border rounded-xl bg-white"><option value="">-- Pilih Supplier --</option><template x-for="s in masterSuppliers"><option :value="s.id" x-text="s.nama"></option></template></select>
+                                </div>
+                                <div><label class="block text-slate-400 mb-0.5 font-bold">Jumlah Utang Belanja (Rp)</label><input type="number" x-model.number="formTempo.nominal" class="w-full p-2 border rounded-xl bg-white"></div>
+                                <div><label class="block text-slate-400 mb-0.5 font-bold">Tanggal Jatuh Tempo</label><input type="date" x-model="formTempo.jatuhTempo" class="w-full p-2 border rounded-xl bg-white"></div>
+                                <button @click="simpanPembelianSubData('tempo')" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-2 rounded-xl font-bold uppercase tracking-wider">Bukukan Tagihan Tempo</button>
+                            </div>
+                            <div class="md:col-span-2 border rounded-xl overflow-hidden table-responsive">
+                                <table class="w-full text-left"><thead class="bg-slate-50 border-b text-slate-500 font-bold"><tr><th class="p-2.5">Nama Supplier</th><th class="p-2.5 text-right">Sisa Hutang</th><th class="p-2.5 text-center">Jatuh Tempo</th><th class="p-2.5 text-center">Aksi Pelunasan</th></tr></thead>
+                                    <tbody><template x-for="item in dbPembelianData.tempo"><tr class="border-b"><td class="p-2.5 font-bold text-slate-700" x-text="item.supplierNama"></td><td class="p-2.5 text-right font-bold text-rose-600" x-text="formatRupiah(item.nominal)"></td><td class="p-2.5 text-center text-slate-500 font-medium" x-text="item.jatuhTempo"></td><td class="p-2.5 text-center"><button @click="bayarHutangTempo(item)" class="bg-green-600 hover:bg-green-700 text-white font-bold text-[10px] px-2.5 py-1 rounded-lg uppercase">Bayar Lunas</button></td></tr></template></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HISTORI NOTA PEMBELIAN -->
+                    <div x-show="subTabPembelian === 'riwayat'" class="space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-3">
+                            <h4 class="font-bold text-sm text-slate-800 uppercase tracking-wide">Arsip Dokumen Historis Log Kulakan Toko</h4>
+                            <div class="flex flex-wrap gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                                <button @click="filterPeriodePembelian = 'hari_ini'" :class="filterPeriodePembelian === 'hari_ini' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-500 hover:text-slate-800'" class="px-2.5 py-1 rounded-lg text-[11px] transition">Hari Ini</button>
+                                <button @click="filterPeriodePembelian = 'kemarin'" :class="filterPeriodePembelian === 'kemarin' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-500 hover:text-slate-800'" class="px-2.5 py-1 rounded-lg text-[11px] transition">Kemarin</button>
+                                <button @click="filterPeriodePembelian = '7_hari'" :class="filterPeriodePembelian === '7_hari' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-500 hover:text-slate-800'" class="px-2.5 py-1 rounded-lg text-[11px] transition">7 Hari</button>
+                                <button @click="filterPeriodePembelian = '30_hari'" :class="filterPeriodePembelian === '30_hari' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-500 hover:text-slate-800'" class="px-2.5 py-1 rounded-lg text-[11px] transition">30 Hari</button>
+                            </div>
+                        </div>
+                        <div class="border rounded-xl overflow-hidden table-responsive">
+                            <table class="w-full text-left">
+                                <thead class="bg-slate-50 font-bold border-b text-slate-500"><tr><th>Tanggal Pengadaan</th><th>ID Faktur Kulakan</th><th class="text-right">Nilai Total Pengeluaran Kas</th><th class="text-center">Tindakan Koreksi</th></tr></thead>
+                                <tbody>
+                                    <template x-for="(nota, idx) in itemPembelianTerfilter" :key="idx">
+                                        <tr class="border-b font-medium hover:bg-slate-50/50">
+                                            <td class="p-3 text-slate-500 font-mono" x-text="nota.formatTanggal || new Date().toLocaleDateString('id-ID')"></td><td class="p-3 text-slate-700 font-bold uppercase tracking-wider" x-text="nota.idFaktur || 'WN-FKT-' + (idx+5501)"></td><td class="p-3 text-right text-emerald-600 font-black" x-text="formatRupiah(nota.totalBiaya)"></td>
+                                            <td class="p-3 text-center">
+                                                <button @click="batalkanSalahCatatNotaPembelian(nota)" class="bg-red-50 hover:bg-red-600 text-red-600 hover:text-white px-2.5 py-1 rounded-lg font-bold text-[10px] border border-red-200 transition duration-150 inline-flex items-center gap-1"><i class="fa fa-trash-can text-[9px]"></i> Hapus / Batalkan Nota</button>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB MENU TRANSAKSI POS KASIR -->
             <div x-show="adminTab === 'pos'" class="space-y-4">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <div class="lg:col-span-4 space-y-4">
@@ -470,8 +686,26 @@
                             </div>
                         </div>
 
+                        <div class="bg-white p-4 rounded-2xl border shadow-sm text-xs space-y-3">
+                            <h4 class="font-black text-slate-700 uppercase tracking-wide border-b pb-1.5 flex items-center gap-1.5"><i class="fa fa-history text-purple-600"></i> Riwayat Nota Terakhir</h4>
+                            <div class="max-h-52 overflow-y-auto space-y-2 pr-1">
+                                <template x-for="(nota, index) in historiTransaksi.penjualan.slice().reverse()" :key="index">
+                                    <div class="p-2 bg-slate-50 border rounded-xl space-y-1 relative">
+                                        <p class="font-bold text-slate-800 text-[11px]" x-text="'Nota: ' + (nota.idNota || 'WN-POS-AUTO')"></p>
+                                        <div class="flex justify-between text-[10px] text-gray-500 font-medium">
+                                            <span x-text="nota.metodeBayar || 'Tunai'"></span>
+                                            <span class="font-bold text-green-600" x-text="formatRupiah(nota.totalOmset)"></span>
+                                        </div>
+                                        <div class="flex gap-1.5 pt-1">
+                                            <button @click="cetakUlangStrukFisik(nota)" class="flex-1 bg-white border border-slate-300 hover:bg-slate-100 py-1 rounded font-bold text-[10px] text-slate-700 flex items-center justify-center gap-1"><i class="fa fa-print"></i> Cetak Struk</button>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
                         <div class="bg-white p-4 rounded-2xl border text-xs">
-                            <h4 class="font-bold text-slate-700 mb-2">Simulasi Klik Deteksi Scan Foto:</h4>
+                            <h4 class="font-bold text-slate-700 mb-2">Simulasi Klik Deteksi Scan Foto Produk:</h4>
                             <div class="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
                                 <template x-for="p in products">
                                     <button @click="triggerVisualMatch(p)" class="p-1.5 border rounded-xl hover:border-green-500 transition flex items-center gap-2 bg-slate-50 text-left">
@@ -487,29 +721,46 @@
                         <div class="flex flex-wrap items-center justify-between border-b pb-3 mb-3 gap-2">
                             <h3 class="font-bold text-xs text-slate-700 uppercase tracking-wide flex items-center gap-1"><i class="fa fa-calculator text-green-600"></i> Keranjang Transaksi Aktif</h3>
                             <div class="flex flex-wrap gap-1.5">
-                                <button @click="tundaAntreanTransaksiPOS()" class="bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 px-2.5 py-1 rounded-lg font-bold text-[10px]"><i class="fa fa-pause"></i> Jeda</button>
+                                <button @click="tundaAntreanTransaksiPOS()" class="bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 px-2.5 py-1 rounded-lg font-bold text-[10px] flex items-center gap-1"><i class="fa fa-pause"></i> Jeda</button>
                                 <button x-show="pembelianTertundaPOS.length > 0" @click="panggilAntreanTransaksiPOS()" class="bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 px-2.5 py-1 rounded-lg font-bold text-[10px] flex items-center gap-1 animate-pulse"><i class="fa fa-play"></i> Ambil Jeda (<span x-text="pembelianTertundaPOS.length"></span>)</button>
+                                <button @click="bukaAksesNamaPelangganModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg font-bold text-[10px] flex items-center gap-1"><i class="fa fa-user"></i> <span x-text="posNamaPelanggan || 'Set Pelanggan'"></span></button>
                                 <button @click="kosongkanKeranjangPOSBarang()" class="bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 px-2.5 py-1 rounded-lg font-bold text-[10px]"><i class="fa fa-trash"></i> Batal Semua</button>
                             </div>
                         </div>
 
                         <div class="flex-1 table-responsive">
                             <table class="w-full text-sm text-left">
-                                <thead class="bg-slate-50 text-slate-500 text-xs"><tr><th class="p-3">Nama Produk</th><th class="p-3 text-center">Satuan</th><th class="p-3 text-center">Jumlah</th><th class="p-3 text-right">Subtotal</th><th class="p-3 text-center">Opsi</th></tr></thead>
+                                <thead class="bg-slate-50 text-slate-500 text-xs">
+                                    <tr>
+                                        <th class="p-3">Nama Produk</th>
+                                        <th class="p-3 text-center">Satuan</th>
+                                        <th class="p-3 text-center">Jumlah</th>
+                                        <th class="p-3 text-right">Subtotal</th>
+                                        <th class="p-3 text-center">Opsi / Aksi</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                     <template x-for="(item, idx) in posCart" :key="idx">
                                         <tr class="border-b text-xs hover:bg-slate-50/50">
-                                            <td class="p-3"><span class="font-bold text-slate-800 block" x-text="item.nama"></span></td>
+                                            <td class="p-3">
+                                                <span class="font-bold text-slate-800 block" x-text="item.nama"></span>
+                                                <template x-if="item.diskonItem > 0">
+                                                    <span class="text-[10px] text-red-500 font-bold" x-text="'Diskon: -' + formatRupiah(item.diskonItem)"></span>
+                                                </template>
+                                            </td>
                                             <td class="p-3 text-center uppercase font-black text-orange-600" x-text="item.satuan"></td>
                                             <td class="p-3 text-center">
                                                 <div class="flex items-center justify-center gap-1">
-                                                    <button @click="if(item.qty > 1) item.qty--" class="w-5 h-5 bg-slate-100 rounded font-bold text-xs">-</button>
+                                                    <button @click="if(item.qty > 1) item.qty--" class="w-5 h-5 bg-slate-100 rounded text-center font-bold text-xs">-</button>
                                                     <span class="w-8 text-center font-bold" x-text="item.qty"></span>
-                                                    <button @click="item.qty++" class="w-5 h-5 bg-slate-100 rounded font-bold text-xs">+</button>
+                                                    <button @click="item.qty++" class="w-5 h-5 bg-slate-100 rounded text-center font-bold text-xs">+</button>
                                                 </div>
                                             </td>
                                             <td class="p-3 text-right font-black text-slate-900" x-text="formatRupiah((item.hargaTerpilih - item.diskonItem) * item.qty)"></td>
-                                            <td class="p-3 text-center"><button @click="posCart.splice(idx, 1)" class="text-red-500 hover:text-red-700 px-1"><i class="fa fa-trash-can"></i></button></td>
+                                            <td class="p-3 text-center space-x-1">
+                                                <button @click="bukaModalEditHargaDiskonItem(item, idx)" class="text-amber-500 hover:text-amber-700 px-1" title="Ubah Harga / Diskon"><i class="fa fa-tags"></i></button>
+                                                <button @click="posCart.splice(idx, 1)" class="text-red-500 hover:text-red-700 px-1" title="Hapus Barang"><i class="fa fa-trash-can"></i></button>
+                                            </td>
                                         </tr>
                                     </template>
                                 </tbody>
@@ -520,29 +771,336 @@
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
                                 <div>
                                     <span class="font-bold text-xs text-slate-500 block">METODE PEMBAYARAN:</span>
-                                    <select x-model="posMetodeBayar" class="p-2 border rounded-xl bg-white text-xs font-bold mt-1 focus:outline-green-500"><option value="Tunai">Uang Tunai (Cash)</option><option value="QRIS">QRIS / Non-Tunai</option></select>
+                                    <select x-model="posMetodeBayar" class="p-2 border rounded-xl bg-white text-xs font-bold mt-1 focus:outline-green-500">
+                                        <option value="Tunai">Uang Tunai (Cash)</option>
+                                        <option value="QRIS">QRIS / Non-Tunai</option>
+                                    </select>
                                 </div>
                                 <div class="text-right">
                                     <span class="font-bold text-xs text-slate-500 block">TOTAL TRANSAKSI KASIR:</span>
                                     <span class="text-3xl font-black text-green-600" x-text="formatRupiah(posCartTotal)"></span>
                                 </div>
                             </div>
-                            <button @click="bayarPOS()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-lg">SELESAIKAN TRANSAKSI & CETAK STRUK</button>
+                            <button @click="bayarPOS()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-lg">SELESAIKAN TRANSAKSI (POTONG STOK ACCURATE)</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- MENU KEUANGAN & LAPORAN LAIN DIABAIKAN SUPAYA SINGKAT -->
+            <!-- TAB MENU KEUANGAN -->
+            <div x-show="adminTab === 'keuangan'" class="space-y-6" x-cloak>
+                <div class="border-b pb-3 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-base font-black text-slate-900 tracking-wide uppercase flex items-center gap-2">
+                            <i class="fa fa-scale-balanced text-green-600"></i> 6. Sistem Administrasi & Manajemen Keuangan
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Kelola penuh buku besar pembukuan, pelunasan utang piutang, kasbon pelanggan, serta pos anggaran mutasi operasional.</p>
+                    </div>
+                    <button x-show="subTabKeuangan !== 'menu'" @click="subTabKeuangan = 'menu'; resetKeuanganForm()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition">
+                        <i class="fa fa-arrow-left mr-1"></i> Kembali ke Menu Keuangan
+                    </button>
+                </div>
+
+                <div x-show="subTabKeuangan === 'menu'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-left">
+                    <div @click="subTabKeuangan = 'hutang_dagang'; fetchPembelianSubData('tempo')" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4">
+                        <div class="w-14 h-14 bg-red-50 text-red-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-caret-down text-2xl text-red-500"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">HUTANG DAGANG</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Catatan tagihan tempo dari supplier.</p></div>
+                    </div>
+                    <div @click="subTabKeuangan = 'piutang_dagang'; fetchKeuanganSubData('piutang')" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4">
+                        <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-caret-up text-2xl text-blue-600"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">PIUTANG DAGANG</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Pencatatan nota kasbon para pelanggan.</p></div>
+                    </div>
+                    <div @click="subTabKeuangan = 'pembayaran_hutang'; fetchPembelianSubData('tempo')" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4">
+                        <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-money-bill-transfer text-emerald-600"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">PEMBAYARAN HUTANG</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Input cicilan atau pelunasan ke supplier.</p></div>
+                    </div>
+                    <div @click="subTabKeuangan = 'pembayaran_piutang'; fetchKeuanganSubData('piutang')" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4">
+                        <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-wallet text-purple-600"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">PEMBAYARAN PIUTANG</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Pencatatan bayar bon dari pelanggan.</p></div>
+                    </div>
+                    <div @click="subTabKeuangan = 'aliran_kas'; fetchKeuanganSubData('mutasi')" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4">
+                        <div class="w-14 h-14 bg-teal-50 text-teal-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-chart-simple text-teal-600"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">ALIRAN KAS & BIAYA</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Mutasi saldo kas kecil & biaya operasional.</p></div>
+                    </div>
+                </div>
+
+                <div x-show="subTabKeuangan === 'hutang_dagang'" class="space-y-4 text-xs">
+                    <div class="flex justify-between border-b pb-2"><h4 class="font-bold text-sm text-slate-800 uppercase">Manajemen & Input Saldo Hutang Dagang</h4></div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
+                            <h5 class="font-bold text-slate-700 uppercase border-b pb-1">Tambah Saldo Hutang</h5>
+                            <div><label class="block text-slate-400 mb-0.5 font-bold">Supplier Kreditur</label><select x-model="formKeuanganHutang.supplierId" class="w-full p-2 border rounded-xl bg-white"><option value="">-- Pilih Supplier --</option><template x-for="s in masterSuppliers"><option :value="s.id" x-text="s.nama"></option></template></select></div>
+                            <div><label class="block text-slate-400 mb-0.5 font-bold">Jumlah Nilai Hutang (Rp)</label><input type="number" x-model.number="formKeuanganHutang.nominal" class="w-full p-2 border rounded-xl bg-white font-bold"></div>
+                            <div><label class="block text-slate-400 mb-0.5 font-bold">Tanggal Jatuh Tempo</label><input type="date" x-model="formKeuanganHutang.jatuhTempo" class="w-full p-2 border rounded-xl bg-white"></div>
+                            <button @click="simpanKeuanganHutangLangsung()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-xl font-bold uppercase tracking-wider">Bukukan Hutang Baru</button>
+                        </div>
+                        <div class="md:col-span-2 border rounded-xl overflow-hidden table-responsive bg-white">
+                            <table class="w-full text-left">
+                                <thead class="bg-slate-50 border-b text-slate-500 font-bold"><tr><th class="p-3">Nama Supplier</th><th class="p-3 text-right">Nilai Hutang</th><th class="p-3 text-center">Batas Jatuh Tempo</th><th class="p-3 text-center">Status</th></tr></thead>
+                                <tbody><template x-for="item in dbPembelianData.tempo"><tr class="border-b font-medium"><td class="p-3 font-bold text-slate-700" x-text="item.supplierNama"></td><td class="p-3 text-right font-bold text-red-600" x-text="formatRupiah(item.nominal)"></td><td class="p-3 text-center text-slate-500" x-text="item.jatuhTempo"></td><td class="p-3 text-center"><span class="px-2 py-0.5 bg-red-50 text-red-600 font-bold text-[10px] rounded-full">Belum Lunas</span></td></tr></template></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="subTabKeuangan === 'piutang_dagang'" class="space-y-4 text-xs">
+                    <div class="flex justify-between border-b pb-2"><h4 class="font-bold text-sm text-slate-800 uppercase">Pencatatan Berkas Saldo Piutang / Kasbon Pelanggan</h4></div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
+                            <h5 class="font-bold text-slate-700 uppercase border-b pb-1">Buka Kasbon Baru</h5>
+                            <div><label class="block text-slate-400 mb-0.5 font-bold">Nama Pelanggan Pembeli</label><select x-model="formKeuanganPiutang.pelangganNama" class="w-full p-2 border rounded-xl bg-white"><option value="">-- Pilih Pelanggan --</option><template x-for="m in masterPelanggans"><option :value="m.nama" x-text="m.nama"></option></template></select></div>
+                            <div><label class="block text-slate-400 mb-0.5 font-bold">Nominal Kasbon (Rp)</label><input type="number" x-model.number="formKeuanganPiutang.nominal" class="w-full p-2 border rounded-xl bg-white font-bold"></div>
+                            <div><label class="block text-slate-400 mb-0.5 font-bold">Keterangan / Deskripsi</label><input type="text" x-model="formKeuanganPiutang.keterangan" placeholder="Belanja sembako bon" class="w-full p-2 border rounded-xl bg-white"></div>
+                            <button @click="simpanKeuanganSubData('piutang')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-bold uppercase tracking-wider">Terbitkan Nota Piutang</button>
+                        </div>
+                        <div class="md:col-span-2 border rounded-xl overflow-hidden table-responsive bg-white">
+                            <table class="w-full text-left">
+                                <thead class="bg-slate-50 border-b text-slate-500 font-bold"><tr><th class="p-2.5">Tanggal</th><th class="p-2.5">Nama Konsumen</th><th class="p-2.5">Keterangan</th><th class="p-2.5 text-right">Sisa Piutang</th></tr></thead>
+                                <tbody><template x-for="item in dbKeuanganData.piutang"><tr><td class="p-2.5 text-slate-500" x-text="item.formatTanggal"></td><td class="p-2.5 font-bold text-slate-700" x-text="item.pelangganNama"></td><td class="p-2.5 text-slate-600" x-text="item.keterangan"></td><td class="p-2.5 text-right font-bold text-blue-600" x-text="formatRupiah(item.nominal)"></td></tr></template></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="subTabKeuangan === 'pembayaran_hutang'" class="space-y-4 text-xs">
+                    <div class="flex justify-between border-b pb-2"><h4 class="font-bold text-sm text-slate-800 uppercase">Validasi Pembayaran & Pelunasan Hutang Dagang</h4></div>
+                    <div class="bg-white border rounded-xl overflow-hidden table-responsive">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 border-b text-slate-500 font-bold"><tr><th class="p-3">Nama Mitra Supplier</th><th class="p-3 text-right">Total Tagihan</th><th class="p-3 text-center">Batas Tempo</th><th class="p-3 text-center">Aksi Eksekusi Dana</th></tr></thead>
+                            <tbody><template x-for="item in dbPembelianData.tempo"><tr class="border-b font-medium"><td class="p-3 font-bold text-slate-700" x-text="item.supplierNama"></td><td class="p-3 text-right font-bold text-red-600" x-text="formatRupiah(item.nominal)"></td><td class="p-3 text-center text-slate-500" x-text="item.jatuhTempo"></td><td class="p-3 text-center"><button @click="bayarHutangTempo(item)" class="bg-green-600 hover:bg-green-700 text-white font-bold px-3 py-1.5 rounded-lg uppercase tracking-wider">Bayar & Catat Mutasi</button></td></tr></template></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div x-show="subTabKeuangan === 'pembayaran_piutang'" class="space-y-4 text-xs">
+                    <div class="flex justify-between border-b pb-2"><h4 class="font-bold text-sm text-slate-800 uppercase">Validasi Pembayaran Bon & Piutang Pelanggan</h4></div>
+                    <div class="bg-white border rounded-xl overflow-hidden table-responsive">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 border-b text-slate-500 font-bold"><tr><th class="p-3">Tanggal Terbit</th><th class="p-3">Nama Pelanggan</th><th class="p-3">Keterangan Catatan</th><th class="p-3 text-right">Sisa Saldo Bon</th><th class="p-3 text-center">Tindakan Kasir</th></tr></thead>
+                            <tbody><template x-for="item in dbKeuanganData.piutang"><tr class="border-b font-medium"><td class="p-3 text-slate-500" x-text="item.formatTanggal"></td><td class="p-3 font-bold text-slate-700" x-text="item.pelangganNama"></td><td class="p-3 text-slate-600" x-text="item.keterangan"></td><td class="p-3 text-right font-bold text-blue-600" x-text="formatRupiah(item.nominal)"></td><td class="p-3 text-center"><button @click="lunasiPiutangPelanggan(item)" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-3 py-1.5 rounded-lg uppercase tracking-wider">Terima Dana Cash</button></td></tr></template></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div x-show="subTabKeuangan === 'aliran_kas'" class="space-y-4 text-xs">
+                    <div class="flex justify-between border-b pb-2"><h4 class="font-bold text-sm text-slate-800 uppercase">Arus Keluar Masuk Dana Operasional & Alokasi Anggaran</h4></div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div class="bg-white p-3 rounded-xl border border-green-200"><p class="text-[10px] font-bold text-gray-400 uppercase">Total Pemasukan Tambahan</p><p class="text-base font-black text-green-600 mt-0.5" x-text="formatRupiah(totalPemasukanMutasi)"></p></div>
+                        <div class="bg-white p-3 rounded-xl border border-red-200"><p class="text-[10px] font-bold text-gray-400 uppercase">Total Pengeluaran Mutasi</p><p class="text-base font-black text-red-600 mt-0.5" x-text="formatRupiah(totalPengeluaranMutasi)"></p></div>
+                        <div class="bg-white p-3 rounded-xl border border-teal-200"><p class="text-[10px] font-bold text-gray-400 uppercase">Saldo Berjalan Kas Kecil</p><p class="text-base font-black text-teal-600 mt-0.5" x-text="formatRupiah(totalPemasukanMutasi - totalPengeluaranMutasi)"></p></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
+                            <h5 class="font-bold text-slate-700 uppercase border-b pb-1">Input Jurnal Mutasi</h5>
+                            <div><label class="block text-slate-400 mb-0.5 font-bold">Jenis Arus Kas</label>
+                                <select x-model="formKeuanganMutasi.jenis" class="w-full p-2 border rounded-xl bg-white font-bold"><option value="Pengeluaran">Keluar (Biaya/Operasional)</option><option value="Pemasukan">Masuk (Suntikan Modal/Lainnya)</option></select>
+                            </div>
+                            <div><label class="block text-slate-400 mb-0.5 font-bold">Nominal Mutasi Dana (Rp)</label><input type="number" x-model.number="formKeuanganMutasi.nominal" class="w-full p-2 border rounded-xl bg-white font-bold"></div>
+                            <div><label class="block text-slate-400 mb-0.5 font-bold">Nama Pos Anggaran</label><input type="text" x-model="formKeuanganMutasi.namaPos" placeholder="Contoh: Bayar Listrik, Gaji Karyawan" class="w-full p-2 border rounded-xl bg-white font-semibold"></div>
+                            <button @click="simpanKeuanganSubData('mutasi')" class="w-full bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-xl font-bold uppercase tracking-wider">Bukukan Transaksi Kas</button>
+                        </div>
+                        
+                        <div class="md:col-span-2 space-y-4">
+                            <div class="bg-white p-4 rounded-xl border">
+                                <h5 class="font-bold text-slate-700 uppercase mb-2 text-[11px] tracking-wide"><i class="fa fa-chart-pie text-teal-600 mr-1"></i> Analisis Persentase Alokasi Pengeluaran</h5>
+                                <div class="space-y-3">
+                                    <template x-for="alokasi in rekapAlokasiAnggaran" :key="alokasi.namaPos">
+                                        <div>
+                                            <div class="flex justify-between text-[11px] font-semibold mb-1">
+                                                <span class="text-slate-700 truncate max-w-[180px]" x-text="alokasi.namaPos"></span>
+                                                <div class="space-x-1.5 flex-shrink-0"><span class="text-slate-400" x-text="formatRupiah(alokasi.total)"></span><span class="text-teal-600 font-bold" x-text="alokasi.persen.toFixed(1) + '%'"></span></div>
+                                            </div>
+                                            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div class="bg-teal-500 h-full rounded-full transition-all duration-300" :style="'width: ' + alokasi.persen + '%'"></div></div>
+                                        </div>
+                                    </template>
+                                    <template x-if="rekapAlokasiAnggaran.length === 0"><p class="text-slate-400 text-center py-2 font-medium">Belum ada data pengeluaran untuk dianalisis.</p></template>
+                                </div>
+                            </div>
+
+                            <div class="border rounded-xl overflow-hidden table-responsive bg-white">
+                                <table class="w-full text-left">
+                                    <thead class="bg-slate-50 border-b text-slate-500 font-bold"><tr><th class="p-2.5">Tanggal</th><th class="p-2.5">Nama Anggaran</th><th class="p-2.5 text-center">Tipe Kas</th><th class="p-2.5 text-right">Jumlah Saldo</th></tr></thead>
+                                    <tbody>
+                                        <template x-for="item in dbKeuanganData.mutasi" :key="item.id">
+                                            <tr class="border-b font-medium">
+                                                <td class="p-2.5 text-slate-500" x-text="item.formatTanggal"></td><td class="p-2.5 font-bold text-slate-700" x-text="item.namaPos"></td>
+                                                <td class="p-2.5 text-center"><span class="px-2 py-0.5 rounded font-bold text-[10px]" :class="item.jenis === 'Pemasukan' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'" x-text="item.jenis"></span></td>
+                                                <td class="p-2.5 text-right font-bold" :class="item.jenis === 'Pemasukan' ? 'text-green-600' : 'text-red-600'" x-text="formatRupiah(item.nominal)"></td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB MENU PUSAT LAPORAN -->
+            <div x-show="adminTab === 'laporan'" class="space-y-6" x-cloak>
+                <div class="border-b pb-3 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-base font-black text-slate-900 tracking-wide uppercase flex items-center gap-2"><i class="fa fa-chart-line text-green-600"></i> Pusat Analisis & Pelaporan Operasional</h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Pantau ringkasan performa dan pembukuan komprehensif bisnis retail Anda.</p>
+                    </div>
+                    <button x-show="subTabLaporan !== 'menu'" @click="subTabLaporan = 'menu'" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5"><i class="fa fa-arrow-left"></i> Kembali ke Menu Utama Laporan</button>
+                </div>
+
+                <div x-show="subTabLaporan === 'menu'" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mb-6">
+                    <div class="bg-white p-4 rounded-xl border border-green-200"><p class="text-xs font-bold text-gray-400">TOTAL OMSET BRUTO</p><p class="text-xl font-black text-green-600 mt-1" x-text="formatRupiah(hitungKas.omset)"></p></div>
+                    <div class="bg-white p-4 rounded-xl border border-blue-200"><p class="text-xs font-bold text-gray-400">TOTAL PENGELUARAN KULAKAN</p><p class="text-xl font-black text-blue-600 mt-1" x-text="formatRupiah(hitungKas.pengeluaran)"></p></div>
+                    <div class="bg-white p-4 rounded-xl border border-orange-200"><p class="text-xs font-bold text-gray-400">ESTIMASI LABA KOTOR BISNIS</p><p class="text-xl font-black text-orange-600 mt-1" x-text="formatRupiah(hitungKas.laba)"></p></div>
+                </div>
+
+                <div x-show="subTabLaporan === 'menu'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 text-left">
+                    <div @click="subTabLaporan = 'penjualan'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
+                        <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-chart-gantt"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">LAPORAN PENJUALAN</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Analisis omset berkala & custom tanggal.</p></div>
+                    </div>
+                    <div @click="subTabLaporan = 'pembelian'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
+                        <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-download"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">LAPORAN PEMBELIAN</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Rekap data nota belanja barang ke supplier.</p></div>
+                    </div>
+                    <div @click="subTabLaporan = 'penerimaan'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
+                        <div class="w-14 h-14 bg-cyan-50 text-cyan-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-truck-ramp-box"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">PENERIMAAN BARANG</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Arsip fisik barang masuk hasil cocok PO.</p></div>
+                    </div>
+                    <div @click="subTabLaporan = 'stok'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
+                        <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-box-open"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">LAPORAN STOK</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Posisi sisa kuantitas aset produk terkini.</p></div>
+                    </div>
+                    <div @click="subTabLaporan = 'labarugi'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
+                        <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-sack-dollar"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">LAPORAN LABA RUGI</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Perhitungan Omset bersih dikurangi HPP.</p></div>
+                    </div>
+                    <div @click="subTabLaporan = 'hutangpiutang'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
+                        <div class="w-14 h-14 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-landmark"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">LAPORAN HUTANG PIUTANG</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Rekap total sisa bon & tagihan tempo.</p></div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4" x-show="subTabLaporan !== 'menu'">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-slate-50 p-4 rounded-xl border">
+                        <div class="flex flex-wrap gap-1">
+                            <button @click="filterPeriodeLaporan = 'hari_ini'" :class="filterPeriodeLaporan === 'hari_ini' ? 'bg-green-600 text-white font-bold' : 'bg-white border text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-lg text-xs transition">Hari Ini</button>
+                            <button @click="filterPeriodeLaporan = 'kemarin'" :class="filterPeriodeLaporan === 'kemarin' ? 'bg-green-600 text-white font-bold' : 'bg-white border text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-lg text-xs transition">Kemarin</button>
+                            <button @click="filterPeriodeLaporan = '7_hari'" :class="filterPeriodeLaporan === '7_hari' ? 'bg-green-600 text-white font-bold' : 'bg-white border text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-lg text-xs transition">7 Hari Terakhir</button>
+                            <button @click="filterPeriodeLaporan = '30_hari'" :class="filterPeriodeLaporan === '30_hari' ? 'bg-green-600 text-white font-bold' : 'bg-white border text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-lg text-xs transition">30 Hari Terakhir</button>
+                            <button @click="filterPeriodeLaporan = 'custom'" :class="filterPeriodeLaporan === 'custom' ? 'bg-green-600 text-white font-bold' : 'bg-white border text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-lg text-xs transition">Custom</button>
+                        </div>
+                        <div x-show="filterPeriodeLaporan === 'custom'" class="flex items-center gap-2 text-xs" x-cloak>
+                            <input type="date" x-model="lapCustomMulai" class="p-1.5 border rounded-lg bg-white">
+                            <span class="text-slate-400">s/d</span>
+                            <input type="date" x-model="lapCustomSelesai" class="p-1.5 border rounded-lg bg-white">
+                        </div>
+                        <button @click="eksporKeExcel('tabel-arsip-laporan', subTabLaporan)" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 ml-auto lg:ml-0 shadow-sm"><i class="fa-regular fa-file-excel"></i> Ekspor ke Excel</button>
+                    </div>
+
+                    <div x-show="subTabLaporan === 'penjualan'" class="table-responsive">
+                        <table id="tabel-arsip-laporan" class="w-full text-xs text-left">
+                            <thead class="bg-slate-50 border-b font-bold text-slate-600"><tr><th class="p-3">ID Faktur / Nota</th><th class="p-3">Daftar Belanja</th><th class="p-3 text-right">Total Modal (HPP)</th><th class="p-3 text-right">Total Omset Kotor</th></tr></thead>
+                            <tbody><template x-for="item in prosesFilterLaporanData(historiTransaksi.penjualan, 'penjualan')"><tr class="border-b font-medium"><td class="p-3 font-mono font-bold text-slate-600" x-text="item.idNota || 'WN-POS-AUTO'"></td><td class="p-3 font-semibold text-slate-800" x-text="item.nama"></td><td class="p-3 text-right text-slate-500" x-text="formatRupiah(item.totalModal)"></td><td class="p-3 text-right text-green-600 font-bold" x-text="formatRupiah(item.totalOmset)"></td></tr></template></tbody>
+                        </table>
+                    </div>
+
+                    <div x-show="subTabLaporan === 'pembelian'" class="table-responsive">
+                        <table id="tabel-arsip-laporan" class="w-full text-xs text-left">
+                            <thead class="bg-slate-50 border-b font-bold text-slate-600"><tr><th class="p-3">Faktur ID</th><th class="p-3">ID Komoditas</th><th class="p-3 text-center">Qty Masuk</th><th class="p-3 text-right">Total Kas Keluar</th></tr></thead>
+                            <tbody><template x-for="item in prosesFilterLaporanData(historiTransaksi.pembelian, 'pembelian')"><tr class="border-b font-medium"><td class="p-3 font-mono text-slate-600" x-text="item.idFaktur || 'WN-FKT-AUTO'"></td><td class="p-3 font-bold" x-text="item.produkId"></td><td class="p-3 text-center" x-text="item.qty + ' pcs'"></td><td class="p-3 text-right text-red-500 font-bold" x-text="formatRupiah(item.totalBiaya)"></td></tr></template></tbody>
+                        </table>
+                    </div>
+
+                    <div x-show="subTabLaporan === 'penerimaan'" class="table-responsive">
+                        <table id="tabel-arsip-laporan" class="w-full text-xs text-left">
+                            <thead class="bg-slate-50 border-b font-bold text-slate-600"><tr><th class="p-3">No PO</th><th class="p-3">Nama Mitra Supplier</th><th class="p-3">Produk Item</th><th class="p-3 text-center">Estimasi PO</th><th class="p-3 text-center">Fisik Diterima</th></tr></thead>
+                            <tbody><template x-for="item in dbPembelianData.po.filter(i => i.status === 'Diterima')"><tr class="border-b font-medium"><td class="p-3 font-mono font-bold" x-text="item.noPO"></td><td class="p-3" x-text="item.supplierNama"></td><td class="p-3" x-text="item.produkNama"></td><td class="p-3 text-center text-slate-400" x-text="item.qty"></td><td class="p-3 text-center text-emerald-600 font-black" x-text="item.qtyFisik"></td></tr></template></tbody>
+                        </table>
+                    </div>
+
+                    <div x-show="subTabLaporan === 'stok'" class="table-responsive">
+                        <table id="tabel-arsip-laporan" class="w-full text-xs text-left">
+                            <thead class="bg-slate-50 border-b font-bold text-slate-600"><tr><th class="p-3">Nama Komoditas Barang</th><th class="p-3">Kategori</th><th class="p-3 text-right">Harga HPP Beli</th><th class="p-3 text-center">Posisi Sisa Stok Fisik</th></tr></thead>
+                            <tbody><template x-for="p in products"><tr class="border-b"><td class="p-3 font-bold text-slate-800" x-text="p.nama"></td><td class="p-3 text-slate-500" x-text="p.kategori"></td><td class="p-3 text-right" x-text="formatRupiah(p.hargaBeli)"></td><td class="p-3 text-center font-black text-blue-600" x-text="p.stokAwal + ' pcs'"></td></tr></template></tbody>
+                        </table>
+                    </div>
+
+                    <div x-show="subTabLaporan === 'labarugi'" class="table-responsive">
+                        <table id="tabel-arsip-laporan" class="w-full text-xs text-left">
+                            <thead class="bg-slate-50 border-b font-bold text-slate-600"><tr><th class="p-3">Parameter Pembukuan Laba Rugi</th><th class="p-3 text-right">Nilai Total Akumulasi (Rp)</th></tr></thead>
+                            <tbody>
+                                <tr class="border-b"><td class="p-3 font-semibold text-slate-700">1. Total Pendapatan Kotor (Omset Penjualan)</td><td class="p-3 text-right font-bold text-green-600" x-text="formatRupiah(hitungKas.omset)"></td></tr>
+                                <tr class="border-b"><td class="p-3 font-semibold text-slate-700">2. Harga Pokok Penjualan (HPP / Biaya Kulakan)</td><td class="p-3 text-right font-bold text-blue-600" x-text="formatRupiah(hitungKas.pengeluaran)"></td></tr>
+                                <tr class="border-b bg-amber-50/50"><td class="p-3 font-black text-slate-900">3. Estimasi Laba Bersih Operasional (Net Profit)</td><td class="p-3 text-right font-black text-orange-600" x-text="formatRupiah(hitungKas.laba)"></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div x-show="subTabLaporan === 'hutangpiutang'" class="table-responsive">
+                        <table id="tabel-arsip-laporan" class="w-full text-xs text-left">
+                            <thead class="bg-slate-50 border-b font-bold text-slate-600"><tr><th class="p-3">Entitas / Nama Rekanan</th><th class="p-3 text-center">Tipe Akun Keuangan</th><th class="p-3 text-right">Sisa Saldo Tagihan</th></tr></thead>
+                            <tbody>
+                                <template x-for="h in dbPembelianData.tempo"><tr class="border-b"><td class="p-3 font-bold" x-text="h.supplierNama"></td><td class="p-3 text-center text-red-500 font-bold">HUTANG (Supplier)</td><td class="p-3 text-right font-bold text-red-600" x-text="formatRupiah(h.nominal)"></td></tr></template>
+                                <template x-for="p in dbKeuanganData.piutang"><tr class="border-b"><td class="p-3 font-bold" x-text="p.pelangganNama"></td><td class="p-3 text-center text-blue-500 font-bold">PIUTANG (Bon Pembeli)</td><td class="p-3 text-right font-bold text-blue-600" x-text="formatRupiah(p.nominal)"></td></tr></template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </main>
     </div>
 
-    <!-- AREA STRUK PEMBELIAN KUSTOM (UNTUK MODUL PRINTER THERMAL) -->
+    <!-- MODAL POPUP WINDOWS EDIT UTILS -->
+    <div x-show="modalEditItemOpen" class="fixed inset-0 z-[6000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
+        <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
+            <h3 class="text-sm font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-tags text-amber-500 mr-1"></i> Sesuaikan Item Belanja</h3>
+            <div class="space-y-3.5 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-500 mb-1">Ubah Harga Jual Satuan (Rp)</label>
+                    <input type="number" x-model.number="formEditItem.hargaTerpilih" class="w-full p-2.5 border rounded-xl bg-slate-50 font-bold text-slate-800">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-500 mb-1">Potongan Diskon Per-Item (Rp)</label>
+                    <input type="number" x-model.number="formEditItem.diskonItem" class="w-full p-2.5 border rounded-xl bg-slate-50 font-bold text-red-600">
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button @click="modalEditItemOpen = false" class="w-1/3 bg-slate-200 py-2.5 rounded-xl font-bold">Batal</button>
+                    <button @click="simpanPenyesuaianItemKeranjang()" class="w-2/3 bg-green-600 text-white py-2.5 rounded-xl font-bold uppercase shadow-md">Terapkan Perubahan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NAMA PELANGGAN -->
+    <div x-show="modalNamaPelangganOpen" class="fixed inset-0 z-[6000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
+        <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
+            <h3 class="text-sm font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-user text-blue-600 mr-1"></i> Tautkan Nama Pelanggan</h3>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-500 mb-1">Pilih Member Terdaftar</label>
+                    <select x-model="posNamaPelanggan" @change="modalNamaPelangganOpen = false" class="w-full p-2.5 border rounded-xl bg-white text-xs font-semibold">
+                        <option value="">-- Pilih Pembeli --</option>
+                        <template x-for="m in masterPelanggans" :key="m.id"><option :value="m.nama" x-text="m.nama + ' ('+m.tipe+')'"></option></template>
+                    </select>
+                </div>
+                <div class="text-center text-gray-400 font-bold my-1 uppercase text-[10px]">— ATAU INPUT MANUAL —</div>
+                <div>
+                    <label class="block font-bold text-slate-500 mb-1">Ketik Nama Pelanggan Umum</label>
+                    <input type="text" x-model="posNamaPelanggan" placeholder="Contoh: Ibu Ani" class="w-full p-2.5 border rounded-xl bg-slate-50 font-bold text-xs">
+                </div>
+                <button @click="modalNamaPelangganOpen = false" class="w-full bg-slate-900 text-white font-bold py-2.5 rounded-xl uppercase tracking-wider mt-1">Selesai</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- KERTAS STRUK TERSEMBUNYI -->
     <div id="print-receipt-area" class="hidden p-4 bg-white text-black font-mono text-[10px] w-64">
         <center>
-            <h2 style="font-size:14px; font-weight:bold;" x-text="formatStruk.namaStruk || profilToko.nama || 'WIINMART POS'"></h2>
-            <p x-text="formatStruk.alamatStruk || profilToko.alamat || 'Alamat Toko'"></p>
-            <p x-text="'Telp: ' + (formatStruk.telpStruk || profilToko.wa || '-')"></p>
+            <h2 style="font-size:14px; font-weight:bold;" x-text="profilToko.nama || 'WIINMART POS'"></h2>
+            <p x-text="profilToko.alamat || 'Alamat Toko'"></p>
+            <p x-text="'Telp: ' + (profilToko.wa || '-')"></p>
             <p x-text="'Nota: ' + receiptPrintData.idNota"></p>
             <p x-text="'Bayar: ' + receiptPrintData.metodeBayar"></p>
             <p>===============================</p>
@@ -557,37 +1115,206 @@
         </div>
         <center>
             <p>===============================</p>
-            <div class="flex justify-between font-bold" style="font-size:12px;"><span>TOTAL:</span><span x-text="formatRupiah(receiptPrintData.totalOmset)"></span></div>
-            <p style="margin-top:10px; font-size:9px;" x-text="formatStruk.footerMessage || 'Terima Kasih Atas Kunjungan Anda'"></p>
+            <div class="flex justify-between font-bold" style="font-size:12px;">
+                <span>TOTAL:</span>
+                <span x-text="formatRupiah(receiptPrintData.totalOmset)"></span>
+            </div>
+            <p style="margin-top:10px; font-size:9px;" x-text="pengaturanStruk.footerMessage"></p>
         </center>
     </div>
 
-    <!-- WINDOWS MODAL MULTI SATUAN -->
+    <!-- MODAL KATEGORI -->
+    <div x-show="categoryModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
+        <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
+            <h3 class="text-base font-black text-slate-800 mb-3 uppercase tracking-wide">Kelola Kategori Toko</h3>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-500 mb-1">Nama Kategori Baru</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="newCatInput" placeholder="Contoh: Frozen Food" class="flex-1 p-2 border rounded-xl bg-slate-50 font-semibold">
+                        <button @click="let val = document.getElementById('newCatInput').value; if(val) { categories.push(val); document.getElementById('newCatInput').value = ''; alert('Kategori ditambahkan!'); }" class="bg-green-600 text-white px-3 py-2 rounded-xl font-bold">Tambah</button>
+                    </div>
+                </div>
+                <div class="border-t pt-2">
+                    <label class="block font-bold text-slate-400 uppercase mb-1">Daftar Aktif:</label>
+                    <div class="max-h-40 overflow-y-auto space-y-1 bg-slate-50 p-2 rounded-xl border">
+                        <template x-for="(cat, idx) in categories" :key="idx">
+                            <div class="flex justify-between items-center bg-white p-1.5 rounded border text-[11px] font-bold text-slate-700">
+                                <span x-text="cat"></span>
+                                <button @click="categories.splice(idx, 1)" class="text-red-500 text-xs"><i class="fa fa-trash"></i></button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <button @click="categoryModalOpen = false" class="w-full bg-slate-900 text-white font-bold py-2.5 rounded-xl uppercase tracking-wider mt-2">Selesai & Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL STOCK OPNAME -->
+    <div x-show="stockOpnameModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
+        <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
+            <h3 class="text-base font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-boxes-packing text-sky-600 mr-1"></i> Form Stock Opname</h3>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-500 mb-1">Pilih Produk</label>
+                    <select x-model="selectedProductId" class="w-full p-2.5 border rounded-xl bg-white"><option value="">-- Pilih Barang --</option><template x-for="p in products" :key="p.firebaseId"><option :value="p.firebaseId" x-text="p.nama + ' (Sisa: ' + p.stokAwal + ' Pcs)'"></option></template></select>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-500 mb-1">Jumlah Stok Fisik Sebenarnya (Dalam Pcs)</label>
+                    <input type="number" x-model.number="stokFisikBaru" class="w-full p-2.5 border rounded-xl bg-slate-50 font-bold">
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button @click="stockOpnameModalOpen = false" class="w-1/3 bg-slate-200 py-2.5 rounded-xl font-bold">Batal</button>
+                    <button @click="simpanStockOpname()" class="w-2/3 bg-sky-600 text-white py-2.5 rounded-xl font-bold uppercase shadow-md">Update Stok Fisik</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL UBAH HARGA -->
+    <div x-show="ubahHargaModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
+        <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
+            <h3 class="text-base font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-tags text-amber-600 mr-1"></i> Form Ubah Struktur Harga</h3>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-500 mb-1">Pilih Produk</label>
+                    <select x-model="selectedProductId" @change="loadHargaProduct()" class="w-full p-2.5 border rounded-xl bg-white"><option value="">-- Pilih Barang --</option><template x-for="p in products" :key="p.firebaseId"><option :value="p.firebaseId" x-text="p.nama"></option></template></select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-500 mb-1">Harga Beli Utama (Rp)</label>
+                        <input type="number" x-model.number="hargaBeliBaru" class="w-full p-2.5 border rounded-xl bg-slate-50 font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-500 mb-1">Harga Satuan Terkecil (Rp)</label>
+                        <input type="number" x-model.number="hargaJualBaru" class="w-full p-2.5 border rounded-xl bg-slate-50 font-bold border-green-300">
+                    </div>
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button @click="ubahHargaModalOpen = false" class="w-1/3 bg-slate-200 py-2.5 rounded-xl font-bold">Batal</button>
+                    <button @click="simpanUbahHarga()" class="w-2/3 bg-amber-500 text-white py-2.5 rounded-xl font-bold uppercase shadow-md">Simpan Harga</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL AFKIR / PEMAKAIAN INTERNAL -->
+    <div x-show="pemakaianBarangModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
+        <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
+            <h3 class="text-base font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-arrow-down-wide-short text-purple-600 mr-1"></i> Pencatatan Rusak / Pakai Internal</h3>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-500 mb-1">Pilih Produk</label>
+                    <select x-model="selectedProductId" class="w-full p-2.5 border rounded-xl bg-white"><option value="">-- Pilih Barang --</option><template x-for="p in products" :key="p.firebaseId"><option :value="p.firebaseId" x-text="p.nama + ' (Stok: ' + p.stokAwal + ' Pcs)'"></option></template></select>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-500 mb-1">Jumlah Keluar Afkir (Pcs)</label>
+                    <input type="number" x-model.number="qtyPemakaian" class="w-full p-2.5 border rounded-xl bg-slate-50 font-bold">
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button @click="pemakaianBarangModalOpen = false" class="w-1/3 bg-slate-200 py-2.5 rounded-xl font-bold">Batal</button>
+                    <button @click="simpanPemakaianBarang()" class="w-2/3 bg-purple-600 text-white py-2.5 rounded-xl font-bold uppercase shadow-md">Potong Stok Gudang</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GENERATE BARCODE -->
+    <div x-show="barcodeModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
+        <div class="bg-white p-6 rounded-3xl w-full max-w-md shadow-2xl">
+            <h3 class="text-base font-black text-slate-800 mb-2 uppercase tracking-wide"><i class="fa fa-barcode text-slate-700 mr-1"></i> Manajer Cetak Kode Barcode</h3>
+            <p class="text-[11px] text-slate-400 mb-3">Berikut adalah daftar produk yang belum memiliki barcode sistem.</p>
+            <div class="space-y-3 text-xs">
+                <div class="max-h-60 overflow-y-auto space-y-1 bg-slate-50 p-2.5 rounded-xl border">
+                    <template x-for="p in products.filter(i => !i.barcode || i.barcode.trim() === '')" :key="p.firebaseId">
+                        <div class="flex justify-between items-center bg-white p-2 rounded border font-medium">
+                            <span class="font-bold text-slate-800 truncate max-w-[200px]" x-text="p.nama"></span>
+                            <span class="text-[10px] bg-red-50 text-red-500 font-black px-1.5 py-0.5 rounded uppercase">Belum Ada</span>
+                        </div>
+                    </template>
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button @click="barcodeModalOpen = false" class="w-1/3 bg-slate-200 py-2.5 rounded-xl font-bold">Tutup</button>
+                    <button @click="generateMissingBarcodes()" class="w-2/3 bg-slate-900 text-white py-2.5 rounded-xl font-bold uppercase tracking-wider shadow-md">Buat Barcode Otomatis</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL MULTI KONVERSI SATUAN -->
     <div x-show="conversionModalOpen" class="fixed inset-0 z-[5000] bg-black/70 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl border-2 border-orange-500">
             <div class="text-center mb-4">
                 <span class="bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-bold text-[10px] uppercase">Foto/Barcode Sukses!</span>
                 <h3 class="text-lg font-black text-slate-800 mt-2" x-text="scannedProduct?.nama"></h3>
+                <p class="text-xs text-gray-400">Pilih jenis konversi transaksi keluar belanja konsumen:</p>
             </div>
             <div class="grid grid-cols-2 gap-3 mb-4">
                 <button @click="selectConversionSatuan(scannedProduct.namaSatuanA || 'Dus', scannedProduct.hargaDus, scannedProduct.isiSatuanA || 1)" class="p-3 border-2 rounded-xl text-center hover:border-green-600 transition">
-                    <span class="block text-xs font-bold text-gray-500 uppercase" x-text="(scannedProduct?.namaSatuanA || 'DUS')"></span>
+                    <span class="block text-xs font-bold uppercase text-gray-500" x-text="(scannedProduct?.namaSatuanA || 'DUS') + ' ('+(scannedProduct?.isiSatuanA || 1)+' Pcs)'"></span>
                     <span class="text-sm font-black text-slate-800" x-text="formatRupiah(scannedProduct?.hargaDus)"></span>
                 </button>
                 <button @click="selectConversionSatuan(scannedProduct.namaSatuanB || 'Pak', scannedProduct.hargaPak, scannedProduct.isiSatuanB || 1)" class="p-3 border-2 rounded-xl text-center hover:border-green-600 transition">
-                    <span class="block text-xs font-bold text-gray-500 uppercase" x-text="(scannedProduct?.namaSatuanB || 'PAK')"></span>
+                    <span class="block text-xs font-bold uppercase text-gray-500" x-text="(scannedProduct?.namaSatuanB || 'PAK') + ' ('+(scannedProduct?.isiSatuanB || 1)+' Pcs)'"></span>
                     <span class="text-sm font-black text-slate-800" x-text="formatRupiah(scannedProduct?.hargaPak)"></span>
                 </button>
                 <button @click="selectConversionSatuan(scannedProduct.namaSatuanC || 'Renceng', scannedProduct.hargaRenceng, scannedProduct.isiSatuanC || 1)" class="p-3 border-2 rounded-xl text-center hover:border-green-600 transition">
-                    <span class="block text-xs font-bold text-gray-500 uppercase" x-text="(scannedProduct?.namaSatuanC || 'RENCENG')"></span>
+                    <span class="block text-xs font-bold uppercase text-gray-500" x-text="(scannedProduct?.namaSatuanC || 'RENCENG') + ' ('+(scannedProduct?.isiSatuanC || 1)+' Pcs)'"></span>
                     <span class="text-sm font-black text-slate-800" x-text="formatRupiah(scannedProduct?.hargaRenceng)"></span>
                 </button>
                 <button @click="selectConversionSatuan(scannedProduct.namaSatuanD || 'Pcs', scannedProduct.hargaJualPcs, 1)" class="p-3 border-2 rounded-xl text-center hover:border-green-600 transition">
-                    <span class="block text-xs font-bold text-gray-500 uppercase" x-text="(scannedProduct?.namaSatuanD || 'PCS')"></span>
+                    <span class="block text-xs font-bold uppercase text-gray-500" x-text="(scannedProduct?.namaSatuanD || 'PCS') + ' (1 Pcs)'"></span>
                     <span class="text-sm font-black text-slate-800" x-text="formatRupiah(scannedProduct?.hargaJualPcs)"></span>
                 </button>
             </div>
-            <button @click="conversionModalOpen = false" class="w-full bg-slate-100 text-slate-500 font-bold py-2 rounded-xl text-xs uppercase">Batal</button>
+            <button @click="conversionModalOpen = false" class="w-full bg-slate-100 text-slate-500 font-bold py-2 rounded-xl text-xs uppercase">Batal Transaksi</button>
+        </div>
+    </div>
+
+    <!-- MODAL PENDAFTARAN BARANG -->
+    <div x-show="adminModal" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
+        <div class="bg-white p-6 rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl">
+            <h3 class="text-base font-black text-slate-800 mb-4" x-text="editMode ? 'Ubah Informasi Komoditas' : 'Pendaftaran Produk & Konversi Satuan Mandiri'"></h3>
+            <div class="space-y-3.5 text-xs">
+                <div><label class="block font-bold text-slate-500 mb-1">Nama Produk Lengkap</label><input type="text" x-model="form.nama" class="w-full p-2.5 border rounded-xl bg-slate-50 font-semibold"></div>
+                <div><label class="block font-bold text-slate-500 mb-1">Kode Barcode Produk (Opsional)</label><input type="text" x-model="form.barcode" class="w-full p-2.5 border rounded-xl bg-slate-50 font-mono text-sm tracking-wider"></div>
+                <div><label class="block font-bold text-slate-500 mb-1">Link URL Foto Produk asli</label><input type="text" x-model="form.foto" class="w-full p-2.5 border rounded-xl bg-slate-50"></div>
+                <div><label class="block font-bold text-slate-500 mb-1">Kategori Produk</label><select x-model="form.kategori" class="w-full p-2.5 border rounded-xl bg-white"><template x-for="cat in categories"><option :value="cat" x-text="cat"></option></template></select></div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="block font-bold text-slate-500 mb-1">Harga HPP Beli Terkecil / Pcs (Rp)</label><input type="number" x-model.number="form.hargaBeli" class="w-full p-2.5 border rounded-xl font-bold bg-slate-50"></div>
+                    <div><label class="block font-bold text-slate-500 mb-1">Total Stok Gudang Utama (Pcs)</label><input type="number" x-model.number="form.stokAwal" class="w-full p-2.5 border rounded-xl font-bold bg-slate-50"></div>
+                </div>
+                <hr class="border-dashed">
+                <p class="text-[10px] font-bold text-orange-600 uppercase tracking-wide"><i class="fa fa-info-circle"></i> Atur Nama Satuan, Harga Jual, & Jumlah Isi Satuan Ke Pcs</p>
+                
+                <div class="space-y-2 bg-slate-50 p-3 rounded-xl border">
+                    <div class="flex gap-1.5 items-center">
+                        <input type="text" x-model="form.namaSatuanA" placeholder="Dus" class="w-1/3 p-2 border rounded-lg bg-white font-bold text-center">
+                        <input type="number" x-model.number="form.hargaDus" placeholder="Harga" class="w-1/3 p-2 border rounded-lg bg-white font-bold text-green-600">
+                        <input type="number" x-model.number="form.isiSatuanA" placeholder="Isi Pcs" class="w-1/3 p-2 border rounded-lg bg-white font-medium text-slate-500" title="Berapa Pcs dalam 1 satuan ini">
+                    </div>
+                    <div class="flex gap-1.5 items-center">
+                        <input type="text" x-model="form.namaSatuanB" placeholder="Pak" class="w-1/3 p-2 border rounded-lg bg-white font-bold text-center">
+                        <input type="number" x-model.number="form.hargaPak" placeholder="Harga" class="w-1/3 p-2 border rounded-lg bg-white font-bold text-green-600">
+                        <input type="number" x-model.number="form.isiSatuanB" placeholder="Isi Pcs" class="w-1/3 p-2 border rounded-lg bg-white font-medium text-slate-500">
+                    </div>
+                    <div class="flex gap-1.5 items-center">
+                        <input type="text" x-model="form.namaSatuanC" placeholder="Renceng" class="w-1/3 p-2 border rounded-lg bg-white font-bold text-center">
+                        <input type="number" x-model.number="form.hargaRenceng" placeholder="Harga" class="w-1/3 p-2 border rounded-lg bg-white font-bold text-green-600">
+                        <input type="number" x-model.number="form.isiSatuanC" placeholder="Isi Pcs" class="w-1/3 p-2 border rounded-lg bg-white font-medium text-slate-500">
+                    </div>
+                    <div class="flex gap-1.5 items-center">
+                        <input type="text" x-model="form.namaSatuanD" placeholder="Pcs" class="w-1/2 p-2 border rounded-lg bg-white font-bold text-center" readonly>
+                        <input type="number" x-model.number="form.hargaJualPcs" placeholder="Harga Pcs" class="w-1/2 p-2 border rounded-lg bg-white font-bold text-green-600">
+                    </div>
+                </div>
+                
+                <div class="flex gap-2 justify-end pt-3">
+                    <button @click="adminModal = false" class="px-4 py-2 border rounded-xl font-bold">Batal</button>
+                    <button @click="saveProduct()" class="px-5 py-2 bg-green-600 text-white rounded-xl font-bold">Simpan Cloud</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -607,87 +1334,376 @@
         const db = firebase.database();
         const auth = firebase.auth();
 
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
+            });
+        }
+
         function posApp() {
             return {
                 userLoggedIn: false, currentUid: null, adminTab: 'pos', adminModal: false, editMode: false,
-                conversionModalOpen: false, scannedProduct: null, isEditingStruk: false,
-                authEmail: '', authPassword: '', isEditingProfil: false, subTabMaster: 'menu', subTabPembelian: 'menu',
+                conversionModalOpen: false, scannedProduct: null,
+                authEmail: '', authPassword: '', searchAdmin: '',
+                isEditingProfil: false, subTabMaster: 'menu', subTabPembelian: 'menu', categoryModalOpen: false, 
+                stockOpnameModalOpen: false, ubahHargaModalOpen: false, pemakaianBarangModalOpen: false, barcodeModalOpen: false,
+                selectedProductId: '', stokFisikBaru: 0, hargaBeliBaru: 0, hargaJualBaru: 0, qtyPemakaian: 0,
+                isEditMasterMode: false, currentEditMasterId: null,
                 categories: ['Sembako', 'Sabun', 'Snack', 'Bumbu', 'Makanan', 'Minuman', 'Mie instant'],
                 products: [], posCart: [], posMetodeBayar: 'Tunai',
                 profilToko: { nama: '', alamat: '', kota: '', wa: '', logo: '' },
                 profilForm: { nama: '', alamat: '', kota: '', wa: '', logo: '' },
-                formatStruk: { namaStruk: '', alamatStruk: '', telpStruk: '', footerMessage: 'Terima Kasih Atas Kunjungan Anda' },
+                pengaturanStruk: { footerMessage: 'Terima Kasih Atas Kunjungan Anda' },
+                masterForm: { supplierNama: '', supplierKontak: '', pelangganNama: '', pelangganKontak: '' },
+                pembelianForm: { produkId: '', qty: 0, totalBiaya: 0 },
                 historiTransaksi: { penjualan: [], pembelian: [] },
-                form: { nama: '', barcode: '', foto: '', namaSatuanA: 'Dus', namaSatuanB: 'Pak', namaSatuanC: 'Renceng', namaSatuanD: 'Pcs', hargaDus: 0, hargaPak: 0, hargaRenceng: 0, hargaJualPcs: 0, hargaBeli: 0, stokAwal: 0, kategori: 'Sembako' },
-                masterSuppliers: [], masterPelanggans: [], masterDiscounts: [], masterSaldos: [], masterShifts: [],
-                formSupplier: { nama: '', kontak: '', alamat: '' }, formPelangan: { nama: '', wa: '', tipe: 'Reguler' }, formDiscount: { nama: '', potongan: 0, minimalBelanja: 0 }, formSaldo: { shiftNama: '', nominal: 0, tanggal: '' }, formShift: { namaStaff: '', jamMulai: '', jamSelesai: '' },
-                dbPembelianData: { po: [], tempo: [] }, formPO: { supplierId: '', produkId: '', qty: 0 }, formTempo: { supplierId: '', nominal: 0, jatuhTempo: '' }, selectedPOGuid: '', formPenerimaan: { produkId: '', produkNama: '', qtyPO: 0, qtyFisik: 0, petugas: '' }, filterPeriodePembelian: 'hari_ini',
-                subTabKeuangan: 'menu', dbKeuanganData: { piutang: [], mutasi: [] }, formKeuanganHutang: { supplierId: '', nominal: 0, jatuhTempo: '' }, formKeuanganPiutang: { pelangganNama: '', nominal: 0, keterangan: '' }, formKeuanganMutasi: { jenis: 'Pengeluaran', nominal: 0, namaPos: '' },
-                posQueryKetik: '', autoCompleteResults: [], pembelianTertundaPOS: [], receiptPrintData: { idNota: '', metodeBayar: '', totalOmset: 0, items: [] }, subTabLaporan: 'menu', filterPeriodeLaporan: 'hari_ini', lapCustomMulai: '', lapCustomSelesai: '',
+                form: { nama: '', barcode: '', foto: '', namaSatuanA: 'Dus', namaSatuanB: 'Pak', namaSatuanC: 'Renceng', namaSatuanD: 'Pcs', hargaDus: 0, hargaPak: 0, hargaRenceng: 0, hargaJualPcs: 0, hargaBeli: 0, stokAwal: 0, kategori: 'Sembako', isiSatuanA: 40, isiSatuanB: 10, isiSatuanC: 10 },
+                masterSuppliers: [], masterPelanggans: [], masterDiscounts: [], masterSaldos: [], masterPoints: [], masterVouchers: [], masterShifts: [],
+                formSupplier: { nama: '', kontak: '', alamat: '' }, formPelangan: { nama: '', wa: '', tipe: 'Reguler' }, formDiscount: { nama: '', potongan: 0, minimalBelanja: 0 }, formSaldo: { shiftNama: '', nominal: 0, tanggal: '' }, formPoint: { minimalBelanja: 0, poinDapat: 0 }, formVoucher: { kode: '', nominal: 0, status: 'Aktif' }, formShift: { namaStaff: '', jamMulai: '', jamSelesai: '' },
+                dbPembelianData: { po: [], tempo: [], retur: [] },
+                formPO: { supplierId: '', produkId: '', qty: 0 }, formTempo: { supplierId: '', nominal: 0, jatuhTempo: '' }, formRetur: { supplierId: '', produkId: '', qty: 0 },
+                selectedPOGuid: '', formPenerimaan: { produkId: '', produkNama: '', qtyPO: 0, qtyFisik: 0, petugas: '' },
+                filterPeriodePembelian: 'hari_ini', customDateMulai: '', customDateSelesai: '',
 
-                get posCartTotal() { return this.posCart.reduce((acc, item) => acc + ((item.hargaTerpilih - item.diskonItem) * item.qty), 0); },
+                subTabKeuangan: 'menu',
+                dbKeuanganData: { piutang: [], mutasi: [] },
+                formKeuanganHutang: { supplierId: '', nominal: 0, jatuhTempo: '' },
+                formKeuanganPiutang: { pelangganNama: '', nominal: 0, keterangan: '' },
+                formKeuanganMutasi: { jenis: 'Pengeluaran', nominal: 0, namaPos: '' },
+
+                posQueryKetik: '',
+                autoCompleteResults: [],
+                modalEditItemOpen: false,
+                modalNamaPelangganOpen: false,
+                posNamaPelanggan: '',
+                pembelianHoldStorage: [], 
+                pembelianTertundaPOS: [],
+                formEditItem: { index: null, hargaTerpilih: 0, diskonItem: 0 },
+                receiptPrintData: { idNota: '', metodeBayar: '', totalOmset: 0, items: [] },
+
+                subTabLaporan: 'menu',
+                filterPeriodeLaporan: 'hari_ini',
+                lapCustomMulai: '',
+                lapCustomSelesai: '',
+
+                get posCartTotal() {
+                    return this.posCart.reduce((acc, item) => acc + ((item.hargaTerpilih - item.diskonItem) * item.qty), 0);
+                },
+
+                get totalPemasukanMutasi() {
+                    return this.dbKeuanganData.mutasi
+                        .filter(i => i.jenis === 'Pemasukan')
+                        .reduce((acc, item) => acc + parseInt(item.nominal || 0), 0);
+                },
+
+                get totalPengeluaranMutasi() {
+                    return this.dbKeuanganData.mutasi
+                        .filter(i => i.jenis === 'Pengeluaran')
+                        .reduce((acc, item) => acc + parseInt(item.nominal || 0), 0);
+                },
+
+                get rekapAlokasiAnggaran() {
+                    let pengeluaranOnly = this.dbKeuanganData.mutasi.filter(i => i.jenis === 'Pengeluaran');
+                    let totalPengeluaran = pengeluaranOnly.reduce((acc, item) => acc + parseInt(item.nominal || 0), 0);
+                    if (totalPengeluaran === 0) return [];
+
+                    let groups = {};
+                    pengeluaranOnly.forEach(item => {
+                        let key = item.namaPos ? item.namaPos.trim() : 'Lain-lain';
+                        groups[key] = (groups[key] || 0) + parseInt(item.nominal || 0);
+                    });
+
+                    return Object.keys(groups).map(nama => {
+                        let total = groups[nama];
+                        return { namaPos: nama, total: total, persen: (total / totalPengeluaran) * 100 };
+                    }).sort((a, b) => b.total - a.total);
+                },
 
                 playNotificationSound(type) {
                     try {
                         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.frequency.setValueAtTime(type === 'scan' ? 1300 : 900, audioCtx.currentTime);
-                        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                        osc.connect(gain); gain.connect(audioCtx.destination);
-                        osc.start(); osc.stop(audioCtx.currentTime + (type === 'scan' ? 0.07 : 0.15));
-                    } catch (e) { console.log(e); }
+                        if (type === 'scan') {
+                            const osc = audioCtx.createOscillator();
+                            const gain = audioCtx.createGain();
+                            osc.type = 'sine';
+                            osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                            osc.connect(gain);
+                            gain.connect(audioCtx.destination);
+                            osc.start();
+                            osc.stop(audioCtx.currentTime + 0.08);
+                        } else if (type === 'transaksi') {
+                            const now = audioCtx.currentTime;
+                            [800, 1000].forEach((freq, idx) => {
+                                const osc = audioCtx.createOscillator();
+                                const gain = audioCtx.createGain();
+                                osc.type = 'sine';
+                                osc.frequency.setValueAtTime(freq, now + (idx * 0.08));
+                                gain.gain.setValueAtTime(0.1, now + (idx * 0.08));
+                                osc.connect(gain);
+                                gain.connect(audioCtx.destination);
+                                osc.start(now + (idx * 0.08));
+                                osc.stop(now + (idx * 0.08) + 0.1);
+                            });
+                        }
+                    } catch (e) {
+                        console.log("AudioContext blocked or not supported.");
+                    }
                 },
 
                 jalankanAutoCompleteQuery() {
-                    if (!this.posQueryKetik) { this.autoCompleteResults = []; return; }
+                    if (!this.posQueryKetik || this.posQueryKetik.trim() === '') {
+                        this.autoCompleteResults = [];
+                        return;
+                    }
                     let q = this.posQueryKetik.toLowerCase();
-                    this.autoCompleteResults = this.products.filter(p => p.nama.toLowerCase().includes(q) || (p.barcode && p.barcode.includes(q)));
+                    this.autoCompleteResults = this.products.filter(p => 
+                        p.nama.toLowerCase().includes(q) || 
+                        (p.barcode && p.barcode.toLowerCase().includes(q))
+                    );
                 },
 
-                kosongkanKeranjangPOSBarang() { this.posCart = []; },
-                tundaAntreanTransaksiPOS() { this.pembelianTertundaPOS = [...this.posCart]; this.posCart = []; alert("Transaksi dijeda."); },
-                panggilAntreanTransaksiPOS() { this.posCart = [...this.pembelianTertundaPOS]; this.pembelianTertundaPOS = []; },
+                bukaModalEditHargaDiskonItem(item, idx) {
+                    this.formEditItem.index = idx;
+                    this.formEditItem.hargaTerpilih = item.hargaTerpilih;
+                    this.formEditItem.diskonItem = item.diskonItem || 0;
+                    this.modalEditItemOpen = true;
+                },
+
+                simpanPenyesuaianItemKeranjang() {
+                    let idx = this.formEditItem.index;
+                    if (idx !== null && this.posCart[idx]) {
+                        this.posCart[idx].hargaTerpilih = this.formEditItem.hargaTerpilih;
+                        this.posCart[idx].diskonItem = this.formEditItem.diskonItem;
+                        alert("Berhasil memperbarui harga/diskon item!");
+                        this.modalEditItemOpen = false;
+                    }
+                },
+
+                bukaAksesNamaPelangganModal() { this.modalNamaPelangganOpen = true; },
+
+                kosongkanKeranjangPOSBarang() {
+                    if (confirm("Apakah Anda yakin ingin membatalkan & mengosongkan seluruh isi keranjang belanja saat ini?")) {
+                        this.posCart = []; this.posNamaPelanggan = '';
+                    }
+                },
+
+                tundaAntreanTransaksiPOS() {
+                    if (this.posCart.length === 0) return alert("Keranjang kosong, tidak ada transaksi untuk dijeda.");
+                    this.pembelianTertundaPOS = [...this.posCart]; this.posCart = [];
+                    alert("Transaksi saat ini berhasil dijeda!");
+                },
+
+                panggilAntreanTransaksiPOS() {
+                    if (this.pembelianTertundaPOS.length === 0) return;
+                    this.posCart = [...this.pembelianTertundaPOS]; this.pembelianTertundaPOS = [];
+                    alert("Transaksi tunda berhasil dikembalikan ke keranjang aktif.");
+                },
 
                 bayarPOS() {
-                    if (this.posCart.length === 0) return alert("Keranjang kosong!");
+                    if (this.posCart.length === 0) return alert("Keranjang belanja kosong!");
+                    
                     let tgl = new Date();
                     let idNotaOtomatis = 'WN-POS-' + tgl.getTime().toString().slice(-6);
                     let daftarNamaItem = [];
-                    let totalHppSemua = 0, totalOmsetSemua = 0;
+                    let totalHppSemua = 0;
+                    let totalOmsetSemua = 0;
 
                     this.posCart.forEach(item => {
                         let targetProd = this.products.find(p => p.firebaseId === item.firebaseId);
                         if (targetProd) {
                             let totalPcsDikurangi = parseInt(item.qty) * parseInt(item.isiKonversi || 1);
+                            let sisaStokPcs = parseInt(targetProd.stokAwal || 0) - totalPcsDikurangi;
+                            
                             db.ref('users/' + this.currentUid + '/produk/' + item.firebaseId).update({ 
-                                stokAwal: Math.max(0, parseInt(targetProd.stokAwal || 0) - totalPcsDikurangi)
+                                stokAwal: sisaStokPcs >= 0 ? sisaStokPcs : 0 
                             });
                         }
+
                         daftarNamaItem.push(`${item.nama} (${item.qty}x ${item.satuan})`);
                         totalHppSemua += (parseInt(item.hargaBeli || 0) * (parseInt(item.qty) * parseInt(item.isiKonversi || 1)));
                         totalOmsetSemua += ((parseInt(item.hargaTerpilih) - parseInt(item.diskonItem)) * parseInt(item.qty));
                     });
 
                     let dataTransaksi = {
-                        idNota: idNotaOtomatis, nama: daftarNamaItem.join(', '), qty: this.posCart.length,
-                        totalModal: totalHppSemua, totalOmset: totalOmsetSemua, metodeBayar: this.posMetodeBayar,
-                        timestamp: tgl.getTime(), formatTanggal: tgl.toLocaleDateString('id-ID'), items: JSON.parse(JSON.stringify(this.posCart))
+                        idNota: idNotaOtomatis,
+                        nama: daftarNamaItem.join(', '),
+                        qty: this.posCart.length,
+                        totalModal: totalHppSemua,
+                        totalOmset: totalOmsetSemua,
+                        metodeBayar: this.posMetodeBayar,
+                        timestamp: tgl.getTime(),
+                        formatTanggal: tgl.toLocaleDateString('id-ID'),
+                        items: JSON.parse(JSON.stringify(this.posCart))
                     };
 
                     db.ref('users/' + this.currentUid + '/transaksi/penjualan').push(dataTransaksi).then(() => {
                         this.playNotificationSound('transaksi');
                         this.receiptPrintData = dataTransaksi;
                         setTimeout(() => { window.print(); }, 400);
-                        this.posCart = [];
+                        this.posCart = []; 
+                        this.posNamaPelanggan = '';
                     });
                 },
 
-                saveFormatStruk() {
-                    db.ref('users/' + this.currentUid + '/pengaturan_struk').set(this.formatStruk).then(() => {
-                        alert("Format struk belanja berhasil diperbarui ke cloud database!");
-                        this.isEditingStruk = false;
+                cetakUlangStrukFisik(nota) {
+                    if (nota.items) {
+                        this.receiptPrintData = nota;
+                    } else {
+                        this.receiptPrintData = {
+                            idNota: nota.idNota || 'WN-POS-REPRINT',
+                            metodeBayar: nota.metodeBayar || 'Tunai',
+                            totalOmset: nota.totalOmset,
+                            items: [{ nama: nota.nama, qty: nota.qty, satuan: 'Item', hargaTerpilih: nota.totalOmset, diskonItem: 0 }]
+                        };
+                    }
+                    setTimeout(() => { window.print(); }, 300);
+                },
+
+                loadDataPOSelected() {
+                    if (!this.selectedPOGuid) { this.formPenerimaan = { produkId: '', produkNama: '', qtyPO: 0, qtyFisik: 0, petugas: '' }; return; }
+                    let targetPO = this.dbPembelianData.po.find(i => i.id === this.selectedPOGuid);
+                    if (targetPO) { this.formPenerimaan.produkId = targetPO.produkId; this.formPenerimaan.produkNama = targetPO.produkNama; this.formPenerimaan.qtyPO = targetPO.qty; this.formPenerimaan.qtyFisik = targetPO.qty; }
+                },
+
+                prosesKirimPenerimaanFisikPO() {
+                    if (!this.selectedPOGuid || !this.formPenerimaan.qtyFisik) { return alert("Pilih dokumen PO dan input jumlah Qty fisik barang!"); }
+                    let p = this.products.find(i => i.firebaseId === this.formPenerimaan.produkId);
+                    if (p) {
+                        let totalStokBaru = parseInt(p.stokAwal || 0) + parseInt(this.formPenerimaan.qtyFisik);
+                        let tglSekarang = new Date();
+                        db.ref('users/' + this.currentUid + '/produk/' + this.formPenerimaan.produkId).update({ stokAwal: totalStokBaru });
+                        db.ref('users/' + this.currentUid + '/pembelian/po/' + this.selectedPOGuid).update({ status: 'Diterima', qtyFisik: this.formPenerimaan.qtyFisik, petugas: this.formPenerimaan.petugas || 'Gudang' });
+                        db.ref('users/' + this.currentUid + '/transaksi/pembelian').push({ produkId: this.formPenerimaan.produkId, qty: this.formPenerimaan.qtyFisik, totalBiaya: (parseInt(p.hargaBeli || 0) * parseInt(this.formPenerimaan.qtyFisik)), timestamp: tglSekarang.getTime(), formatTanggal: tglSekarang.toLocaleDateString('id-ID'), idFaktur: 'WN-FKT-' + Math.floor(10000 + Math.random() * 90000) });
+                        alert("Selesai! Jumlah fisik barang PO berhasil diverifikasi masuk ke sistem stok gudang.");
+                        this.selectedPOGuid = ''; this.formPenerimaan = { produkId: '', produkNama: '', qtyPO: 0, qtyFisik: 0, petugas: '' };
+                    }
+                },
+
+                get itemPembelianTerfilter() {
+                    if (!this.historiTransaksi.pembelian) return [];
+                    let sekarang = new Date(); sekarang.setHours(0, 0, 0, 0);
+                    return this.historiTransaksi.pembelian.filter(nota => {
+                        let tanggalNota = nota.timestamp ? new Date(nota.timestamp) : new Date(); tanggalNota.setHours(0, 0, 0, 0);
+                        let selisihHari = Math.floor((sekarang.getTime() - tanggalNota.getTime()) / (1000 * 60 * 60 * 24));
+                        if (this.filterPeriodePembelian === 'hari_ini') return selisihHari === 0;
+                        if (this.filterPeriodePembelian === 'kemarin') return selisihHari === 1;
+                        if (this.filterPeriodePembelian === '7_hari') return selisihHari >= 0 && selisihHari <= 7;
+                        if (this.filterPeriodePembelian === '30_hari') return selisihHari >= 0 && selisihHari <= 30;
+                        return true;
                     });
+                },
+
+                prosesFilterLaporanData(arrayData, mode) {
+                    if (!arrayData) return [];
+                    let hariIni = new Date(); hariIni.setHours(0,0,0,0);
+                    return arrayData.filter(item => {
+                        let itemDate = item.timestamp ? new Date(item.timestamp) : new Date();
+                        itemDate.setHours(0,0,0,0);
+                        let selisih = Math.floor((hariIni.getTime() - itemDate.getTime()) / (1000 * 60 * 60 * 24));
+                        
+                        if (this.filterPeriodeLaporan === 'hari_ini') return selisih === 0;
+                        if (this.filterPeriodeLaporan === 'kemarin') return selisih === 1;
+                        if (this.filterPeriodeLaporan === '7_hari') return selisih >= 0 && selisih <= 7;
+                        if (this.filterPeriodeLaporan === '30_hari') return selisih >= 0 && selisih <= 30;
+                        if (this.filterPeriodeLaporan === 'custom') {
+                            if (!this.lapCustomMulai || !this.lapCustomSelesai) return true;
+                            let start = new Date(this.lapCustomMulai); start.setHours(0,0,0,0);
+                            let end = new Date(this.lapCustomSelesai); end.setHours(23,59,59,999);
+                            let timeItem = item.timestamp ? item.timestamp : new Date().getTime();
+                            return timeItem >= start.getTime() && timeItem <= end.getTime();
+                        }
+                        return true;
+                    });
+                },
+
+                eksporKeExcel(tableId, namaFile) {
+                    let tab = document.getElementById(tableId);
+                    if(!tab) return alert("Data tabel kosong, tidak dapat mengekspor!");
+                    let html = tab.outerHTML;
+                    let url = 'data:application/vnd.ms-excel;charset=utf-8,\uFEFF' + encodeURIComponent(html);
+                    let downloadLink = document.createElement("a");
+                    document.body.appendChild(downloadLink);
+                    downloadLink.href = url;
+                    downloadLink.download = 'Laporan_' + namaFile + '_' + new Date().toLocaleDateString('id-ID') + '.xls';
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                },
+
+                batalkanSalahCatatNotaPembelian(nota) {
+                    if (confirm("Apakah Anda yakin ingin membatalkan/menghapus nota transaksi kulakan ini? Stok produk dan kas pengeluaran terkait akan disesuaikan kembali.")) {
+                        if (nota.produkId && nota.qty) {
+                            let prod = this.products.find(i => i.firebaseId === nota.produkId);
+                            if (prod) { let sisaStokKoreksi = parseInt(prod.stokAwal || 0) - parseInt(nota.qty); db.ref('users/' + this.currentUid + '/produk/' + nota.produkId).update({ stokAwal: sisaStokKoreksi >= 0 ? sisaStokKoreksi : 0 }); }
+                        }
+                        db.ref('users/' + this.currentUid + '/transaksi/pembelian/' + nota.firebaseKey).remove().then(() => { alert("Nota berhasil dibatalkan."); });
+                    }
+                },
+
+                get hitungKas() {
+                    let omset = 0, pengeluaran = 0, laba = 0;
+                    this.historiTransaksi.penjualan.forEach(i => { omset += parseInt(i.totalOmset || 0); laba += (parseInt(i.totalOmset || 0) - parseInt(i.totalModal || 0)); });
+                    this.historiTransaksi.pembelian.forEach(i => { pengeluaran += parseInt(i.totalBiaya || 0); });
+                    this.dbKeuanganData.mutasi.forEach(i => {
+                        if (i.jenis === 'Pengeluaran') pengeluaran += parseInt(i.nominal || 0);
+                        if (i.jenis === 'Pemasukan') omset += parseInt(i.nominal || 0);
+                    });
+                    return { omset, pengeluaran, laba };
+                },
+
+                fetchKeuanganSubData(path) {
+                    if(!this.currentUid) return;
+                    db.ref('users/' + this.currentUid + '/keuangan/' + path).on('value', snap => {
+                        let val = snap.val();
+                        this.dbKeuanganData[path] = val ? Object.keys(val).map(k => ({ id: k, ...val[k] })) : [];
+                    });
+                },
+
+                simpanKeuanganHutangLangsung() {
+                    if(!this.formKeuanganHutang.supplierId || !this.formKeuanganHutang.nominal) return alert("Pilih Supplier dan isi nominal hutang!");
+                    let s = this.masterSuppliers.find(i => i.id === this.formKeuanganHutang.supplierId);
+                    if(!s) return alert("Supplier tidak valid!");
+                    let payload = { supplierId: s.id, supplierNama: s.nama, nominal: this.formKeuanganHutang.nominal, jatuhTempo: this.formKeuanganHutang.jatuhTempo || '-' };
+                    db.ref('users/' + this.currentUid + '/pembelian/tempo').push(payload).then(() => {
+                        alert("Hutang Dagang Baru Berhasil Dibukukan ke Cloud!"); this.resetKeuanganForm();
+                    });
+                },
+
+                simpanKeuanganSubData(path) {
+                    if(!this.currentUid) return;
+                    let payload = {}; let tgl = new Date();
+                    if(path === 'piutang') {
+                        if(!this.formKeuanganPiutang.pelangganNama || !this.formKeuanganPiutang.nominal) return alert("Pilih pelanggan dan isi nilai kasbon!");
+                        payload = { ...this.formKeuanganPiutang, timestamp: tgl.getTime(), formatTanggal: tgl.toLocaleDateString('id-ID') };
+                    } else if(path === 'mutasi') {
+                        if(!this.formKeuanganMutasi.namaPos || !this.formKeuanganMutasi.nominal) return alert("Isi nama pos anggaran dan nominal mutasi kas!");
+                        payload = { ...this.formKeuanganMutasi, timestamp: tgl.getTime(), formatTanggal: tgl.toLocaleDateString('id-ID') };
+                    }
+                    db.ref('users/' + this.currentUid + '/keuangan/' + path).push(payload).then(() => {
+                        alert("Arsip Pembukuan Keuangan Berhasil Tersimpan!"); this.resetKeuanganForm();
+                    });
+                },
+
+                bayarHutangTempo(item) {
+                    if (confirm(`Konfirmasi pembayaran lunas tagihan sebesar ${this.formatRupiah(item.nominal)} ke Supplier ${item.supplierNama}?`)) {
+                        let tgl = new Date();
+                        db.ref('users/' + this.currentUid + '/keuangan/mutasi').push({ jenis: 'Pengeluaran', nominal: item.nominal, namaPos: 'Pelunasan Hutang Supplier: ' + item.supplierNama, timestamp: tgl.getTime(), formatTanggal: tgl.toLocaleDateString('id-ID') });
+                        db.ref('users/' + this.currentUid + '/pembelian/tempo/' + item.id).remove().then(() => { alert("Pembayaran hutang berhasil divalidasi!"); });
+                    }
+                },
+
+                lunasiPiutangPelanggan(item) {
+                    if (confirm(`Konfirmasi penerimaan pembayaran bon senilai ${this.formatRupiah(item.nominal)} dari Pelanggan ${item.pelangganNama}?`)) {
+                        let tgl = new Date();
+                        db.ref('users/' + this.currentUid + '/keuangan/mutasi').push({ jenis: 'Pemasukan', nominal: item.nominal, namaPos: 'Penerimaan Bayar Bon: ' + item.pelangganNama, timestamp: tgl.getTime(), formatTanggal: tgl.toLocaleDateString('id-ID') });
+                        db.ref('users/' + this.currentUid + '/keuangan/piutang/' + item.id).remove().then(() => { alert("Piutang berhasil dilunasi!"); });
+                    }
+                },
+
+                resetKeuanganForm() {
+                    this.formKeuanganHutang = { supplierId: '', nominal: 0, jatuhTempo: '' };
+                    this.formKeuanganPiutang = { pelangganNama: '', nominal: 0, keterangan: '' };
+                    this.formKeuanganMutasi = { jenis: 'Pengeluaran', nominal: 0, namaPos: '' };
                 },
 
                 init() {
@@ -695,42 +1711,118 @@
                         if (user) {
                             this.userLoggedIn = true; this.currentUid = user.uid;
                             db.ref('users/' + this.currentUid + '/profil').on('value', snap => { let val = snap.val(); if(val) { this.profilToko = val; this.profilForm = { ...val }; } });
-                            db.ref('users/' + this.currentUid + '/pengaturan_struk').on('value', snap => { let val = snap.val(); if(val) { this.formatStruk = val; } });
                             db.ref('users/' + this.currentUid + '/produk').on('value', snap => { let val = snap.val(); this.products = val ? Object.keys(val).map(k => ({ firebaseId: k, ...val[k] })) : []; });
                             db.ref('users/' + this.currentUid + '/transaksi/penjualan').on('value', snap => { let val = snap.val(); this.historiTransaksi.penjualan = val ? Object.keys(val).map(k => val[k]) : []; });
+                            db.ref('users/' + this.currentUid + '/transaksi/pembelian').on('value', snap => { let val = snap.val(); this.historiTransaksi.pembelian = val ? Object.keys(val).map(k => ({ firebaseKey: k, ...val[k] })) : []; });
                             db.ref('users/' + this.currentUid + '/master/supplier').on('value', snap => { let val = snap.val(); this.masterSuppliers = val ? Object.keys(val).map(k => ({ id: k, ...val[k] })) : []; });
                             db.ref('users/' + this.currentUid + '/master/pelanggan').on('value', snap => { let val = snap.val(); this.masterPelanggans = val ? Object.keys(val).map(k => ({ id: k, ...val[k] })) : []; });
-                        }
+                            db.ref('users/' + this.currentUid + '/master/discount').on('value', snap => { let val = snap.val(); this.masterDiscounts = val ? Object.keys(val).map(k => ({ id: k, ...val[k] })) : []; });
+                            db.ref('users/' + this.currentUid + '/master/saldo_awal').on('value', snap => { let val = snap.val(); this.masterSaldos = val ? Object.keys(val).map(k => ({ id: k, ...val[k] })) : []; });
+                            db.ref('users/' + this.currentUid + '/master/shift').on('value', snap => { let val = snap.val(); this.masterShifts = val ? Object.keys(val).map(k => ({ id: k, ...val[k] })) : []; });
+
+                            this.fetchKeuanganSubData('piutang');
+                            this.fetchKeuanganSubData('mutasi');
+                            this.fetchPembelianSubData('tempo');
+                            this.fetchPembelianSubData('po');
+                        } else { this.userLoggedIn = false; this.currentUid = null; }
                     });
                 },
 
-                startVisualScanner() {
-                    let scanner = new Html5Qrcode("reader");
-                    scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 260 }, (text) => {
-                        let query = text.trim().toLowerCase();
-                        let p = this.products.find(i => 
-                            (i.barcode && i.barcode.toLowerCase() === query) || 
-                            i.nama.toLowerCase().includes(query) || 
-                            (i.foto && i.foto.toLowerCase().includes(query))
-                        );
-                        if(p) { this.triggerVisualMatch(p); }
-                    }).catch(e => { console.log("Simulasi kamera aktif"); });
+                fetchPembelianSubData(path) {
+                    if(!this.currentUid) return;
+                    db.ref('users/' + this.currentUid + '/pembelian/' + path).on('value', snap => { let val = snap.val(); this.dbPembelianData[path] = val ? Object.keys(val).map(k => ({ id: k, ...val[k] })) : []; });
                 },
 
+                simpanPembelianSubData(path) {
+                    if(!this.currentUid) return;
+                    let payload = {};
+                    if(path === 'po') {
+                        let s = this.masterSuppliers.find(i=>i.id === this.formPO.supplierId); let p = this.products.find(i=>i.firebaseId === this.formPO.produkId);
+                        if(!s || !p) return alert("Pilih Supplier & Produk terlebih dahulu!");
+                        payload = { noPO: 'PO-' + Math.floor(1000 + Math.random()*9000), supplierId: s.id, supplierNama: s.nama, produkId: p.firebaseId, produkNama: p.nama, qty: this.formPO.qty, status: 'Tertunda' };
+                    } else if(path === 'tempo') {
+                        let s = this.masterSuppliers.find(i=>i.id === this.formTempo.supplierId);
+                        if(!s || !this.formTempo.nominal) return alert("Pilih Supplier Kreditur & Nominal Utang!");
+                        payload = { supplierId: s.id, supplierNama: s.nama, nominal: this.formTempo.nominal, jatuhTempo: this.formTempo.jatuhTempo || '-' };
+                    }
+                    db.ref('users/' + this.currentUid + '/pembelian/' + path).push(payload).then(() => { alert("Dokumen Fitur Pembelian Berhasil Ditambahkan!"); });
+                },
+
+                eksekusiPembelianTunai() {
+                    if(!this.pembelianForm.produkId || !this.pembelianForm.qty) return alert("Isi produk dan jumlah kuantitas terlebih dahulu!");
+                    let prod = this.products.find(i => i.firebaseId === this.pembelianForm.produkId);
+                    if(prod) {
+                        let totalStokBaru = parseInt(prod.stokAwal || 0) + parseInt(this.pembelianForm.qty);
+                        db.ref('users/' + this.currentUid + '/produk/' + this.pembelianForm.produkId).update({ stokAwal: totalStokBaru });
+                        db.ref('users/' + this.currentUid + '/transaksi/pembelian').push({ produkId: this.pembelianForm.produkId, qty: this.pembelianForm.qty, totalBiaya: this.pembelianForm.totalBiaya, timestamp: new Date().getTime() });
+                        this.pembelianForm = { produkId: '', qty: 0, totalBiaya: 0 }; this.subTabPembelian = 'menu';
+                    }
+                },
+
+                loginUser() { auth.signInWithEmailAndPassword(this.authEmail, this.authPassword).then(() => { this.userLoggedIn = true; }).catch(err => alert(err.message)); },
+                registerUser() { auth.createUserWithEmailAndPassword(this.authEmail, this.authPassword).then(() => { alert("Registrasi Akun Berhasil!"); }).catch(err => alert(err.message)); },
+                logoutUser() { auth.signOut().then(() => alert("Berhasil Logout")); },
+                prosesUploadLogoFile(event) { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (e) => { this.profilForm.logo = e.target.result; }; reader.readAsDataURL(file); } },
+                saveProfil() { db.ref('users/' + this.currentUid + '/profil').set(this.profilForm).then(() => { alert("Profil Toko Berhasil Disimpan!"); this.isEditingProfil = false; }); },
+                hapusDataProfil() { if(confirm("Reset data profil?")) { db.ref('users/' + this.currentUid + '/profil').remove().then(() => { this.isEditingProfil = false; }); } },
+                
+                openAddProductForm() { 
+                    this.editMode = false; 
+                    this.form = { nama: '', barcode: '', foto: '', namaSatuanA: 'Dus', namaSatuanB: 'Pak', namaSatuanC: 'Renceng', namaSatuanD: 'Pcs', hargaDus: 0, hargaPak: 0, hargaRenceng: 0, hargaJualPcs: 0, hargaBeli: 0, stokAwal: 0, kategori: 'Sembako', isiSatuanA: 40, isiSatuanB: 10, isiSatuanC: 10 }; 
+                    this.adminModal = true; 
+                },
+                saveProduct() { 
+                    let data = JSON.parse(JSON.stringify(this.form)); 
+                    if (this.editMode) { 
+                        db.ref('users/' + this.currentUid + '/produk/' + this.form.firebaseId).update(data).then(() => this.adminModal = false); 
+                    } else { 
+                        db.ref('users/' + this.currentUid + '/produk').push(data).then(() => this.adminModal = false); 
+                    } 
+                },
+                editProduct(p) { this.editMode = true; this.form = { ...p }; this.adminModal = true; },
+                deleteProduct(id) { if(confirm("Hapus?")) db.ref('users/' + this.currentUid + '/produk/' + id).remove(); },
+                openStockOpnameModal() { this.selectedProductId = ''; this.stokFisikBaru = 0; this.stockOpnameModalOpen = true; },
+                simpanStockOpname() { db.ref('users/' + this.currentUid + '/produk/' + this.selectedProductId).update({ stokAwal: this.stokFisikBaru }).then(() => { this.stockOpnameModalOpen = false; }); },
+                openUbahHargaModal() { this.selectedProductId = ''; this.hargaBeliBaru = 0; this.hargaJualBaru = 0; this.ubahHargaModalOpen = true; },
+                loadHargaProduct() { let p = this.products.find(i => i.firebaseId === this.selectedProductId); if(p) { this.hargaBeliBaru = p.hargaBeli || 0; this.hargaJualBaru = p.hargaJualPcs || 0; } },
+                simpanUbahHarga() { db.ref('users/' + this.currentUid + '/produk/' + this.selectedProductId).update({ hargaBeli: this.hargaBeliBaru, hargaJualPcs: this.hargaJualBaru }).then(() => { this.ubahHargaModalOpen = false; }); },
+                openPemakaianBarangModal() { this.selectedProductId = ''; this.qtyPemakaian = 0; this.pemakaianBarangModalOpen = true; },
+                simpanPemakaianBarang() { let p = this.products.find(i => i.firebaseId === this.selectedProductId); let sisa = parseInt(p.stokAwal || 0) - this.qtyPemakaian; db.ref('users/' + this.currentUid + '/produk/' + this.selectedProductId).update({ stokAwal: sisa >= 0 ? sisa : 0 }).then(() => { this.pemakaianBarangModalOpen = false; }); },
+                generateMissingBarcodes() { this.products.forEach(p => { if (!p.barcode) { db.ref('users/' + this.currentUid + '/produk/' + p.firebaseId).update({ barcode: 'WN-' + Math.floor(10000000 + Math.random() * 90000000) }); } }); this.barcodeModalOpen = false; },
+
+                startVisualScanner() {
+                    this.playNotificationSound('scan');
+                    let scanner = new Html5Qrcode("reader");
+                    scanner.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (text) => {
+                        let p = this.products.find(i => (i.barcode && i.barcode === text) || i.nama.toLowerCase().includes(text.toLowerCase()) || (i.foto && i.foto.includes(text)));
+                        if(p) { this.triggerVisualMatch(p); }
+                    }).catch(e => { console.log("Kamera aktif simulasi"); });
+                },
                 stopScanner() { document.getElementById("reader").innerHTML = ""; },
                 triggerVisualMatch(produk) { this.playNotificationSound('scan'); this.scannedProduct = produk; this.conversionModalOpen = true; },
                 
                 selectConversionSatuan(satuan, harga, isiKonversi) {
+                    if(!harga || harga === 0) { return alert("Harga konversi tingkat ini belum diatur!"); }
                     this.posCart.push({
-                        firebaseId: this.scannedProduct.firebaseId, nama: this.scannedProduct.nama,
-                        satuan: satuan, hargaTerpilih: harga || 0, diskonItem: 0,
-                        hargaBeli: this.scannedProduct.hargaBeli || 0, qty: 1, isiKonversi: isiKonversi || 1
+                        firebaseId: this.scannedProduct.firebaseId,
+                        nama: this.scannedProduct.nama,
+                        satuan: satuan,
+                        hargaTerpilih: harga,
+                        diskonItem: 0,
+                        hargaBeli: this.scannedProduct.hargaBeli,
+                        qty: 1,
+                        isiKonversi: isiKonversi || 1
                     });
                     this.conversionModalOpen = false;
                 },
 
-                loginUser() { auth.signInWithEmailAndPassword(this.authEmail, this.authPassword); },
-                saveProfil() { db.ref('users/' + this.currentUid + '/profil').set(this.profilForm).then(() => { this.isEditingProfil = false; }); },
+                simpanMaster(path, dataForm) {
+                    if (this.isEditMasterMode) { db.ref('users/' + this.currentUid + '/master/' + path + '/' + this.currentEditMasterId).update(dataForm).then(() => { this.resetMasterFormControl(); }); }
+                    else { db.ref('users/' + this.currentUid + '/master/' + path).push(dataForm).then(() => { Object.keys(dataForm).forEach(key => dataForm[key] = ''); }); }
+                },
+                editMasterDataControl(tipe, item) { this.isEditMasterMode = true; this.currentEditMasterId = item.id; if (tipe === 'supplier') this.formSupplier = { nama: item.nama, kontak: item.kontak, alamat: item.alamat || '' }; },
+                resetMasterFormControl() { this.isEditMasterMode = false; this.currentEditMasterId = null; this.formSupplier = { nama: '', kontak: '', alamat: '' }; },
+                hapusMaster(path, id) { if(confirm("Hapus?")) db.ref('users/' + this.currentUid + '/master/' + path + '/' + id).remove(); },
                 formatRupiah(num) { return 'Rp ' + (num ? parseInt(num).toLocaleString('id-ID') : '0'); }
             }
         }
