@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SaaS POS WiinMart - AI Visual Product Scanner</title>
     
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#16a34a">
+    
     <link class="apple-touch-icon" href="https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg">
     <link rel="icon" type="image/jpeg" href="https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg">
     
@@ -12,10 +15,6 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
-    
-    <!-- Pustaka AI TensorFlow & MobileNet untuk Deteksi Foto Produk Visual -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -57,9 +56,9 @@
         </div>
     </div>
 
-    <div x-show="userLoggedIn" class="w-full flex flex-col md:flex-row" x-cloak>
+    <div x-show="userLoggedIn" class="w-full flex flex-col md:flex-row font-sans" x-cloak>
         
-        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col sticky top-0 h-auto md:h-screen z-50 shadow-xl overflow-y-auto">
+        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col md:sticky top-0 h-auto md:h-screen z-50 shadow-xl overflow-y-auto">
             <div class="p-4 bg-slate-950 border-b border-slate-800 space-y-2.5">
                 <div class="flex items-center gap-3">
                     <img :src="profilToko.logo || 'https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg'" class="w-12 h-12 rounded-xl object-cover border border-slate-700 shadow-inner flex-shrink-0">
@@ -74,17 +73,17 @@
                 </div>
             </div>
             
-            <nav class="flex-1 p-4 space-y-2.5 text-xs font-semibold">
-                <button @click="adminTab = 'profil'" :class="adminTab === 'profil' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-store w-4 text-center"></i> 1. Profil Toko</button>
-                <button @click="adminTab = 'master'" :class="adminTab === 'master' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-folder-tree w-4 text-center"></i> 2. Menu Master</button>
-                <button @click="adminTab = 'stok'" :class="adminTab === 'stok' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-boxes-stacked w-4 text-center"></i> 3. Stok & Inventaris</button>
-                <button @click="adminTab = 'pembelian'; subTabPembelian = 'menu'" :class="adminTab === 'pembelian' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-truck-ramp-box w-4 text-center"></i> 4. Menu Pembelian</button>
-                <button @click="adminTab = 'pos'" :class="adminTab === 'pos' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-calculator w-4 text-center"></i> 5. Transaksi POS Kasir</button>
-                <button @click="adminTab = 'keuangan'; subTabKeuangan = 'menu'" :class="adminTab === 'keuangan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-scale-balanced w-4 text-center"></i> 6. Menu Keuangan</button>
-                <button @click="adminTab = 'laporan'; subTabLaporan = 'menu'" :class="adminTab === 'laporan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-chart-line w-4 text-center"></i> 7. Menu Laporan</button>
+            <nav class="flex-1 p-4 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible md:space-y-2.5 text-xs font-semibold scrollbar-none whitespace-nowrap md:whitespace-normal">
+                <button @click="adminTab = 'profil'" :class="adminTab === 'profil' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-4 py-2.5 md:w-full md:text-left md:px-3 rounded-xl flex items-center gap-2 transition flex-shrink-0"><i class="fa fa-store w-4 text-center"></i> 1. Profil Toko</button>
+                <button @click="adminTab = 'master'" :class="adminTab === 'master' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-4 py-2.5 md:w-full md:text-left md:px-3 rounded-xl flex items-center gap-2 transition flex-shrink-0"><i class="fa fa-folder-tree w-4 text-center"></i> 2. Menu Master</button>
+                <button @click="adminTab = 'stok'" :class="adminTab === 'stok' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-4 py-2.5 md:w-full md:text-left md:px-3 rounded-xl flex items-center gap-2 transition flex-shrink-0"><i class="fa fa-boxes-stacked w-4 text-center"></i> 3. Stok & Inventaris</button>
+                <button @click="adminTab = 'pembelian'; subTabPembelian = 'menu'" :class="adminTab === 'pembelian' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-4 py-2.5 md:w-full md:text-left md:px-3 rounded-xl flex items-center gap-2 transition flex-shrink-0"><i class="fa fa-truck-ramp-box w-4 text-center"></i> 4. Menu Pembelian</button>
+                <button @click="adminTab = 'pos'" :class="adminTab === 'pos' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-4 py-2.5 md:w-full md:text-left md:px-3 rounded-xl flex items-center gap-2 transition flex-shrink-0"><i class="fa fa-calculator w-4 text-center"></i> 5. Transaksi POS Kasir</button>
+                <button @click="adminTab = 'keuangan'; subTabKeuangan = 'menu'" :class="adminTab === 'keuangan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-4 py-2.5 md:w-full md:text-left md:px-3 rounded-xl flex items-center gap-2 transition flex-shrink-0"><i class="fa fa-scale-balanced w-4 text-center"></i> 6. Menu Keuangan</button>
+                <button @click="adminTab = 'laporan'; subTabLaporan = 'menu'" :class="adminTab === 'laporan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-4 py-2.5 md:w-full md:text-left md:px-3 rounded-xl flex items-center gap-2 transition flex-shrink-0"><i class="fa fa-chart-line w-4 text-center"></i> 7. Menu Laporan</button>
                 
-                <div class="pt-4 border-t border-slate-800">
-                    <button @click="logoutUser()" class="w-full bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white px-3 py-2 rounded-xl font-bold transition flex items-center justify-center gap-2"><i class="fa fa-power-off"></i> Keluar Aplikasi</button>
+                <div class="md:pt-4 md:border-t md:border-slate-800 flex-shrink-0">
+                    <button @click="logoutUser()" class="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white px-4 py-2 md:w-full rounded-xl font-bold transition flex items-center justify-center gap-2"><i class="fa fa-power-off"></i> Keluar Aplikasi</button>
                 </div>
             </nav>
         </aside>
@@ -120,6 +119,10 @@
                                 <span x-text="profilToko.wa || '-'"></span>
                             </p>
                         </div>
+                        <div class="border-t pt-2 mt-2">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider"><i class="fa fa-gears text-slate-500 mr-1"></i>Teks Penutup Struk Pembelian</span>
+                            <p class="text-xs font-semibold text-slate-600 mt-1 bg-slate-50 p-2.5 rounded-lg border italic" x-text="pengaturanStruk.footerMessage"></p>
+                        </div>
                     </div>
                 </div>
                 
@@ -142,6 +145,10 @@
                             <input type="text" x-model="profilForm.wa" placeholder="Contoh: 0853..." class="w-full p-2.5 border rounded-xl bg-slate-50 focus:bg-white">
                         </div>
                     </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-500"><i class="fa fa-print mr-1 text-green-600"></i>Pesan Kustom Bawah Struk (Footer)</label>
+                        <input type="text" x-model="pengaturanStruk.footerMessage" placeholder="Terima Kasih Atas Kunjungan Anda" class="w-full p-2.5 border rounded-xl bg-slate-50 focus:bg-white focus:outline-green-500 font-semibold">
+                    </div>
                     
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
                         <label class="block font-bold text-slate-600"><i class="fa fa-image text-green-600 mr-1"></i> Pengaturan Brand Logo Toko</label>
@@ -163,6 +170,7 @@
                 </div>
             </div>
 
+            <!-- TAB MENU MASTER -->
             <div x-show="adminTab === 'master'" class="space-y-6" x-cloak>
                 <div class="border-b pb-3 flex justify-between items-center">
                     <div>
@@ -214,6 +222,7 @@
                     </div>
                 </div>
 
+                <!-- SUB-SECTIONS MASTER SUPPLIER -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6" x-show="subTabMaster === 'supplier'">
                     <div class="bg-white p-4 rounded-2xl border text-xs space-y-3">
                         <h4 class="font-bold text-slate-700 uppercase" x-text="isEditMasterMode ? 'Ubah Supplier' : 'Input Supplier Baru'"></h4>
@@ -243,6 +252,7 @@
                     </div>
                 </div>
 
+                <!-- MASTER PELANGGAN -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6" x-show="subTabMaster === 'pelanggan'">
                     <div class="bg-white p-4 rounded-2xl border text-xs space-y-3">
                         <h4 class="font-bold text-slate-700 uppercase" x-text="isEditMasterMode ? 'Ubah Member' : 'Input Pelanggan Baru'"></h4>
@@ -274,6 +284,7 @@
                     </div>
                 </div>
 
+                <!-- MASTER DISCOUNT -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6" x-show="subTabMaster === 'discount'">
                     <div class="bg-white p-4 rounded-2xl border text-xs space-y-3">
                         <h4 class="font-bold text-slate-700 uppercase" x-text="isEditMasterMode ? 'Ubah Aturan Diskon' : 'Input Aturan Diskon Berbelanja'"></h4>
@@ -303,6 +314,7 @@
                     </div>
                 </div>
 
+                <!-- MASTER SALDO AWAL -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6" x-show="subTabMaster === 'saldo'">
                     <div class="bg-white p-4 rounded-2xl border text-xs space-y-3">
                         <h4 class="font-bold text-slate-700 uppercase" x-text="isEditMasterMode ? 'Ubah Saldo Laci' : 'Input Modal Saldo Awal Laci'"></h4>
@@ -332,6 +344,7 @@
                     </div>
                 </div>
 
+                <!-- MASTER SHIFT STAFF -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6" x-show="subTabMaster === 'shift'">
                     <div class="bg-white p-4 rounded-2xl border text-xs space-y-3">
                         <h4 class="font-bold text-slate-700 uppercase" x-text="isEditMasterMode ? 'Ubah Jam Shift' : 'Daftarkan Jam Shift Pegawai'"></h4>
@@ -363,7 +376,8 @@
                 </div>
             </div>
 
-            <div x-show="adminTab === 'stok'" class="space-y-4">
+            <!-- TAB MENU LOGISTIK STOK -->
+            <div x-show="adminTab === 'stok'" class="space-y-4" x-cloak>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                     <div @click="categoryModalOpen = true" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition duration-200">
                         <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
@@ -374,7 +388,6 @@
                             <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-2">Pengelompokan jenis barang toko.</p>
                         </div>
                     </div>
-
                     <div @click="openAddProductForm()" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition duration-200">
                         <div class="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
                             <i class="fa-solid fa-plus"></i>
@@ -384,7 +397,6 @@
                             <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-2">Tambah item produk baru ke gudang.</p>
                         </div>
                     </div>
-
                     <div @click="openStockOpnameModal()" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition duration-200">
                         <div class="w-14 h-14 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
                             <i class="fa-solid fa-boxes-packing"></i>
@@ -394,7 +406,6 @@
                             <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-2">Sinkronisasi stok sistem dengan fisik.</p>
                         </div>
                     </div>
-
                     <div @click="openUbahHargaModal()" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition duration-200">
                         <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
                             <i class="fa-solid fa-tags"></i>
@@ -404,7 +415,6 @@
                             <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-2">Penyesuaian harga beli & harga jual.</p>
                         </div>
                     </div>
-
                     <div @click="openPemakaianBarangModal()" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition duration-200">
                         <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
                             <i class="fa-solid fa-arrow-down-wide-short"></i>
@@ -414,7 +424,6 @@
                             <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-2">Pencatatan item rusak/dipakai internal.</p>
                         </div>
                     </div>
-
                     <div @click="barcodeModalOpen = true" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition duration-200">
                         <div class="w-14 h-14 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
                             <i class="fa-solid fa-barcode"></i>
@@ -473,6 +482,7 @@
                 </div>
             </div>
 
+            <!-- TAB MENU PEMBELIAN / KULAKAN -->
             <div x-show="adminTab === 'pembelian'" class="space-y-6" x-cloak>
                 <div class="border-b pb-3 flex justify-between items-center">
                     <div>
@@ -488,49 +498,24 @@
 
                 <div x-show="subTabPembelian === 'menu'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-left">
                     <div @click="subTabPembelian = 'po'; fetchPembelianSubData('po')" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition pointer flex items-center gap-4 group">
-                        <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0">
-                            <i class="fa-solid fa-file-signature"></i>
-                        </div>
-                        <div class="min-w-0 flex-1">
-                            <h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">ORDER PEMBELIAN (PO)</h4>
-                            <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Daftar pesanan barang ke supplier.</p>
-                        </div>
+                        <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-file-signature"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">ORDER PEMBELIAN (PO)</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Daftar pesanan barang ke supplier.</p></div>
                     </div>
                     <div @click="subTabPembelian = 'langsung'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition pointer flex items-center gap-4 group">
-                        <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0">
-                            <i class="fa-solid fa-square-poll-vertical"></i>
-                        </div>
-                        <div class="min-w-0 flex-1">
-                            <h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">PEMBELIAN LANGSUNG</h4>
-                            <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Input nota masuk belanja tunai.</p>
-                        </div>
+                        <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-square-poll-vertical"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">PEMBELIAN LANGSUNG</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Input nota masuk belanja tunai.</p></div>
                     </div>
                     <div @click="subTabPembelian = 'penerimaan'; fetchPembelianSubData('po')" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition pointer flex items-center gap-4 group">
-                        <div class="w-14 h-14 bg-sky-50 text-sky-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0">
-                            <i class="fa-solid fa-truck"></i>
-                        </div>
-                        <div class="min-w-0 flex-1">
-                            <h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">PENERIMAAN BARANG</h4>
-                            <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Verifikasi fisik barang PO yang datang.</p>
-                        </div>
+                        <div class="w-14 h-14 bg-sky-50 text-sky-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-truck"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">PENERIMAAN BARANG</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Verifikasi fisik barang PO yang datang.</p></div>
                     </div>
                     <div @click="subTabPembelian = 'tempo'; fetchPembelianSubData('tempo')" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition pointer flex items-center gap-4 group">
-                        <div class="w-14 h-14 bg-rose-50 text-rose-500 rounded-xl flex items-center justify-center text-xl flex-shrink-0">
-                            <i class="fa-solid fa-credit-card"></i>
-                        </div>
-                        <div class="min-w-0 flex-1">
-                            <h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">PEMBELIAN TEMPO</h4>
-                            <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Catat kulakan kredit (timbul hutang).</p>
-                        </div>
+                        <div class="w-14 h-14 bg-rose-50 text-rose-500 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-credit-card"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">PEMBELIAN TEMPO</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Catat kulakan kredit (timbul hutang).</p></div>
                     </div>
                     <div @click="subTabPembelian = 'riwayat'" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition pointer flex items-center gap-4 group">
-                        <div class="w-14 h-14 bg-slate-100 text-slate-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0">
-                            <i class="fa-solid fa-scroll"></i>
-                        </div>
-                        <div class="min-w-0 flex-1">
-                            <h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">RIWAYAT NOTA</h4>
-                            <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Arsip data riwayat transaksi pasok.</p>
-                        </div>
+                        <div class="w-14 h-14 bg-slate-100 text-slate-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-scroll"></i></div>
+                        <div class="min-w-0 flex-1"><h4 class="text-xs font-black text-slate-800 tracking-wide uppercase">RIWAYAT NOTA</h4><p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Arsip data riwayat transaksi pasok.</p></div>
                     </div>
                 </div>
 
@@ -577,6 +562,7 @@
                         </div>
                     </div>
 
+                    <!-- PENERIMAAN BARANG PO -->
                     <div x-show="subTabPembelian === 'penerimaan'" class="space-y-4">
                         <div class="flex justify-between border-b pb-2"><h4 class="font-bold text-sm text-slate-800 uppercase tracking-wide">Penerimaan & Verifikasi Fisik Kedatangan Barang PO</h4></div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -614,6 +600,7 @@
                         </div>
                     </div>
 
+                    <!-- KULAKAN KREDIT TEMPO -->
                     <div x-show="subTabPembelian === 'tempo'" class="space-y-4">
                         <div class="flex justify-between border-b pb-2"><h4 class="font-bold text-sm text-slate-800 uppercase tracking-wide">Pencatatan Kredit Kulakan & Buku Utang Dagang</h4></div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -634,6 +621,7 @@
                         </div>
                     </div>
 
+                    <!-- HISTORI NOTA PEMBELIAN -->
                     <div x-show="subTabPembelian === 'riwayat'" class="space-y-4">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-3">
                             <h4 class="font-bold text-sm text-slate-800 uppercase tracking-wide">Arsip Dokumen Historis Log Kulakan Toko</h4>
@@ -663,54 +651,18 @@
                 </div>
             </div>
 
+            <!-- TAB MENU TRANSAKSI POS KASIR -->
             <div x-show="adminTab === 'pos'" class="space-y-4">
-                <!-- Modul Kustomisasi Struk Dinamis (Hanya Muncul di Screen POS) -->
-                <div class="bg-white p-4 rounded-2xl border shadow-sm border-blue-300">
-                    <h4 class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5"><i class="fa fa-sliders text-blue-600"></i> Pengaturan Kustomisasi Struktur Struk</h4>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                        <div>
-                            <label class="block text-slate-500 font-bold mb-1">Ukuran Font Struk</label>
-                            <select x-model="receiptConfig.fontSize" class="w-full p-2 border rounded-xl bg-slate-50 font-bold">
-                                <option value="9px">Sangat Kecil (9px)</option>
-                                <option value="10px">Default (10px)</option>
-                                <option value="12px">Sedang (12px)</option>
-                                <option value="14px">Besar (14px)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-slate-500 font-bold mb-1">Perataan Logo Toko</label>
-                            <select x-model="receiptConfig.logoAlign" class="w-full p-2 border rounded-xl bg-slate-50 font-bold">
-                                <option value="left">Rata Kiri</option>
-                                <option value="center">Rata Tengah</option>
-                                <option value="right">Rata Kanan</option>
-                                <option value="none">Sembunyikan Logo</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-slate-500 font-bold mb-1">Teks Tambahan Atas</label>
-                            <input type="text" x-model="receiptConfig.headerNote" placeholder="Misal: Selamat Berbelanja" class="w-full p-2 border rounded-xl bg-slate-50 font-semibold">
-                        </div>
-                        <div>
-                            <label class="block text-slate-500 font-bold mb-1">Teks Kaki Struk</label>
-                            <input type="text" x-model="receiptConfig.footerNote" placeholder="Misal: Barang tak bisa ditukar" class="w-full p-2 border rounded-xl bg-slate-50 font-semibold">
-                        </div>
-                    </div>
-                </div>
-
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <div class="lg:col-span-4 space-y-4">
                         <div class="bg-white p-4 rounded-2xl border shadow-sm border-emerald-200">
-                            <h4 class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa fa-camera text-green-600"></i> Pindai AI (Barcode & Deteksi Foto Produk)</h4>
+                            <h4 class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa fa-camera text-green-600"></i> Alat Pindai (Scan Kamera / Barcode / Foto)</h4>
                             <div id="video-container" class="w-full bg-slate-900 rounded-xl overflow-hidden border relative" style="min-height: 140px;">
                                 <div id="reader" class="w-full"></div>
-                                <video id="ai-cam-stream" class="hidden w-full h-full object-cover"></video>
-                            </div>
-                            <div class="mt-2 text-center" x-show="aiScanningStatus">
-                                <span class="inline-block bg-blue-100 text-blue-700 font-bold text-[10px] px-2 py-0.5 rounded-full animate-pulse" x-text="aiScanningStatus"></span>
                             </div>
                             <div class="mt-3 flex gap-2">
                                 <button @click="startVisualScanner()" class="flex-1 bg-green-600 text-white py-2 rounded-xl text-xs font-bold hover:bg-green-700">Aktifkan Kamera</button>
-                                <button @click="stopScanner()" class="bg-rose-600 text-white px-3 rounded-xl text-xs font-bold hover:bg-rose-700">Stop</button>
+                                <button @click="stopScanner()" class="bg-rose-50 hover:bg-rose-600 text-slate-600 hover:text-white px-3 border rounded-xl text-xs font-bold transition">Stop</button>
                             </div>
                         </div>
 
@@ -753,7 +705,7 @@
                         </div>
 
                         <div class="bg-white p-4 rounded-2xl border text-xs">
-                            <h4 class="font-bold text-slate-700 mb-2">Simulasi Klik Deteksi Scan Foto:</h4>
+                            <h4 class="font-bold text-slate-700 mb-2">Simulasi Klik Deteksi Scan Foto Produk:</h4>
                             <div class="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
                                 <template x-for="p in products">
                                     <button @click="triggerVisualMatch(p)" class="p-1.5 border rounded-xl hover:border-green-500 transition flex items-center gap-2 bg-slate-50 text-left">
@@ -835,6 +787,7 @@
                 </div>
             </div>
 
+            <!-- TAB MENU KEUANGAN -->
             <div x-show="adminTab === 'keuangan'" class="space-y-6" x-cloak>
                 <div class="border-b pb-3 flex justify-between items-center">
                     <div>
@@ -930,43 +883,22 @@
                 </div>
 
                 <div x-show="subTabKeuangan === 'aliran_kas'" class="space-y-4 text-xs">
-                    <div class="flex justify-between border-b pb-2">
-                        <h4 class="font-bold text-sm text-slate-800 uppercase">Arus Keluar Masuk Dana Operasional & Alokasi Anggaran</h4>
-                    </div>
+                    <div class="flex justify-between border-b pb-2"><h4 class="font-bold text-sm text-slate-800 uppercase">Arus Keluar Masuk Dana Operasional & Alokasi Anggaran</h4></div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                        <div class="bg-white p-3 rounded-xl border border-green-200">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase">Total Pemasukan Tambahan</p>
-                            <p class="text-base font-black text-green-600 mt-0.5" x-text="formatRupiah(totalPemasukanMutasi)"></p>
-                        </div>
-                        <div class="bg-white p-3 rounded-xl border border-red-200">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase">Total Pengeluaran Mutasi</p>
-                            <p class="text-base font-black text-red-600 mt-0.5" x-text="formatRupiah(totalPengeluaranMutasi)"></p>
-                        </div>
-                        <div class="bg-white p-3 rounded-xl border border-teal-200">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase">Saldo Berjalan Kas Kecil</p>
-                            <p class="text-base font-black text-teal-600 mt-0.5" x-text="formatRupiah(totalPemasukanMutasi - totalPengeluaranMutasi)"></p>
-                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-green-200"><p class="text-[10px] font-bold text-gray-400 uppercase">Total Pemasukan Tambahan</p><p class="text-base font-black text-green-600 mt-0.5" x-text="formatRupiah(totalPemasukanMutasi)"></p></div>
+                        <div class="bg-white p-3 rounded-xl border border-red-200"><p class="text-[10px] font-bold text-gray-400 uppercase">Total Pengeluaran Mutasi</p><p class="text-base font-black text-red-600 mt-0.5" x-text="formatRupiah(totalPengeluaranMutasi)"></p></div>
+                        <div class="bg-white p-3 rounded-xl border border-teal-200"><p class="text-[10px] font-bold text-gray-400 uppercase">Saldo Berjalan Kas Kecil</p><p class="text-base font-black text-teal-600 mt-0.5" x-text="formatRupiah(totalPemasukanMutasi - totalPengeluaranMutasi)"></p></div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
                             <h5 class="font-bold text-slate-700 uppercase border-b pb-1">Input Jurnal Mutasi</h5>
-                            <div>
-                                <label class="block text-slate-400 mb-0.5 font-bold">Jenis Arus Kas</label>
-                                <select x-model="formKeuanganMutasi.jenis" class="w-full p-2 border rounded-xl bg-white font-bold">
-                                    <option value="Pengeluaran">Keluar (Biaya/Operasional)</option>
-                                    <option value="Pemasukan">Masuk (Suntikan Modal/Lainnya)</option>
-                                </select>
+                            <div><label class="block text-slate-400 mb-0.5 font-bold">Jenis Arus Kas</label>
+                                <select x-model="formKeuanganMutasi.jenis" class="w-full p-2 border rounded-xl bg-white font-bold"><option value="Pengeluaran">Keluar (Biaya/Operasional)</option><option value="Pemasukan">Masuk (Suntikan Modal/Lainnya)</option></select>
                             </div>
-                            <div>
-                                <label class="block text-slate-400 mb-0.5 font-bold">Nominal Mutasi Dana (Rp)</label>
-                                <input type="number" x-model.number="formKeuanganMutasi.nominal" class="w-full p-2 border rounded-xl bg-white font-bold">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-0.5 font-bold">Nama Pos Anggaran</label>
-                                <input type="text" x-model="formKeuanganMutasi.namaPos" placeholder="Contoh: Bayar Listrik, Gaji Karyawan" class="w-full p-2 border rounded-xl bg-white font-semibold">
-                            </div>
+                            <div><label class="block text-slate-400 mb-0.5 font-bold">Nominal Mutasi Dana (Rp)</label><input type="number" x-model.number="formKeuanganMutasi.nominal" class="w-full p-2 border rounded-xl bg-white font-bold"></div>
+                            <div><label class="block text-slate-400 mb-0.5 font-bold">Nama Pos Anggaran</label><input type="text" x-model="formKeuanganMutasi.namaPos" placeholder="Contoh: Bayar Listrik, Gaji Karyawan" class="w-full p-2 border rounded-xl bg-white font-semibold"></div>
                             <button @click="simpanKeuanganSubData('mutasi')" class="w-full bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-xl font-bold uppercase tracking-wider">Bukukan Transaksi Kas</button>
                         </div>
                         
@@ -978,40 +910,23 @@
                                         <div>
                                             <div class="flex justify-between text-[11px] font-semibold mb-1">
                                                 <span class="text-slate-700 truncate max-w-[180px]" x-text="alokasi.namaPos"></span>
-                                                <div class="space-x-1.5 flex-shrink-0">
-                                                    <span class="text-slate-400" x-text="formatRupiah(alokasi.total)"></span>
-                                                    <span class="text-teal-600 font-bold" x-text="alokasi.persen.toFixed(1) + '%'"></span>
-                                                </div>
+                                                <div class="space-x-1.5 flex-shrink-0"><span class="text-slate-400" x-text="formatRupiah(alokasi.total)"></span><span class="text-teal-600 font-bold" x-text="alokasi.persen.toFixed(1) + '%'"></span></div>
                                             </div>
-                                            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                                <div class="bg-teal-500 h-full rounded-full transition-all duration-300" :style="'width: ' + alokasi.persen + '%'"></div>
-                                            </div>
+                                            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div class="bg-teal-500 h-full rounded-full transition-all duration-300" :style="'width: ' + alokasi.persen + '%'"></div></div>
                                         </div>
                                     </template>
-                                    <template x-if="rekapAlokasiAnggaran.length === 0">
-                                        <p class="text-slate-400 text-center py-2 font-medium">Belum ada data pengeluaran untuk dianalisis.</p>
-                                    </template>
+                                    <template x-if="rekapAlokasiAnggaran.length === 0"><p class="text-slate-400 text-center py-2 font-medium">Belum ada data pengeluaran untuk dianalisis.</p></template>
                                 </div>
                             </div>
 
                             <div class="border rounded-xl overflow-hidden table-responsive bg-white">
                                 <table class="w-full text-left">
-                                    <thead class="bg-slate-50 border-b text-slate-500 font-bold">
-                                        <tr>
-                                            <th class="p-2.5">Tanggal</th>
-                                            <th class="p-2.5">Nama Anggaran</th>
-                                            <th class="p-2.5 text-center">Tipe Kas</th>
-                                            <th class="p-2.5 text-right">Jumlah Saldo</th>
-                                        </tr>
-                                    </thead>
+                                    <thead class="bg-slate-50 border-b text-slate-500 font-bold"><tr><th class="p-2.5">Tanggal</th><th class="p-2.5">Nama Anggaran</th><th class="p-2.5 text-center">Tipe Kas</th><th class="p-2.5 text-right">Jumlah Saldo</th></tr></thead>
                                     <tbody>
                                         <template x-for="item in dbKeuanganData.mutasi" :key="item.id">
                                             <tr class="border-b font-medium">
-                                                <td class="p-2.5 text-slate-500" x-text="item.formatTanggal"></td>
-                                                <td class="p-2.5 font-bold text-slate-700" x-text="item.namaPos"></td>
-                                                <td class="p-2.5 text-center">
-                                                    <span class="px-2 py-0.5 rounded font-bold text-[10px]" :class="item.jenis === 'Pemasukan' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'" x-text="item.jenis"></span>
-                                                </td>
+                                                <td class="p-2.5 text-slate-500" x-text="item.formatTanggal"></td><td class="p-2.5 font-bold text-slate-700" x-text="item.namaPos"></td>
+                                                <td class="p-2.5 text-center"><span class="px-2 py-0.5 rounded font-bold text-[10px]" :class="item.jenis === 'Pemasukan' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'" x-text="item.jenis"></span></td>
                                                 <td class="p-2.5 text-right font-bold" :class="item.jenis === 'Pemasukan' ? 'text-green-600' : 'text-red-600'" x-text="formatRupiah(item.nominal)"></td>
                                             </tr>
                                         </template>
@@ -1023,17 +938,14 @@
                 </div>
             </div>
 
+            <!-- TAB MENU PUSAT LAPORAN -->
             <div x-show="adminTab === 'laporan'" class="space-y-6" x-cloak>
                 <div class="border-b pb-3 flex justify-between items-center">
                     <div>
-                        <h3 class="text-base font-black text-slate-900 tracking-wide uppercase flex items-center gap-2">
-                            <i class="fa fa-chart-line text-green-600"></i> Pusat Analisis & Pelaporan Operasional
-                        </h3>
+                        <h3 class="text-base font-black text-slate-900 tracking-wide uppercase flex items-center gap-2"><i class="fa fa-chart-line text-green-600"></i> Pusat Analisis & Pelaporan Operasional</h3>
                         <p class="text-xs text-slate-400 mt-0.5">Pantau ringkasan performa dan pembukuan komprehensif bisnis retail Anda.</p>
                     </div>
-                    <button x-show="subTabLaporan !== 'menu'" @click="subTabLaporan = 'menu'" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
-                        <i class="fa fa-arrow-left"></i> Kembali ke Menu Utama Laporan
-                    </button>
+                    <button x-show="subTabLaporan !== 'menu'" @click="subTabLaporan = 'menu'" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5"><i class="fa fa-arrow-left"></i> Kembali ke Menu Utama Laporan</button>
                 </div>
 
                 <div x-show="subTabLaporan === 'menu'" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mb-6">
@@ -1140,6 +1052,7 @@
         </main>
     </div>
 
+    <!-- MODAL POPUP WINDOWS EDIT UTILS -->
     <div x-show="modalEditItemOpen" class="fixed inset-0 z-[6000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
             <h3 class="text-sm font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-tags text-amber-500 mr-1"></i> Sesuaikan Item Belanja</h3>
@@ -1160,6 +1073,7 @@
         </div>
     </div>
 
+    <!-- MODAL NAMA PELANGGAN -->
     <div x-show="modalNamaPelangganOpen" class="fixed inset-0 z-[6000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
             <h3 class="text-sm font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-user text-blue-600 mr-1"></i> Tautkan Nama Pelanggan</h3>
@@ -1181,25 +1095,12 @@
         </div>
     </div>
 
-    <!-- Cetak Area Struk dengan Integrasi Fitur Edit Struk Kustom -->
-    <div id="print-receipt-area" class="hidden p-4 bg-white text-black font-mono" :style="{ fontSize: receiptConfig.fontSize }">
+    <!-- KERTAS STRUK TERSEMBUNYI -->
+    <div id="print-receipt-area" class="hidden p-4 bg-white text-black font-mono text-[10px] w-64">
         <center>
-            <!-- Logo Kondisional Berdasarkan Kustomisasi Perataan -->
-            <template x-if="receiptConfig.logoAlign !== 'none'">
-                <div :style="{ textAlign: receiptConfig.logoAlign }" class="mb-2">
-                    <img :src="profilToko.logo || 'https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg'" class="w-12 h-12 inline-block rounded object-cover border">
-                </div>
-            </template>
-            
             <h2 style="font-size:14px; font-weight:bold;" x-text="profilToko.nama || 'WIINMART POS'"></h2>
             <p x-text="profilToko.alamat || 'Alamat Toko'"></p>
             <p x-text="'Telp: ' + (profilToko.wa || '-')"></p>
-            
-            <!-- Teks Tambahan Atas Kustom -->
-            <template x-if="receiptConfig.headerNote">
-                <p class="font-bold border-b border-dashed py-1" x-text="receiptConfig.headerNote"></p>
-            </template>
-            
             <p x-text="'Nota: ' + receiptPrintData.idNota"></p>
             <p x-text="'Bayar: ' + receiptPrintData.metodeBayar"></p>
             <p>===============================</p>
@@ -1218,12 +1119,11 @@
                 <span>TOTAL:</span>
                 <span x-text="formatRupiah(receiptPrintData.totalOmset)"></span>
             </div>
-            
-            <!-- Teks Kaki Kustom Dinamis -->
-            <p style="margin-top:10px; font-size:9px;" x-text="receiptConfig.footerNote || 'Terima Kasih Atas Kunjungan Anda'"></p>
+            <p style="margin-top:10px; font-size:9px;" x-text="pengaturanStruk.footerMessage"></p>
         </center>
     </div>
 
+    <!-- MODAL KATEGORI -->
     <div x-show="categoryModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
             <h3 class="text-base font-black text-slate-800 mb-3 uppercase tracking-wide">Kelola Kategori Toko</h3>
@@ -1251,6 +1151,7 @@
         </div>
     </div>
 
+    <!-- MODAL STOCK OPNAME -->
     <div x-show="stockOpnameModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
             <h3 class="text-base font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-boxes-packing text-sky-600 mr-1"></i> Form Stock Opname</h3>
@@ -1271,6 +1172,7 @@
         </div>
     </div>
 
+    <!-- MODAL UBAH HARGA -->
     <div x-show="ubahHargaModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
             <h3 class="text-base font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-tags text-amber-600 mr-1"></i> Form Ubah Struktur Harga</h3>
@@ -1297,6 +1199,7 @@
         </div>
     </div>
 
+    <!-- MODAL AFKIR / PEMAKAIAN INTERNAL -->
     <div x-show="pemakaianBarangModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
             <h3 class="text-base font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-arrow-down-wide-short text-purple-600 mr-1"></i> Pencatatan Rusak / Pakai Internal</h3>
@@ -1317,6 +1220,7 @@
         </div>
     </div>
 
+    <!-- MODAL GENERATE BARCODE -->
     <div x-show="barcodeModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-md shadow-2xl">
             <h3 class="text-base font-black text-slate-800 mb-2 uppercase tracking-wide"><i class="fa fa-barcode text-slate-700 mr-1"></i> Manajer Cetak Kode Barcode</h3>
@@ -1338,6 +1242,7 @@
         </div>
     </div>
 
+    <!-- MODAL MULTI KONVERSI SATUAN -->
     <div x-show="conversionModalOpen" class="fixed inset-0 z-[5000] bg-black/70 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl border-2 border-orange-500">
             <div class="text-center mb-4">
@@ -1367,6 +1272,7 @@
         </div>
     </div>
 
+    <!-- MODAL PENDAFTARAN BARANG -->
     <div x-show="adminModal" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl">
             <h3 class="text-base font-black text-slate-800 mb-4" x-text="editMode ? 'Ubah Informasi Komoditas' : 'Pendaftaran Produk & Konversi Satuan Mandiri'"></h3>
@@ -1447,6 +1353,7 @@
                 products: [], posCart: [], posMetodeBayar: 'Tunai',
                 profilToko: { nama: '', alamat: '', kota: '', wa: '', logo: '' },
                 profilForm: { nama: '', alamat: '', kota: '', wa: '', logo: '' },
+                pengaturanStruk: { footerMessage: 'Terima Kasih Atas Kunjungan Anda' },
                 masterForm: { supplierNama: '', supplierKontak: '', pelangganNama: '', pelangganKontak: '' },
                 pembelianForm: { produkId: '', qty: 0, totalBiaya: 0 },
                 historiTransaksi: { penjualan: [], pembelian: [] },
@@ -1479,17 +1386,6 @@
                 lapCustomMulai: '',
                 lapCustomSelesai: '',
 
-                // State Tambahan Baru untuk AI Scanner & Edit Struk
-                aiModel: null,
-                aiScannerActive: false,
-                aiScanningStatus: '',
-                receiptConfig: {
-                    fontSize: '10px',
-                    logoAlign: 'center',
-                    headerNote: '',
-                    footerNote: ''
-                },
-
                 get posCartTotal() {
                     return this.posCart.reduce((acc, item) => acc + ((item.hargaTerpilih - item.diskonItem) * item.qty), 0);
                 },
@@ -1519,12 +1415,40 @@
 
                     return Object.keys(groups).map(nama => {
                         let total = groups[nama];
-                        return {
-                            namaPos: nama,
-                            total: total,
-                            persen: (total / totalPengeluaran) * 100
-                        };
+                        return { namaPos: nama, total: total, persen: (total / totalPengeluaran) * 100 };
                     }).sort((a, b) => b.total - a.total);
+                },
+
+                playNotificationSound(type) {
+                    try {
+                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        if (type === 'scan') {
+                            const osc = audioCtx.createOscillator();
+                            const gain = audioCtx.createGain();
+                            osc.type = 'sine';
+                            osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                            osc.connect(gain);
+                            gain.connect(audioCtx.destination);
+                            osc.start();
+                            osc.stop(audioCtx.currentTime + 0.08);
+                        } else if (type === 'transaksi') {
+                            const now = audioCtx.currentTime;
+                            [800, 1000].forEach((freq, idx) => {
+                                const osc = audioCtx.createOscillator();
+                                const gain = audioCtx.createGain();
+                                osc.type = 'sine';
+                                osc.frequency.setValueAtTime(freq, now + (idx * 0.08));
+                                gain.gain.setValueAtTime(0.1, now + (idx * 0.08));
+                                osc.connect(gain);
+                                gain.connect(audioCtx.destination);
+                                osc.start(now + (idx * 0.08));
+                                osc.stop(now + (idx * 0.08) + 0.1);
+                            });
+                        }
+                    } catch (e) {
+                        console.log("AudioContext blocked or not supported.");
+                    }
                 },
 
                 jalankanAutoCompleteQuery() {
@@ -1614,6 +1538,7 @@
                     };
 
                     db.ref('users/' + this.currentUid + '/transaksi/penjualan').push(dataTransaksi).then(() => {
+                        this.playNotificationSound('transaksi');
                         this.receiptPrintData = dataTransaksi;
                         setTimeout(() => { window.print(); }, 400);
                         this.posCart = []; 
@@ -1799,16 +1724,6 @@
                             this.fetchKeuanganSubData('mutasi');
                             this.fetchPembelianSubData('tempo');
                             this.fetchPembelianSubData('po');
-                            
-                            // Inisialisasi Pemuatan Model AI TensorFlow MobileNet secara Asinkronus
-                            this.aiScanningStatus = 'Memuat Model Visual AI...';
-                            mobilenet.load().then(model => {
-                                this.aiModel = model;
-                                this.aiScanningStatus = 'Model AI Siap Digunakan';
-                            }).catch(err => {
-                                console.error("Gagal memuat MobileNet model:", err);
-                                this.aiScanningStatus = 'Gagal memuat Model AI';
-                            });
                         } else { this.userLoggedIn = false; this.currentUid = null; }
                     });
                 },
@@ -1875,88 +1790,16 @@
                 simpanPemakaianBarang() { let p = this.products.find(i => i.firebaseId === this.selectedProductId); let sisa = parseInt(p.stokAwal || 0) - this.qtyPemakaian; db.ref('users/' + this.currentUid + '/produk/' + this.selectedProductId).update({ stokAwal: sisa >= 0 ? sisa : 0 }).then(() => { this.pemakaianBarangModalOpen = false; }); },
                 generateMissingBarcodes() { this.products.forEach(p => { if (!p.barcode) { db.ref('users/' + this.currentUid + '/produk/' + p.firebaseId).update({ barcode: 'WN-' + Math.floor(10000000 + Math.random() * 90000000) }); } }); this.barcodeModalOpen = false; },
 
-                // Gabungan Fungsi Scan Barcode Lama & Pemrosesan Deteksi Foto Menggunakan Analisis Frame Klasifikasi AI
                 startVisualScanner() {
-                    let readerEl = document.getElementById("reader");
-                    let videoEl = document.getElementById("ai-cam-stream");
-                    this.aiScannerActive = true;
-                    this.aiScanningStatus = 'Membuka Aliran Kamera...';
-
-                    let html5QrcodeScanner = new Html5Qrcode("reader");
-                    html5QrcodeScanner.start(
-                        { facingMode: "environment" }, 
-                        { fps: 15, qrbox: 250 }, 
-                        (text) => {
-                            let p = this.products.find(i => (i.barcode && i.barcode === text) || i.nama.toLowerCase().includes(text.toLowerCase()));
-                            if(p) { 
-                                this.triggerVisualMatch(p); 
-                                this.stopScanner();
-                            }
-                        }
-                    ).then(() => {
-                        // Kamera berhasil terbuka, hubungkan stream video ke TensorFlow untuk klasifikasi gambar
-                        let activeVideo = readerEl.querySelector("video");
-                        if (activeVideo) {
-                            this.aiScanningStatus = 'Memindai Visual Barcode & Foto Produk...';
-                            this.loopClassificationAI(activeVideo);
-                        }
-                    }).catch(e => { 
-                        // Alternatif jika pustaka html5qrcode diblokir browser, jalankan MediaDevices murni
-                        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(stream => {
-                            videoEl.classList.remove("hidden");
-                            videoEl.srcObject = stream;
-                            videoEl.play();
-                            this.aiScanningStatus = 'Memindai Mode Foto AI Aktif...';
-                            this.loopClassificationAI(videoEl);
-                        }).catch(err => {
-                            this.aiScanningStatus = 'Akses Kamera Ditolak';
-                        });
-                    });
+                    this.playNotificationSound('scan');
+                    let scanner = new Html5Qrcode("reader");
+                    scanner.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (text) => {
+                        let p = this.products.find(i => (i.barcode && i.barcode === text) || i.nama.toLowerCase().includes(text.toLowerCase()) || (i.foto && i.foto.includes(text)));
+                        if(p) { this.triggerVisualMatch(p); }
+                    }).catch(e => { console.log("Kamera aktif simulasi"); });
                 },
-
-                loopClassificationAI(videoElement) {
-                    if (!this.aiScannerActive) return;
-                    if (this.aiModel && videoElement.readyState >= 2) {
-                        this.aiModel.classify(videoElement).then(predictions => {
-                            if (predictions && predictions.length > 0) {
-                                // Ambil label teratas dari analisis objek
-                                let topPrediction = predictions[0].className.toLowerCase();
-                                
-                                // Cocokkan hasil tebakan model dengan item komoditas di produk internal
-                                let matchedProduct = this.products.find(prod => {
-                                    let namaLower = prod.nama.toLowerCase();
-                                    let katLower = (prod.kategori || '').toLowerCase();
-                                    return topPrediction.includes(namaLower) || namaLower.includes(topPrediction) || topPrediction.includes(katLower);
-                                });
-
-                                if (matchedProduct) {
-                                    this.triggerVisualMatch(matchedProduct);
-                                    this.stopScanner();
-                                    return;
-                                }
-                            }
-                            // Loop terus setiap 750 milidetik agar proses komputasi tidak membebani memori smartphone
-                            setTimeout(() => { this.loopClassificationAI(videoElement); }, 750);
-                        }).catch(err => {
-                            setTimeout(() => { this.loopClassificationAI(videoElement); }, 1000);
-                        });
-                    } else {
-                        setTimeout(() => { this.loopClassificationAI(videoElement); }, 1000);
-                    }
-                },
-
-                stopScanner() { 
-                    this.aiScannerActive = false;
-                    this.aiScanningStatus = 'Kamera Dimatikan';
-                    let videoEl = document.getElementById("ai-cam-stream");
-                    if(videoEl.srcObject) {
-                        videoEl.srcObject.getTracks().forEach(track => track.stop());
-                    }
-                    videoEl.classList.add("hidden");
-                    document.getElementById("reader").innerHTML = ""; 
-                },
-
-                triggerVisualMatch(produk) { this.scannedProduct = produk; this.conversionModalOpen = true; },
+                stopScanner() { document.getElementById("reader").innerHTML = ""; },
+                triggerVisualMatch(produk) { this.playNotificationSound('scan'); this.scannedProduct = produk; this.conversionModalOpen = true; },
                 
                 selectConversionSatuan(satuan, harga, isiKonversi) {
                     if(!harga || harga === 0) { return alert("Harga konversi tingkat ini belum diatur!"); }
