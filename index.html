@@ -16,6 +16,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
     
+    <!-- Pustaka TensorFlow.js & MobileNet AI Object Detection -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -118,33 +122,6 @@
                                 <i class="fa-brands fa-whatsapp text-green-500 text-sm"></i>
                                 <span x-text="profilToko.wa || '-'"></span>
                             </p>
-                        </div>
-                    </div>
-
-                    <!-- FITUR KUSTOMISASI EDIT STRUK -->
-                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-3">
-                        <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5"><i class="fa fa-print text-green-600"></i> Pengaturan Cetakan Kustom Struk POS</h4>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Ukuran Teks</label>
-                                <select x-model="profilToko.strukTeksUkuran" @change="saveStrukConfig()" class="w-full p-2 border rounded-xl bg-white font-semibold">
-                                    <option value="9px">Kecil (9px)</option>
-                                    <option value="10px">Standar (10px)</option>
-                                    <option value="12px">Besar (12px)</option>
-                                    <option value="14px">Ekstra Besar (14px)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pemasangan Logo</label>
-                                <select x-model="profilToko.strukTampilkanLogo" @change="saveStrukConfig()" class="w-full p-2 border rounded-xl bg-white font-semibold">
-                                    <option value="ya">Tampilkan Logo</option>
-                                    <option value="tidak">Sembunyikan Logo</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Catatan Kaki Struk (Footer text)</label>
-                            <input type="text" x-model="profilToko.strukFooter" @change="saveStrukConfig()" placeholder="Terima Kasih Atas Kunjungan Anda" class="w-full p-2.5 border rounded-xl bg-white font-medium">
                         </div>
                     </div>
                 </div>
@@ -505,7 +482,7 @@
                         <h3 class="text-base font-black text-slate-900 tracking-wide uppercase flex items-center gap-2">
                             <i class="fa fa-truck-ramp-box text-green-600"></i> 4. Menu Pengadaan & Pembelian (Kulakan)
                         </h3>
-                        <p class="text-xs text-slate-400 mt-0.5">Kelola penuh rantai pasokan komoditas grosir, manajemen utang dagang, retur barang rusak, dan validasi fisik barang masuk.</p>
+                        <p class="textxs text-slate-400 mt-0.5">Kelola rantai pasokan komoditas grosir, manajemen utang dagang, retur barang rusak, dan validasi fisik barang masuk.</p>
                     </div>
                     <button x-show="subTabPembelian !== 'menu'" @click="subTabPembelian = 'menu'" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition">
                         <i class="fa fa-arrow-left mr-1"></i> Kembali ke Menu Pembelian
@@ -694,12 +671,20 @@
                     <div class="lg:col-span-4 space-y-4">
                         <div class="bg-white p-4 rounded-2xl border shadow-sm border-emerald-200">
                             <h4 class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa fa-camera text-green-600"></i> Alat Pindai (Scan Kamera / Barcode)</h4>
-                            <div id="video-container" class="w-full bg-slate-900 rounded-xl overflow-hidden border relative" style="min-height: 140px;">
-                                <div id="reader" class="w-full"></div>
+                            <div id="video-container" class="w-full bg-slate-900 rounded-xl overflow-hidden border relative flex items-center justify-center" style="min-height: 200px;">
+                                <!-- Komponen Video Aliran Gambar Kamera Mentah untuk Komputasi Model AI -->
+                                <video id="webcam" autoplay playsinline muted class="w-full h-auto object-cover"></video>
+                                <canvas id="capture-canvas" class="hidden"></canvas>
+                                <div id="reader" class="w-full hidden"></div>
                             </div>
                             <div class="mt-3 flex gap-2">
                                 <button @click="startVisualScanner()" class="flex-1 bg-green-600 text-white py-2 rounded-xl text-xs font-bold hover:bg-green-700">Aktifkan Kamera</button>
-                                <button @click="stopScanner()" class="bg-rose-50 text-white px-3 rounded-xl text-xs font-bold">Stop</button>
+                                <button @click="ambilFotoDanDeteksiAI()" class="flex-1 bg-blue-600 text-white py-2 rounded-xl text-xs font-bold hover:bg-blue-700">Pindai Foto AI</button>
+                                <button @click="stopScanner()" class="bg-rose-50 text-rose-600 border border-rose-200 px-3 rounded-xl text-xs font-bold">Stop</button>
+                            </div>
+                            <!-- Komponen Informasi Status Respon Pemrosesan Visual Objek Gambar -->
+                            <div id="ai-status" class="text-[10px] text-slate-400 mt-1.5 font-medium italic text-center">
+                                Kamera belum aktif.
                             </div>
                         </div>
 
@@ -723,24 +708,20 @@
                             </div>
                         </div>
 
-                        <!-- LOG PRINT DARI LAPORAN KASIR -->
                         <div class="bg-white p-4 rounded-2xl border shadow-sm text-xs space-y-3">
-                            <h4 class="font-black text-slate-700 uppercase tracking-wide border-b pb-1.5 flex items-center gap-1.5"><i class="fa fa-print text-purple-600"></i> Pintasan Cetak Struk Terakhir</h4>
+                            <h4 class="font-black text-slate-700 uppercase tracking-wide border-b pb-1.5 flex items-center gap-1.5"><i class="fa fa-history text-purple-600"></i> Riwayat Nota Terakhir</h4>
                             <div class="max-h-52 overflow-y-auto space-y-2 pr-1">
-                                <template x-if="historiTransaksi.penjualan.length > 0">
+                                <template x-for="(nota, index) in historiTransaksi.penjualan.slice().reverse()" :key="index">
                                     <div class="p-2 bg-slate-50 border rounded-xl space-y-1 relative">
-                                        <p class="font-bold text-slate-800 text-[11px]" x-text="'Nota: ' + (historiTransaksi.penjualan[historiTransaksi.penjualan.length - 1].idNota || 'WN-POS-AUTO')"></p>
+                                        <p class="font-bold text-slate-800 text-[11px]" x-text="'Nota: ' + (nota.idNota || 'WN-POS-AUTO')"></p>
                                         <div class="flex justify-between text-[10px] text-gray-500 font-medium">
-                                            <span x-text="historiTransaksi.penjualan[historiTransaksi.penjualan.length - 1].metodeBayar || 'Tunai'"></span>
-                                            <span class="font-bold text-green-600" x-text="formatRupiah(historiTransaksi.penjualan[historiTransaksi.penjualan.length - 1].totalOmset)"></span>
+                                            <span x-text="nota.metodeBayar || 'Tunai'"></span>
+                                            <span class="font-bold text-green-600" x-text="formatRupiah(nota.totalOmset)"></span>
                                         </div>
                                         <div class="flex gap-1.5 pt-1">
-                                            <button @click="cetakUlangStrukFisik(historiTransaksi.penjualan[historiTransaksi.penjualan.length - 1])" class="flex-1 bg-white border border-slate-300 hover:bg-slate-100 py-1 rounded font-bold text-[10px] text-slate-700 flex items-center justify-center gap-1"><i class="fa fa-print"></i> Cetak Struk Terakhir</button>
+                                            <button @click="cetakUlangStrukFisik(nota)" class="flex-1 bg-white border border-slate-300 hover:bg-slate-100 py-1 rounded font-bold text-[10px] text-slate-700 flex items-center justify-center gap-1"><i class="fa fa-print"></i> Cetak Struk</button>
                                         </div>
                                     </div>
-                                </template>
-                                <template x-if="historiTransaksi.penjualan.length === 0">
-                                    <p class="text-slate-400 text-center py-2 font-medium">Belum ada transaksi hari ini.</p>
                                 </template>
                             </div>
                         </div>
@@ -972,7 +953,7 @@
                                             <div class="flex justify-between text-[11px] font-semibold mb-1">
                                                 <span class="text-slate-700 truncate max-w-[180px]" x-text="alokasi.namaPos"></span>
                                                 <div class="space-x-1.5 flex-shrink-0">
-                                                    <span class="text-slate-400" x-text="formatRupiah(alokasi.total)"></span >
+                                                    <span class="text-slate-400" x-text="formatRupiah(alokasi.total)"></span>
                                                     <span class="text-teal-600 font-bold" x-text="alokasi.persen.toFixed(1) + '%'"></span>
                                                 </div>
                                             </div>
@@ -1079,11 +1060,10 @@
                         <button @click="eksporKeExcel('tabel-arsip-laporan', subTabLaporan)" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 ml-auto lg:ml-0 shadow-sm"><i class="fa-regular fa-file-excel"></i> Ekspor ke Excel</button>
                     </div>
 
-                    <!-- REPRINT STRUK STRUKTURAL DI LAPORAN PENJUALAN -->
                     <div x-show="subTabLaporan === 'penjualan'" class="table-responsive">
                         <table id="tabel-arsip-laporan" class="w-full text-xs text-left">
-                            <thead class="bg-slate-50 border-b font-bold text-slate-600"><tr><th class="p-3">ID Faktur / Nota</th><th class="p-3">Daftar Belanja</th><th class="p-3 text-right">Total Modal (HPP)</th><th class="p-3 text-right">Total Omset Kotor</th><th class="p-3 text-center">Cetak Ulang</th></tr></thead>
-                            <tbody><template x-for="item in prosesFilterLaporanData(historiTransaksi.penjualan, 'penjualan')"><tr class="border-b font-medium"><td class="p-3 font-mono font-bold text-slate-600" x-text="item.idNota || 'WN-POS-AUTO'"></td><td class="p-3 font-semibold text-slate-800" x-text="item.nama"></td><td class="p-3 text-right text-slate-500" x-text="formatRupiah(item.totalModal)"></td><td class="p-3 text-right text-green-600 font-bold" x-text="formatRupiah(item.totalOmset)"></td><td class="p-3 text-center"><button @click="cetakUlangStrukFisik(item)" class="bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white px-2 py-1 rounded border border-blue-200 text-[10px] font-bold transition flex items-center justify-center gap-1 mx-auto"><i class="fa fa-print"></i> Reprint</button></td></tr></template></tbody>
+                            <thead class="bg-slate-50 border-b font-bold text-slate-600"><tr><th class="p-3">ID Faktur / Nota</th><th class="p-3">Daftar Belanja</th><th class="p-3 text-right">Total Modal (HPP)</th><th class="p-3 text-right">Total Omset Kotor</th></tr></thead>
+                            <tbody><template x-for="item in prosesFilterLaporanData(historiTransaksi.penjualan, 'penjualan')"><tr class="border-b font-medium"><td class="p-3 font-mono font-bold text-slate-600" x-text="item.idNota || 'WN-POS-AUTO'"></td><td class="p-3 font-semibold text-slate-800" x-text="item.nama"></td><td class="p-3 text-right text-slate-500" x-text="formatRupiah(item.totalModal)"></td><td class="p-3 text-right text-green-600 font-bold" x-text="formatRupiah(item.totalOmset)"></td></tr></template></tbody>
                         </table>
                     </div>
 
@@ -1175,12 +1155,8 @@
         </div>
     </div>
 
-    <!-- STRUK AREA DINAMIS DENGAN FITUR EDIT STRUK -->
-    <div id="print-receipt-area" class="hidden p-4 bg-white text-black font-mono w-64" :style="'font-size: ' + (profilToko.strukTeksUkuran || '10px')">
+    <div id="print-receipt-area" class="hidden p-4 bg-white text-black font-mono text-[10px] w-64">
         <center>
-            <template x-if="profilToko.strukTampilkanLogo !== 'tidak'">
-                <img :src="profilToko.logo || 'https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg'" style="width:50px; height:50px; object-cover; margin-bottom:6px; border-radius:8px;">
-            </template>
             <h2 style="font-size:14px; font-weight:bold;" x-text="profilToko.nama || 'WIINMART POS'"></h2>
             <p x-text="profilToko.alamat || 'Alamat Toko'"></p>
             <p x-text="'Telp: ' + (profilToko.wa || '-')"></p>
@@ -1202,7 +1178,7 @@
                 <span>TOTAL:</span>
                 <span x-text="formatRupiah(receiptPrintData.totalOmset)"></span>
             </div>
-            <p style="margin-top:10px; font-size:9px;" x-text="profilToko.strukFooter || 'Terima Kasih Atas Kunjungan Anda'"></p>
+            <p style="margin-top:10px; font-size:9px;">Terima Kasih Atas<br>Kunjungan Anda</p>
         </center>
     </div>
 
@@ -1410,11 +1386,16 @@
         const db = firebase.database();
         const auth = firebase.auth();
 
+        // Register Service Worker untuk Standar PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
             });
         }
+
+        // Deklarasi Variabel Lingkup Global untuk Pemuatan Tensor Inti Kamera Instan
+        let streamVideoGlobal = null;
+        let modelAiMobileNet = null;
 
         function posApp() {
             return {
@@ -1427,7 +1408,7 @@
                 isEditMasterMode: false, currentEditMasterId: null,
                 categories: ['Sembako', 'Sabun', 'Snack', 'Bumbu', 'Makanan', 'Minuman', 'Mie instant'],
                 products: [], posCart: [], posMetodeBayar: 'Tunai',
-                profilToko: { nama: '', alamat: '', kota: '', wa: '', logo: '', strukTeksUkuran: '10px', strukTampilkanLogo: 'ya', strukFooter: 'Terima Kasih Atas Kunjungan Anda' },
+                profilToko: { nama: '', alamat: '', kota: '', wa: '', logo: '' },
                 profilForm: { nama: '', alamat: '', kota: '', wa: '', logo: '' },
                 masterForm: { supplierNama: '', supplierKontak: '', pelangganNama: '', pelangganKontak: '' },
                 pembelianForm: { produkId: '', qty: 0, totalBiaya: 0 },
@@ -1460,42 +1441,6 @@
                 filterPeriodeLaporan: 'hari_ini',
                 lapCustomMulai: '',
                 lapCustomSelesai: '',
-
-                // AUDIO SYNTHESIZER BEAT & BEEP (TANPA FILE LUAR SANGAT AMAN)
-                playAudioBeep(type) {
-                    try {
-                        let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                        let oscillator = audioCtx.createOscillator();
-                        let gainNode = audioCtx.createGain();
-                        oscillator.connect(gainNode);
-                        gainNode.connect(audioCtx.destination);
-                        
-                        if (type === 'scan') {
-                            oscillator.type = 'sine';
-                            oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); 
-                            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                            oscillator.start();
-                            oscillator.stop(audioCtx.currentTime + 0.1);
-                        } else if (type === 'success') {
-                            oscillator.type = 'triangle';
-                            oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime); 
-                            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                            oscillator.start();
-                            oscillator.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1);
-                            oscillator.stop(audioCtx.currentTime + 0.25);
-                        }
-                    } catch (e) { console.log("Audio API Error:", e); }
-                },
-
-                saveStrukConfig() {
-                    if (this.currentUid) {
-                        db.ref('users/' + this.currentUid + '/profil').update({
-                            strukTeksUkuran: this.profilToko.strukTeksUkuran,
-                            strukTampilkanLogo: this.profilToko.strukTampilkanLogo,
-                            strukFooter: this.profilToko.strukFooter
-                        });
-                    }
-                },
 
                 get posCartTotal() {
                     return this.posCart.reduce((acc, item) => acc + ((item.hargaTerpilih - item.diskonItem) * item.qty), 0);
@@ -1621,7 +1566,6 @@
                     };
 
                     db.ref('users/' + this.currentUid + '/transaksi/penjualan').push(dataTransaksi).then(() => {
-                        this.playAudioBeep('success'); // SUARA BERHASIL TRANSAKSI
                         this.receiptPrintData = dataTransaksi;
                         setTimeout(() => { window.print(); }, 400);
                         this.posCart = []; 
@@ -1793,13 +1737,7 @@
                     auth.onAuthStateChanged((user) => {
                         if (user) {
                             this.userLoggedIn = true; this.currentUid = user.uid;
-                            db.ref('users/' + this.currentUid + '/profil').on('value', snap => { 
-                                let val = snap.val(); 
-                                if(val) { 
-                                    this.profilToko = Object.assign(this.profilToko, val); 
-                                    this.profilForm = { ...val }; 
-                                } 
-                            });
+                            db.ref('users/' + this.currentUid + '/profil').on('value', snap => { let val = snap.val(); if(val) { this.profilToko = val; this.profilForm = { ...val }; } });
                             db.ref('users/' + this.currentUid + '/produk').on('value', snap => { let val = snap.val(); this.products = val ? Object.keys(val).map(k => ({ firebaseId: k, ...val[k] })) : []; });
                             db.ref('users/' + this.currentUid + '/transaksi/penjualan').on('value', snap => { let val = snap.val(); this.historiTransaksi.penjualan = val ? Object.keys(val).map(k => val[k]) : []; });
                             db.ref('users/' + this.currentUid + '/transaksi/pembelian').on('value', snap => { let val = snap.val(); this.historiTransaksi.pembelian = val ? Object.keys(val).map(k => ({ firebaseKey: k, ...val[k] })) : []; });
@@ -1879,19 +1817,106 @@
                 simpanPemakaianBarang() { let p = this.products.find(i => i.firebaseId === this.selectedProductId); let sisa = parseInt(p.stokAwal || 0) - this.qtyPemakaian; db.ref('users/' + this.currentUid + '/produk/' + this.selectedProductId).update({ stokAwal: sisa >= 0 ? sisa : 0 }).then(() => { this.pemakaianBarangModalOpen = false; }); },
                 generateMissingBarcodes() { this.products.forEach(p => { if (!p.barcode) { db.ref('users/' + this.currentUid + '/produk/' + p.firebaseId).update({ barcode: 'WN-' + Math.floor(10000000 + Math.random() * 90000000) }); } }); this.barcodeModalOpen = false; },
 
+                // Manajemen Alur Eksekusi AI Visual Object Recognition Scanner
                 startVisualScanner() {
-                    let scanner = new Html5Qrcode("reader");
-                    scanner.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (text) => {
-                        let p = this.products.find(i => (i.barcode && i.barcode === text) || i.nama.toLowerCase().includes(text.toLowerCase()));
-                        if(p) { this.triggerVisualMatch(p); }
-                    }).catch(e => { console.log("Kamera aktif simulasi"); });
+                    const video = document.getElementById('webcam');
+                    const statusStatus = document.getElementById('ai-status');
+                    statusStatus.innerText = "Sedang memuat AI Model & Kamera...";
+
+                    if (!modelAiMobileNet) {
+                        mobilenet.load().then(model => {
+                            modelAiMobileNet = model;
+                            statusStatus.innerText = "Model AI siap. Mengakses kamera...";
+                            this.bukaAksesKameraGawai(video);
+                        }).catch(err => {
+                            statusStatus.innerText = "Gagal memuat AI model.";
+                            alert("Error AI: " + err.message);
+                        });
+                    } else {
+                        this.bukaAksesKameraGawai(video);
+                    }
                 },
-                stopScanner() { document.getElementById("reader").innerHTML = ""; },
-                triggerVisualMatch(produk) { 
-                    this.playAudioBeep('scan'); // SUARA SCAN PRODUK
-                    this.scannedProduct = produk; 
-                    this.conversionModalOpen = true; 
+
+                bukaAksesKameraGawai(videoElement) {
+                    const statusStatus = document.getElementById('ai-status');
+                    navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: "environment" },
+                        audio: false
+                    })
+                    .then(stream => {
+                        streamVideoGlobal = stream;
+                        videoElement.srcObject = stream;
+                        statusStatus.innerText = "Kamera & AI Aktif. Siapkan produk di depan kamera lalu klik 'Pindai Foto AI'.";
+                    })
+                    .catch(err => {
+                        statusStatus.innerText = "Gagal mengakses kamera fisik.";
+                        alert("Akses kamera ditolak/gagal: " + err.message);
+                    });
                 },
+
+                stopScanner() {
+                    if (streamVideoGlobal) {
+                        streamVideoGlobal.getTracks().forEach(track => track.stop());
+                        streamVideoGlobal = null;
+                    }
+                    const video = document.getElementById('webcam');
+                    if(video) video.srcObject = null;
+                    document.getElementById('ai-status').innerText = "Kamera dinonaktifkan.";
+                },
+
+                ambilFotoDanDeteksiAI() {
+                    if (!modelAiMobileNet || !streamVideoGlobal) {
+                        return alert("Aktifkan kamera terlebih dahulu!");
+                    }
+
+                    const video = document.getElementById('webcam');
+                    const canvas = document.getElementById('capture-canvas');
+                    const context = canvas.getContext('2d');
+                    const statusStatus = document.getElementById('ai-status');
+
+                    statusStatus.innerText = "Menganalisis visual objek produk...";
+
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    modelAiMobileNet.classify(canvas).then(predictions => {
+                        if (predictions && predictions.length > 0) {
+                            let kataKunciAI = predictions[0].className.toLowerCase();
+                            statusStatus.innerText = `Terdeteksi: ${predictions[0].className} (${(predictions[0].probability * 100).toFixed(1)}%)`;
+
+                            let produkCocok = this.products.find(p => {
+                                let namaProd = p.nama.toLowerCase();
+                                let kategoriProd = (p.kategori || '').toLowerCase();
+                                return kataKunciAI.split(', ').some(keywords => 
+                                    namaProd.includes(keywords) || keywords.includes(namaProd) || kategoriProd.includes(keywords)
+                                );
+                            });
+
+                            if (produkCocok) {
+                                this.triggerVisualMatch(produkCocok);
+                            } else {
+                                let fallbackProd = this.products.find(p => 
+                                    kataKunciAI.split(' ').some(word => word.length > 3 && p.nama.toLowerCase().includes(word))
+                                );
+
+                                if (fallbackProd) {
+                                    this.triggerVisualMatch(fallbackProd);
+                                } else {
+                                    alert(`AI mendeteksi objek ini kemungkinan: "${predictions[0].className}". Namun produk dengan nama/kategori tersebut belum terdaftar di master barang Anda.`);
+                                }
+                            }
+                        } else {
+                            statusStatus.innerText = "Objek gagal dikenali. Pastikan pencahayaan cukup.";
+                        }
+                    }).catch(err => {
+                        statusStatus.innerText = "Gagal memproses gambar.";
+                        console.error(err);
+                    });
+                },
+
+                triggerVisualMatch(produk) { this.scannedProduct = produk; this.conversionModalOpen = true; },
                 
                 selectConversionSatuan(satuan, harga, isiKonversi) {
                     if(!harga || harga === 0) { return alert("Harga konversi tingkat ini belum diatur!"); }
