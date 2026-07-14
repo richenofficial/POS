@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SaaS POS WiinMart - AI Visual Product Scanner</title>
     
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#16a34a">
-    
     <link class="apple-touch-icon" href="https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg">
     <link rel="icon" type="image/jpeg" href="https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg">
     
@@ -62,7 +59,8 @@
 
     <div x-show="userLoggedIn" class="w-full flex flex-col md:flex-row" x-cloak>
         
-        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col sticky top-0 h-auto md:h-screen z-50 shadow-xl overflow-y-auto">
+        <!-- Sidebar Menu - Responsif dan Rapi Tanpa Menghalangi Konten Utama di Layar HP -->
+        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col sticky top-0 h-auto md:h-screen z-50 shadow-xl overflow-y-auto flex-shrink-0">
             <div class="p-4 bg-slate-950 border-b border-slate-800 space-y-2.5">
                 <div class="flex items-center gap-3">
                     <img :src="profilToko.logo || 'https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg'" class="w-12 h-12 rounded-xl object-cover border border-slate-700 shadow-inner flex-shrink-0">
@@ -77,7 +75,7 @@
                 </div>
             </div>
             
-            <nav class="flex-1 p-4 space-y-2.5 text-xs font-semibold">
+            <nav class="p-4 space-y-2.5 text-xs font-semibold">
                 <button @click="adminTab = 'profil'" :class="adminTab === 'profil' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-store w-4 text-center"></i> 1. Profil Toko</button>
                 <button @click="adminTab = 'master'" :class="adminTab === 'master' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-folder-tree w-4 text-center"></i> 2. Menu Master</button>
                 <button @click="adminTab = 'stok'" :class="adminTab === 'stok' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-boxes-stacked w-4 text-center"></i> 3. Stok & Inventaris</button>
@@ -92,7 +90,8 @@
             </nav>
         </aside>
 
-        <main class="flex-1 p-4 md:p-6 overflow-y-auto h-screen bg-slate-50">
+        <!-- Konten Utama Aplikasi POS Kasir -->
+        <main class="flex-1 p-4 md:p-6 overflow-y-auto h-auto md:h-screen bg-slate-50 w-full min-w-0">
             
             <div x-show="adminTab === 'profil'" class="bg-white p-6 rounded-2xl border shadow-sm max-w-xl" x-transition>
                 <div class="flex justify-between items-center mb-4 border-b pb-2">
@@ -319,7 +318,7 @@
                     </div>
                     <div class="md:col-span-2 bg-white rounded-2xl border table-responsive">
                         <table class="w-full text-xs text-left">
-                            <thead class="bg-slate-50 font-bold border-b text-slate-500"><tr><th class="p-3">Tanggal</th><th class="p-3">Shift Kasir</th><th class="p-3 text-right">Nominal Laci</th><th class="p-3 text-center">Aksi</th></tr></thead>
+                            <thead class="bg-slate-50 border-b text-slate-500 font-bold"><tr><th class="p-3">Tanggal</th><th class="p-3">Shift Kasir</th><th class="p-3 text-right">Nominal Laci</th><th class="p-3 text-center">Aksi</th></tr></thead>
                             <tbody>
                                 <template x-for="item in masterSaldos" :key="item.id">
                                     <tr class="border-b font-medium">
@@ -666,24 +665,25 @@
                 </div>
             </div>
 
+            <!-- TAB TRANSAKSI KASIR -->
             <div x-show="adminTab === 'pos'" class="space-y-4">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <div class="lg:col-span-4 space-y-4">
                         <div class="bg-white p-4 rounded-2xl border shadow-sm border-emerald-200">
                             <h4 class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa fa-camera text-green-600"></i> Alat Pindai (Scan Kamera / Barcode)</h4>
-                            <div id="video-container" class="w-full bg-slate-900 rounded-xl overflow-hidden border relative flex flex-col items-center justify-center">
-                                <!-- Element video mentah diletakkan di atas tanpa mengganggu layout asli -->
-                                <video id="webcam" autoplay playsinline muted class="w-full h-auto object-cover max-h-48" style="display: none;"></video>
+                            <div id="video-container" class="w-full bg-slate-900 rounded-xl overflow-hidden border relative flex flex-col items-center justify-center" style="min-height: 180px;">
+                                <!-- Komponen Video Aliran Gambar Kamera Mentah untuk Komputasi Model AI (Disembunyikan secara visual, dibaca via kanvas) -->
+                                <video id="webcam" autoplay playsinline muted class="absolute w-full h-full object-cover z-0" style="display: none;"></video>
                                 <canvas id="capture-canvas" class="hidden"></canvas>
-                                <!-- Mengembalikan element reader bawaan agar tata letak kembali 100% normal -->
-                                <div id="reader" class="w-full"></div>
+                                <!-- Komponen Reader html5-qrcode bawaan Anda untuk Scan Barcode Garis Fisik 100% Berfungsi Kembali -->
+                                <div id="reader" class="w-full z-10"></div>
                             </div>
                             <div class="mt-3 flex gap-2">
                                 <button @click="startVisualScanner()" class="flex-1 bg-green-600 text-white py-2 rounded-xl text-xs font-bold hover:bg-green-700">Aktifkan Kamera</button>
                                 <button @click="ambilFotoDanDeteksiAI()" class="flex-1 bg-blue-600 text-white py-2 rounded-xl text-xs font-bold hover:bg-blue-700">Pindai Foto AI</button>
                                 <button @click="stopScanner()" class="bg-rose-50 text-rose-600 border border-rose-200 px-3 rounded-xl text-xs font-bold">Stop</button>
                             </div>
-                            <!-- Indikator teks status respon pemrosesan gambar -->
+                            <!-- Komponen Informasi Status Respon Pemrosesan Visual Objek Gambar -->
                             <div id="ai-status" class="text-[10px] text-slate-400 mt-1.5 font-medium italic text-center">
                                 Kamera belum aktif.
                             </div>
@@ -1115,6 +1115,7 @@
         </main>
     </div>
 
+    <!-- MODAL POP-UP DI SINI -->
     <div x-show="modalEditItemOpen" class="fixed inset-0 z-[6000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
             <h3 class="text-sm font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-tags text-amber-500 mr-1"></i> Sesuaikan Item Belanja</h3>
@@ -1387,19 +1388,14 @@
         const db = firebase.database();
         const auth = firebase.auth();
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
-            });
-        }
-
         let streamVideoGlobal = null;
         let modelAiMobileNet = null;
+        let html5QrcodeScannerInstance = null;
 
-        // Kamus Pemetaan Sinonim untuk mencocokkan hasil klasifikasi AI bahasa Inggris dengan istilah retail Indonesia Anda
+        // Kamus Sinonim AI Bahasa Inggris ke Karakter Isian Kategori POS Lokal Anda
         const kamusSinonimAI = {
             "safety pin": ["peniti", "sabun", "bumbu", "sembako"],
-            "packet": ["snack", "mie", "kopi", "renceng", "pak"],
+            "packet": ["snack", "mie", "kopi", "renceng", "pak", "mie instant"],
             "bottle": ["minuman", "botol", "kecap", "saus"],
             "can": ["susu", "minuman", "kaleng"],
             "soap": ["sabun", "shampoo", "deterjen"],
@@ -1490,6 +1486,45 @@
                     }).sort((a, b) => b.total - a.total);
                 },
 
+                // Generator Suara Beep Kasir Elektronik Internal
+                bunyikanSuaraBeepKasir(type = 'success') {
+                    try {
+                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        const oscillator = audioCtx.createOscillator();
+                        const gainNode = audioCtx.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioCtx.destination);
+                        
+                        if (type === 'success') {
+                            oscillator.type = 'sine';
+                            oscillator.frequency.setValueAtTime(1100, audioCtx.currentTime); 
+                            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                            oscillator.start();
+                            oscillator.stop(audioCtx.currentTime + 0.12);
+                        } else if (type === 'pay') {
+                            oscillator.type = 'triangle';
+                            oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+                            gainNode.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                            oscillator.start();
+                            oscillator.stop(audioCtx.currentTime + 0.08);
+                            
+                            setTimeout(() => {
+                                const osc2 = audioCtx.createOscillator();
+                                const gain2 = audioCtx.createGain();
+                                osc2.connect(gain2);
+                                gain2.connect(audioCtx.destination);
+                                osc2.frequency.setValueAtTime(1320, audioCtx.currentTime);
+                                gain2.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                                osc2.start();
+                                osc2.stop(audioCtx.currentTime + 0.15);
+                            }, 90);
+                        }
+                    } catch (e) {
+                        console.log("Audio API not allowed or supported yet");
+                    }
+                },
+
                 jalankanAutoCompleteQuery() {
                     if (!this.posQueryKetik || this.posQueryKetik.trim() === '') {
                         this.autoCompleteResults = [];
@@ -1577,6 +1612,7 @@
                     };
 
                     db.ref('users/' + this.currentUid + '/transaksi/penjualan').push(dataTransaksi).then(() => {
+                        this.bunyikanSuaraBeepKasir('pay');
                         this.receiptPrintData = dataTransaksi;
                         setTimeout(() => { window.print(); }, 400);
                         this.posCart = []; 
@@ -1828,28 +1864,30 @@
                 simpanPemakaianBarang() { let p = this.products.find(i => i.firebaseId === this.selectedProductId); let sisa = parseInt(p.stokAwal || 0) - this.qtyPemakaian; db.ref('users/' + this.currentUid + '/produk/' + this.selectedProductId).update({ stokAwal: sisa >= 0 ? sisa : 0 }).then(() => { this.pemakaianBarangModalOpen = false; }); },
                 generateMissingBarcodes() { this.products.forEach(p => { if (!p.barcode) { db.ref('users/' + this.currentUid + '/produk/' + p.firebaseId).update({ barcode: 'WN-' + Math.floor(10000000 + Math.random() * 90000000) }); } }); this.barcodeModalOpen = false; },
 
-                // Pemrosesan Streaming Kamera AI Mentah Sisi Klien Tanpa Merusak Desain UI html5-qrcode
+                // INTI PERBAIKAN: Hub Logika Multifungsi Kamera (Barcode Reader + AI Visual Classifier)
                 startVisualScanner() {
                     const video = document.getElementById('webcam');
                     const statusStatus = document.getElementById('ai-status');
-                    statusStatus.innerText = "Memuat Jaringan Saraf Tiruan AI...";
+                    statusStatus.innerText = "Menginisialisasi lensa & modul AI multifungsi...";
 
+                    // 1. Muat pustaka klasifikasi gambar TensorFlow jika belum sedia
                     if (!modelAiMobileNet) {
                         mobilenet.load().then(model => {
                             modelAiMobileNet = model;
-                            statusStatus.innerText = "Model Komputasi Siap.";
-                            this.bukaAksesKameraGawai(video);
+                            this.jalankanStreamHardwareKamera(video);
                         }).catch(err => {
-                            statusStatus.innerText = "Gagal memproses pustaka neural.";
-                            alert("Sistem POS Error: " + err.message);
+                            statusStatus.innerText = "Neural network gagal dimuat.";
+                            alert("Eror Komputasi AI: " + err.message);
                         });
                     } else {
-                        this.bukaAksesKameraGawai(video);
+                        this.jalankanStreamHardwareKamera(video);
                     }
                 },
 
-                bukaAksesKameraGawai(videoElement) {
+                jalankanStreamHardwareKamera(videoElement) {
                     const statusStatus = document.getElementById('ai-status');
+                    
+                    // 2. Aktifkan aliran tangkapan kamera mentah untuk kebutuhan klaster foto AI
                     navigator.mediaDevices.getUserMedia({
                         video: { facingMode: "environment" },
                         audio: false
@@ -1857,17 +1895,43 @@
                     .then(stream => {
                         streamVideoGlobal = stream;
                         videoElement.srcObject = stream;
-                        // Ubah status display inline agar aliran gambar bisa dibaca canvas secara presisi
                         videoElement.style.display = "inline-block";
-                        statusStatus.innerText = "Kamera & AI Aktif. Hadapkan produk fisiknya, lalu tekan tombol 'Pindai Foto AI'.";
+                        
+                        // 3. Jalankan pemindai Barcode bawaan html5-qrcode di area kontainer yang sama
+                        if (!html5QrcodeScannerInstance) {
+                            html5QrcodeScannerInstance = new Html5Qrcode("reader");
+                        }
+                        
+                        html5QrcodeScannerInstance.start(
+                            { facingMode: "environment" }, 
+                            { fps: 20, qrbox: { width: 220, height: 130 } },
+                            (barcodeText) => {
+                                // Callback jika barcode terdeteksi kamera
+                                let p = this.products.find(i => i.barcode && i.barcode.trim() === barcodeText.trim());
+                                if (p) {
+                                    this.bunyikanSuaraBeepKasir('success');
+                                    this.triggerVisualMatch(p);
+                                }
+                            },
+                            (errorMessage) => {
+                                // Silently skip errors scanning frame barcode
+                            }
+                        ).then(() => {
+                            statusStatus.innerText = "Multifungsi Aktif! Barcode otomatis terbaca, atau klik 'Pindai Foto AI' untuk deteksi fisik.";
+                        });
                     })
                     .catch(err => {
-                        statusStatus.innerText = "Akses modul lensa kamera gagal.";
-                        alert("Lensa Kasir Gagal Dimuat: " + err.message);
+                        statusStatus.innerText = "Gagal memuat modul kamera.";
+                        alert("Akses perangkat keras ditolak: " + err.message);
                     });
                 },
 
                 stopScanner() {
+                    if (html5QrcodeScannerInstance) {
+                        html5QrcodeScannerInstance.stop().then(() => {
+                            html5QrcodeScannerInstance = null;
+                        }).catch(e => console.log(e));
+                    }
                     if (streamVideoGlobal) {
                         streamVideoGlobal.getTracks().forEach(track => track.stop());
                         streamVideoGlobal = null;
@@ -1882,7 +1946,7 @@
 
                 ambilFotoDanDeteksiAI() {
                     if (!modelAiMobileNet || !streamVideoGlobal) {
-                        return alert("Silakan klik 'Aktifkan Kamera' terlebih dahulu!");
+                        return alert("Silakan aktifkan kamera kasir terlebih dahulu!");
                     }
 
                     const video = document.getElementById('webcam');
@@ -1890,7 +1954,7 @@
                     const context = canvas.getContext('2d');
                     const statusStatus = document.getElementById('ai-status');
 
-                    statusStatus.innerText = "Mengekstrak fitur visual matriks objek gambar...";
+                    statusStatus.innerText = "Mengekstrak bentuk visual objek...";
 
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
@@ -1899,9 +1963,8 @@
                     modelAiMobileNet.classify(canvas).then(predictions => {
                         if (predictions && predictions.length > 0) {
                             let kataKunciAI = predictions[0].className.toLowerCase();
-                            statusStatus.innerText = `Terjemah Objek: ${predictions[0].className} (${(predictions[0].probability * 100).toFixed(1)}%)`;
+                            statusStatus.innerText = `Objek: ${predictions[0].className} (${(predictions[0].probability * 100).toFixed(1)}%)`;
 
-                            // Evaluasi kata kunci global ke sistem basis kamus sinonim lokal retail
                             let sinonimLokalList = [];
                             Object.keys(kamusSinonimAI).forEach(key => {
                                 if (kataKunciAI.includes(key) || key.includes(kataKunciAI)) {
@@ -1909,47 +1972,45 @@
                                 }
                             });
 
-                            // Jalankan pencocokan berlapis (Fuzzy Name Matching) dengan array master barang toko Anda
                             let produkCocok = this.products.find(p => {
                                 let namaProd = p.nama.toLowerCase();
                                 let kategoriProd = (p.kategori || '').toLowerCase();
                                 
-                                // Lapisan 1: Irisan langsung ke string nama database
                                 let cocokLangsung = kataKunciAI.split(', ').some(kw => 
                                     namaProd.includes(kw) || kw.includes(namaProd) || kategoriProd.includes(kw)
                                 );
                                 if (cocokLangsung) return true;
 
-                                // Lapisan 2: Kecocokan berdasarkan kamus sinonim lokal sembako/warung
                                 return sinonimLokalList.some(sinonim => 
                                     namaProd.includes(sinonim) || kategoriProd.includes(sinonim)
                                 );
                             });
 
                             if (produkCocok) {
+                                this.bunyikanSuaraBeepKasir('success');
                                 this.triggerVisualMatch(produkCocok);
                             } else {
-                                // Lapisan Fallback Terakhir: Ambil sampel string parsial produk teratas yang mendekati
                                 let fallbackProd = this.products.find(p => 
                                     kataKunciAI.split(' ').some(word => word.length > 2 && p.nama.toLowerCase().includes(word))
                                 );
 
                                 if (fallbackProd) {
+                                    this.bunyikanSuaraBeepKasir('success');
                                     this.triggerVisualMatch(fallbackProd);
                                 } else {
-                                    // Jika benar-benar kosong, otomatis arahkan ke item teratas di kategori produk Anda untuk kenyamanan transaksi kasir
                                     if (this.products.length > 0) {
+                                        this.bunyikanSuaraBeepKasir('success');
                                         this.triggerVisualMatch(this.products[0]);
                                     } else {
-                                        alert(`AI mengenali objek ini sebagai: "${predictions[0].className}". Silakan tambahkan data atau kata kunci tersebut pada Nama Produk Anda di Menu Stok.`);
+                                        alert(`AI mendeteksi objek "${predictions[0].className}", namun database barang Anda kosong.`);
                                     }
                                 }
                             }
                         } else {
-                            statusStatus.innerText = "Objek gagal dipindai. Silakan dekatkan produk ke lensa.";
+                            statusStatus.innerText = "Objek tidak terbaca, dekatkan lagi.";
                         }
                     }).catch(err => {
-                        statusStatus.innerText = "Gagal memproses klaster matriks gambar.";
+                        statusStatus.innerText = "Gagal memproses gambar visual.";
                         console.error(err);
                     });
                 },
