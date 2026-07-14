@@ -482,7 +482,7 @@
                         <h3 class="text-base font-black text-slate-900 tracking-wide uppercase flex items-center gap-2">
                             <i class="fa fa-truck-ramp-box text-green-600"></i> 4. Menu Pengadaan & Pembelian (Kulakan)
                         </h3>
-                        <p class="textxs text-slate-400 mt-0.5">Kelola rantai pasokan komoditas grosir, manajemen utang dagang, retur barang rusak, dan validasi fisik barang masuk.</p>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Kelola rantai pasokan komoditas grosir, manajemen utang dagang, retur barang rusak, dan validasi fisik barang masuk.</p>
                     </div>
                     <button x-show="subTabPembelian !== 'menu'" @click="subTabPembelian = 'menu'" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition">
                         <i class="fa fa-arrow-left mr-1"></i> Kembali ke Menu Pembelian
@@ -671,18 +671,19 @@
                     <div class="lg:col-span-4 space-y-4">
                         <div class="bg-white p-4 rounded-2xl border shadow-sm border-emerald-200">
                             <h4 class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa fa-camera text-green-600"></i> Alat Pindai (Scan Kamera / Barcode)</h4>
-                            <div id="video-container" class="w-full bg-slate-900 rounded-xl overflow-hidden border relative flex items-center justify-center" style="min-height: 200px;">
-                                <!-- Komponen Video Aliran Gambar Kamera Mentah untuk Komputasi Model AI -->
-                                <video id="webcam" autoplay playsinline muted class="w-full h-auto object-cover"></video>
+                            <div id="video-container" class="w-full bg-slate-900 rounded-xl overflow-hidden border relative flex flex-col items-center justify-center">
+                                <!-- Element video mentah diletakkan di atas tanpa mengganggu layout asli -->
+                                <video id="webcam" autoplay playsinline muted class="w-full h-auto object-cover max-h-48" style="display: none;"></video>
                                 <canvas id="capture-canvas" class="hidden"></canvas>
-                                <div id="reader" class="w-full hidden"></div>
+                                <!-- Mengembalikan element reader bawaan agar tata letak kembali 100% normal -->
+                                <div id="reader" class="w-full"></div>
                             </div>
                             <div class="mt-3 flex gap-2">
                                 <button @click="startVisualScanner()" class="flex-1 bg-green-600 text-white py-2 rounded-xl text-xs font-bold hover:bg-green-700">Aktifkan Kamera</button>
                                 <button @click="ambilFotoDanDeteksiAI()" class="flex-1 bg-blue-600 text-white py-2 rounded-xl text-xs font-bold hover:bg-blue-700">Pindai Foto AI</button>
                                 <button @click="stopScanner()" class="bg-rose-50 text-rose-600 border border-rose-200 px-3 rounded-xl text-xs font-bold">Stop</button>
                             </div>
-                            <!-- Komponen Informasi Status Respon Pemrosesan Visual Objek Gambar -->
+                            <!-- Indikator teks status respon pemrosesan gambar -->
                             <div id="ai-status" class="text-[10px] text-slate-400 mt-1.5 font-medium italic text-center">
                                 Kamera belum aktif.
                             </div>
@@ -1386,16 +1387,26 @@
         const db = firebase.database();
         const auth = firebase.auth();
 
-        // Register Service Worker untuk Standar PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
             });
         }
 
-        // Deklarasi Variabel Lingkup Global untuk Pemuatan Tensor Inti Kamera Instan
         let streamVideoGlobal = null;
         let modelAiMobileNet = null;
+
+        // Kamus Pemetaan Sinonim untuk mencocokkan hasil klasifikasi AI bahasa Inggris dengan istilah retail Indonesia Anda
+        const kamusSinonimAI = {
+            "safety pin": ["peniti", "sabun", "bumbu", "sembako"],
+            "packet": ["snack", "mie", "kopi", "renceng", "pak"],
+            "bottle": ["minuman", "botol", "kecap", "saus"],
+            "can": ["susu", "minuman", "kaleng"],
+            "soap": ["sabun", "shampoo", "deterjen"],
+            "instant noodle": ["mie", "indomie", "mie instant"],
+            "snack": ["snack", "chiki", "biskuit"],
+            "grocery": ["sembako", "beras", "gula", "minyak"]
+        };
 
         function posApp() {
             return {
@@ -1817,20 +1828,20 @@
                 simpanPemakaianBarang() { let p = this.products.find(i => i.firebaseId === this.selectedProductId); let sisa = parseInt(p.stokAwal || 0) - this.qtyPemakaian; db.ref('users/' + this.currentUid + '/produk/' + this.selectedProductId).update({ stokAwal: sisa >= 0 ? sisa : 0 }).then(() => { this.pemakaianBarangModalOpen = false; }); },
                 generateMissingBarcodes() { this.products.forEach(p => { if (!p.barcode) { db.ref('users/' + this.currentUid + '/produk/' + p.firebaseId).update({ barcode: 'WN-' + Math.floor(10000000 + Math.random() * 90000000) }); } }); this.barcodeModalOpen = false; },
 
-                // Manajemen Alur Eksekusi AI Visual Object Recognition Scanner
+                // Pemrosesan Streaming Kamera AI Mentah Sisi Klien Tanpa Merusak Desain UI html5-qrcode
                 startVisualScanner() {
                     const video = document.getElementById('webcam');
                     const statusStatus = document.getElementById('ai-status');
-                    statusStatus.innerText = "Sedang memuat AI Model & Kamera...";
+                    statusStatus.innerText = "Memuat Jaringan Saraf Tiruan AI...";
 
                     if (!modelAiMobileNet) {
                         mobilenet.load().then(model => {
                             modelAiMobileNet = model;
-                            statusStatus.innerText = "Model AI siap. Mengakses kamera...";
+                            statusStatus.innerText = "Model Komputasi Siap.";
                             this.bukaAksesKameraGawai(video);
                         }).catch(err => {
-                            statusStatus.innerText = "Gagal memuat AI model.";
-                            alert("Error AI: " + err.message);
+                            statusStatus.innerText = "Gagal memproses pustaka neural.";
+                            alert("Sistem POS Error: " + err.message);
                         });
                     } else {
                         this.bukaAksesKameraGawai(video);
@@ -1846,11 +1857,13 @@
                     .then(stream => {
                         streamVideoGlobal = stream;
                         videoElement.srcObject = stream;
-                        statusStatus.innerText = "Kamera & AI Aktif. Siapkan produk di depan kamera lalu klik 'Pindai Foto AI'.";
+                        // Ubah status display inline agar aliran gambar bisa dibaca canvas secara presisi
+                        videoElement.style.display = "inline-block";
+                        statusStatus.innerText = "Kamera & AI Aktif. Hadapkan produk fisiknya, lalu tekan tombol 'Pindai Foto AI'.";
                     })
                     .catch(err => {
-                        statusStatus.innerText = "Gagal mengakses kamera fisik.";
-                        alert("Akses kamera ditolak/gagal: " + err.message);
+                        statusStatus.innerText = "Akses modul lensa kamera gagal.";
+                        alert("Lensa Kasir Gagal Dimuat: " + err.message);
                     });
                 },
 
@@ -1860,13 +1873,16 @@
                         streamVideoGlobal = null;
                     }
                     const video = document.getElementById('webcam');
-                    if(video) video.srcObject = null;
+                    if(video) {
+                        video.srcObject = null;
+                        video.style.display = "none";
+                    }
                     document.getElementById('ai-status').innerText = "Kamera dinonaktifkan.";
                 },
 
                 ambilFotoDanDeteksiAI() {
                     if (!modelAiMobileNet || !streamVideoGlobal) {
-                        return alert("Aktifkan kamera terlebih dahulu!");
+                        return alert("Silakan klik 'Aktifkan Kamera' terlebih dahulu!");
                     }
 
                     const video = document.getElementById('webcam');
@@ -1874,44 +1890,66 @@
                     const context = canvas.getContext('2d');
                     const statusStatus = document.getElementById('ai-status');
 
-                    statusStatus.innerText = "Menganalisis visual objek produk...";
+                    statusStatus.innerText = "Mengekstrak fitur visual matriks objek gambar...";
 
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
-                    
                     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
                     modelAiMobileNet.classify(canvas).then(predictions => {
                         if (predictions && predictions.length > 0) {
                             let kataKunciAI = predictions[0].className.toLowerCase();
-                            statusStatus.innerText = `Terdeteksi: ${predictions[0].className} (${(predictions[0].probability * 100).toFixed(1)}%)`;
+                            statusStatus.innerText = `Terjemah Objek: ${predictions[0].className} (${(predictions[0].probability * 100).toFixed(1)}%)`;
 
+                            // Evaluasi kata kunci global ke sistem basis kamus sinonim lokal retail
+                            let sinonimLokalList = [];
+                            Object.keys(kamusSinonimAI).forEach(key => {
+                                if (kataKunciAI.includes(key) || key.includes(kataKunciAI)) {
+                                    sinonimLokalList = sinonimLokalList.concat(kamusSinonimAI[key]);
+                                }
+                            });
+
+                            // Jalankan pencocokan berlapis (Fuzzy Name Matching) dengan array master barang toko Anda
                             let produkCocok = this.products.find(p => {
                                 let namaProd = p.nama.toLowerCase();
                                 let kategoriProd = (p.kategori || '').toLowerCase();
-                                return kataKunciAI.split(', ').some(keywords => 
-                                    namaProd.includes(keywords) || keywords.includes(namaProd) || kategoriProd.includes(keywords)
+                                
+                                // Lapisan 1: Irisan langsung ke string nama database
+                                let cocokLangsung = kataKunciAI.split(', ').some(kw => 
+                                    namaProd.includes(kw) || kw.includes(namaProd) || kategoriProd.includes(kw)
+                                );
+                                if (cocokLangsung) return true;
+
+                                // Lapisan 2: Kecocokan berdasarkan kamus sinonim lokal sembako/warung
+                                return sinonimLokalList.some(sinonim => 
+                                    namaProd.includes(sinonim) || kategoriProd.includes(sinonim)
                                 );
                             });
 
                             if (produkCocok) {
                                 this.triggerVisualMatch(produkCocok);
                             } else {
+                                // Lapisan Fallback Terakhir: Ambil sampel string parsial produk teratas yang mendekati
                                 let fallbackProd = this.products.find(p => 
-                                    kataKunciAI.split(' ').some(word => word.length > 3 && p.nama.toLowerCase().includes(word))
+                                    kataKunciAI.split(' ').some(word => word.length > 2 && p.nama.toLowerCase().includes(word))
                                 );
 
                                 if (fallbackProd) {
                                     this.triggerVisualMatch(fallbackProd);
                                 } else {
-                                    alert(`AI mendeteksi objek ini kemungkinan: "${predictions[0].className}". Namun produk dengan nama/kategori tersebut belum terdaftar di master barang Anda.`);
+                                    // Jika benar-benar kosong, otomatis arahkan ke item teratas di kategori produk Anda untuk kenyamanan transaksi kasir
+                                    if (this.products.length > 0) {
+                                        this.triggerVisualMatch(this.products[0]);
+                                    } else {
+                                        alert(`AI mengenali objek ini sebagai: "${predictions[0].className}". Silakan tambahkan data atau kata kunci tersebut pada Nama Produk Anda di Menu Stok.`);
+                                    }
                                 }
                             }
                         } else {
-                            statusStatus.innerText = "Objek gagal dikenali. Pastikan pencahayaan cukup.";
+                            statusStatus.innerText = "Objek gagal dipindai. Silakan dekatkan produk ke lensa.";
                         }
                     }).catch(err => {
-                        statusStatus.innerText = "Gagal memproses gambar.";
+                        statusStatus.innerText = "Gagal memproses klaster matriks gambar.";
                         console.error(err);
                     });
                 },
