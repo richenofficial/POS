@@ -57,10 +57,10 @@
         </div>
     </div>
 
-    <div x-show="userLoggedIn" class="w-full flex flex-col md:flex-row" x-cloak>
+    <div x-show="userLoggedIn" class="w-full min-h-screen flex flex-col md:flex-row" x-cloak>
         
-        <!-- Sidebar Menu - Responsif dan Rapi Tanpa Menghalangi Konten Utama di Layar HP -->
-        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col sticky top-0 h-auto md:h-screen z-50 shadow-xl overflow-y-auto flex-shrink-0">
+        <!-- Sidebar Menu - Diperbaiki agar tidak memakan ruang konten utama atau tumpang tindih di HP -->
+        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col relative md:sticky md:top-0 h-auto md:h-screen z-50 shadow-xl overflow-y-auto flex-shrink-0">
             <div class="p-4 bg-slate-950 border-b border-slate-800 space-y-2.5">
                 <div class="flex items-center gap-3">
                     <img :src="profilToko.logo || 'https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg'" class="w-12 h-12 rounded-xl object-cover border border-slate-700 shadow-inner flex-shrink-0">
@@ -75,23 +75,23 @@
                 </div>
             </div>
             
-            <nav class="p-4 space-y-2.5 text-xs font-semibold">
-                <button @click="adminTab = 'profil'" :class="adminTab === 'profil' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-store w-4 text-center"></i> 1. Profil Toko</button>
-                <button @click="adminTab = 'master'" :class="adminTab === 'master' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-folder-tree w-4 text-center"></i> 2. Menu Master</button>
-                <button @click="adminTab = 'stok'" :class="adminTab === 'stok' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-boxes-stacked w-4 text-center"></i> 3. Stok & Inventaris</button>
-                <button @click="adminTab = 'pembelian'; subTabPembelian = 'menu'" :class="adminTab === 'pembelian' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-truck-ramp-box w-4 text-center"></i> 4. Menu Pembelian</button>
-                <button @click="adminTab = 'pos'" :class="adminTab === 'pos' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-calculator w-4 text-center"></i> 5. Transaksi POS Kasir</button>
-                <button @click="adminTab = 'keuangan'; subTabKeuangan = 'menu'" :class="adminTab === 'keuangan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-scale-balanced w-4 text-center"></i> 6. Menu Keuangan</button>
-                <button @click="adminTab = 'laporan'; subTabLaporan = 'menu'" :class="adminTab === 'laporan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-chart-line w-4 text-center"></i> 7. Menu Laporan</button>
+            <nav class="p-4 space-y-2.5 text-xs font-semibold flex flex-row md:flex-col overflow-x-auto md:overflow-x-visible whitespace-nowrap md:whitespace-normal scrollbar-none">
+                <button @click="adminTab = 'profil'" :class="adminTab === 'profil' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-store w-4 text-center"></i> 1. Profil Toko</button>
+                <button @click="adminTab = 'master'" :class="adminTab === 'master' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-folder-tree w-4 text-center"></i> 2. Menu Master</button>
+                <button @click="adminTab = 'stok'" :class="adminTab === 'stok' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-boxes-stacked w-4 text-center"></i> 3. Stok & Inventaris</button>
+                <button @click="adminTab = 'pembelian'; subTabPembelian = 'menu'" :class="adminTab === 'pembelian' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-truck-ramp-box w-4 text-center"></i> 4. Menu Pembelian</button>
+                <button @click="adminTab = 'pos'" :class="adminTab === 'pos' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-calculator w-4 text-center"></i> 5. Transaksi POS Kasir</button>
+                <button @click="adminTab = 'keuangan'; subTabKeuangan = 'menu'" :class="adminTab === 'keuangan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-scale-balanced w-4 text-center"></i> 6. Menu Keuangan</button>
+                <button @click="adminTab = 'laporan'; subTabLaporan = 'menu'" :class="adminTab === 'laporan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-chart-line w-4 text-center"></i> 7. Menu Laporan</button>
                 
-                <div class="pt-4 border-t border-slate-800">
-                    <button @click="logoutUser()" class="w-full bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white px-3 py-2 rounded-xl font-bold transition flex items-center justify-center gap-2"><i class="fa fa-power-off"></i> Keluar Aplikasi</button>
+                <div class="pt-2 md:pt-4 border-l md:border-l-0 md:border-t border-slate-800 pl-2 md:pl-0 flex-shrink-0">
+                    <button @click="logoutUser()" class="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white px-3 py-2.5 rounded-xl font-bold transition flex items-center justify-center gap-2 text-left"><i class="fa fa-power-off"></i> Keluar</button>
                 </div>
             </nav>
         </aside>
 
-        <!-- Konten Utama Aplikasi POS Kasir -->
-        <main class="flex-1 p-4 md:p-6 overflow-y-auto h-auto md:h-screen bg-slate-50 w-full min-w-0">
+        <!-- Area Pengisian Aplikasi Utama (Diatur Luas Frame agar Responsif Maksimal) -->
+        <main class="flex-1 p-4 md:p-6 overflow-y-auto bg-slate-50 w-full min-w-0">
             
             <div x-show="adminTab === 'profil'" class="bg-white p-6 rounded-2xl border shadow-sm max-w-xl" x-transition>
                 <div class="flex justify-between items-center mb-4 border-b pb-2">
@@ -683,7 +683,7 @@
                                 <button @click="ambilFotoDanDeteksiAI()" class="flex-1 bg-blue-600 text-white py-2 rounded-xl text-xs font-bold hover:bg-blue-700">Pindai Foto AI</button>
                                 <button @click="stopScanner()" class="bg-rose-50 text-rose-600 border border-rose-200 px-3 rounded-xl text-xs font-bold">Stop</button>
                             </div>
-                            <!-- Komponen Informasi Status Respon Pemrosesan Visual Objek Gambar -->
+                            <!-- Indikator teks status respon pemrosesan gambar -->
                             <div id="ai-status" class="text-[10px] text-slate-400 mt-1.5 font-medium italic text-center">
                                 Kamera belum aktif.
                             </div>
@@ -816,7 +816,7 @@
                         <h3 class="text-base font-black text-slate-900 tracking-wide uppercase flex items-center gap-2">
                             <i class="fa fa-scale-balanced text-green-600"></i> 6. Sistem Administrasi & Manajemen Keuangan
                         </h3>
-                        <p class="text-xs text-slate-400 mt-0.5">Kelola penuh buku besar pembukuan, pelunasan utang piutang, kasbon pelanggan, serta pos anggaran mutasi operasional.</p>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Kelola penuh buku besar pembukuan, pelunasan utang piutang, kasbon pelanggan, serta pos anggaran mutasi operasional.</p>
                     </div>
                     <button x-show="subTabKeuangan !== 'menu'" @click="subTabKeuangan = 'menu'; resetKeuanganForm()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition">
                         <i class="fa fa-arrow-left mr-1"></i> Kembali ke Menu Keuangan
@@ -1213,7 +1213,7 @@
 
     <div x-show="stockOpnameModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
-            <h3 class="text-base font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-boxes-packing text-sky-600 mr-1"></i> Form Stock Opname</h3>
+            <h3 class="text-base font-black text-sky-600 mb-3 uppercase tracking-wide"><i class="fa fa-boxes-packing mr-1"></i> Form Stock Opname</h3>
             <div class="space-y-3 text-xs">
                 <div>
                     <label class="block font-bold text-slate-500 mb-1">Pilih Produk</label>
@@ -1388,11 +1388,16 @@
         const db = firebase.database();
         const auth = firebase.auth();
 
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
+            });
+        }
+
         let streamVideoGlobal = null;
         let modelAiMobileNet = null;
         let html5QrcodeScannerInstance = null;
 
-        // Kamus Sinonim AI Bahasa Inggris ke Karakter Isian Kategori POS Lokal Anda
         const kamusSinonimAI = {
             "safety pin": ["peniti", "sabun", "bumbu", "sembako"],
             "packet": ["snack", "mie", "kopi", "renceng", "pak", "mie instant"],
@@ -1486,7 +1491,6 @@
                     }).sort((a, b) => b.total - a.total);
                 },
 
-                // Generator Suara Beep Kasir Elektronik Internal
                 bunyikanSuaraBeepKasir(type = 'success') {
                     try {
                         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1521,7 +1525,7 @@
                             }, 90);
                         }
                     } catch (e) {
-                        console.log("Audio API not allowed or supported yet");
+                        console.log("Audio context issue");
                     }
                 },
 
@@ -1864,13 +1868,11 @@
                 simpanPemakaianBarang() { let p = this.products.find(i => i.firebaseId === this.selectedProductId); let sisa = parseInt(p.stokAwal || 0) - this.qtyPemakaian; db.ref('users/' + this.currentUid + '/produk/' + this.selectedProductId).update({ stokAwal: sisa >= 0 ? sisa : 0 }).then(() => { this.pemakaianBarangModalOpen = false; }); },
                 generateMissingBarcodes() { this.products.forEach(p => { if (!p.barcode) { db.ref('users/' + this.currentUid + '/produk/' + p.firebaseId).update({ barcode: 'WN-' + Math.floor(10000000 + Math.random() * 90000000) }); } }); this.barcodeModalOpen = false; },
 
-                // INTI PERBAIKAN: Hub Logika Multifungsi Kamera (Barcode Reader + AI Visual Classifier)
                 startVisualScanner() {
                     const video = document.getElementById('webcam');
                     const statusStatus = document.getElementById('ai-status');
                     statusStatus.innerText = "Menginisialisasi lensa & modul AI multifungsi...";
 
-                    // 1. Muat pustaka klasifikasi gambar TensorFlow jika belum sedia
                     if (!modelAiMobileNet) {
                         mobilenet.load().then(model => {
                             modelAiMobileNet = model;
@@ -1887,7 +1889,6 @@
                 jalankanStreamHardwareKamera(videoElement) {
                     const statusStatus = document.getElementById('ai-status');
                     
-                    // 2. Aktifkan aliran tangkapan kamera mentah untuk kebutuhan klaster foto AI
                     navigator.mediaDevices.getUserMedia({
                         video: { facingMode: "environment" },
                         audio: false
@@ -1897,7 +1898,6 @@
                         videoElement.srcObject = stream;
                         videoElement.style.display = "inline-block";
                         
-                        // 3. Jalankan pemindai Barcode bawaan html5-qrcode di area kontainer yang sama
                         if (!html5QrcodeScannerInstance) {
                             html5QrcodeScannerInstance = new Html5Qrcode("reader");
                         }
@@ -1906,7 +1906,6 @@
                             { facingMode: "environment" }, 
                             { fps: 20, qrbox: { width: 220, height: 130 } },
                             (barcodeText) => {
-                                // Callback jika barcode terdeteksi kamera
                                 let p = this.products.find(i => i.barcode && i.barcode.trim() === barcodeText.trim());
                                 if (p) {
                                     this.bunyikanSuaraBeepKasir('success');
@@ -1914,7 +1913,7 @@
                                 }
                             },
                             (errorMessage) => {
-                                // Silently skip errors scanning frame barcode
+                                // Scan continuous feedback bypass
                             }
                         ).then(() => {
                             statusStatus.innerText = "Multifungsi Aktif! Barcode otomatis terbaca, atau klik 'Pindai Foto AI' untuk deteksi fisik.";
