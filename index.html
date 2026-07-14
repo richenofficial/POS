@@ -13,10 +13,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
     
-    <!-- Pustaka TensorFlow.js & MobileNet AI Object Detection -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
-    
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -57,10 +53,9 @@
         </div>
     </div>
 
-    <div x-show="userLoggedIn" class="w-full min-h-screen flex flex-col md:flex-row" x-cloak>
+    <div x-show="userLoggedIn" class="w-full flex flex-col md:flex-row" x-cloak>
         
-        <!-- Sidebar Menu - Diperbaiki agar tidak memakan ruang konten utama atau tumpang tindih di HP -->
-        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col relative md:sticky md:top-0 h-auto md:h-screen z-50 shadow-xl overflow-y-auto flex-shrink-0">
+        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col sticky top-0 h-auto md:h-screen z-50 shadow-xl overflow-y-auto">
             <div class="p-4 bg-slate-950 border-b border-slate-800 space-y-2.5">
                 <div class="flex items-center gap-3">
                     <img :src="profilToko.logo || 'https://i.ibb.co.com/Zp69hhGN/bbb907f2-78d7-4f61-b8c3-22fa727fc8a3.jpg'" class="w-12 h-12 rounded-xl object-cover border border-slate-700 shadow-inner flex-shrink-0">
@@ -75,23 +70,22 @@
                 </div>
             </div>
             
-            <nav class="p-4 space-y-2.5 text-xs font-semibold flex flex-row md:flex-col overflow-x-auto md:overflow-x-visible whitespace-nowrap md:whitespace-normal scrollbar-none">
-                <button @click="adminTab = 'profil'" :class="adminTab === 'profil' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-store w-4 text-center"></i> 1. Profil Toko</button>
-                <button @click="adminTab = 'master'" :class="adminTab === 'master' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-folder-tree w-4 text-center"></i> 2. Menu Master</button>
-                <button @click="adminTab = 'stok'" :class="adminTab === 'stok' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-boxes-stacked w-4 text-center"></i> 3. Stok & Inventaris</button>
-                <button @click="adminTab = 'pembelian'; subTabPembelian = 'menu'" :class="adminTab === 'pembelian' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-truck-ramp-box w-4 text-center"></i> 4. Menu Pembelian</button>
-                <button @click="adminTab = 'pos'" :class="adminTab === 'pos' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-calculator w-4 text-center"></i> 5. Transaksi POS Kasir</button>
-                <button @click="adminTab = 'keuangan'; subTabKeuangan = 'menu'" :class="adminTab === 'keuangan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-scale-balanced w-4 text-center"></i> 6. Menu Keuangan</button>
-                <button @click="adminTab = 'laporan'; subTabLaporan = 'menu'" :class="adminTab === 'laporan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="px-3 py-2.5 rounded-xl flex items-center gap-2 transition mr-2 md:mr-0 flex-shrink-0 md:w-full text-left"><i class="fa fa-chart-line w-4 text-center"></i> 7. Menu Laporan</button>
+            <nav class="flex-1 p-4 space-y-2.5 text-xs font-semibold">
+                <button @click="adminTab = 'profil'" :class="adminTab === 'profil' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-store w-4 text-center"></i> 1. Profil Toko</button>
+                <button @click="adminTab = 'master'" :class="adminTab === 'master' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-folder-tree w-4 text-center"></i> 2. Menu Master</button>
+                <button @click="adminTab = 'stok'" :class="adminTab === 'stok' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-boxes-stacked w-4 text-center"></i> 3. Stok & Inventaris</button>
+                <button @click="adminTab = 'pembelian'; subTabPembelian = 'menu'" :class="adminTab === 'pembelian' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-truck-ramp-box w-4 text-center"></i> 4. Menu Pembelian</button>
+                <button @click="adminTab = 'pos'" :class="adminTab === 'pos' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-calculator w-4 text-center"></i> 5. Transaksi POS Kasir</button>
+                <button @click="adminTab = 'keuangan'; subTabKeuangan = 'menu'" :class="adminTab === 'keuangan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-scale-balanced w-4 text-center"></i> 6. Menu Keuangan</button>
+                <button @click="adminTab = 'laporan'; subTabLaporan = 'menu'" :class="adminTab === 'laporan' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-2 transition"><i class="fa fa-chart-line w-4 text-center"></i> 7. Menu Laporan</button>
                 
-                <div class="pt-2 md:pt-4 border-l md:border-l-0 md:border-t border-slate-800 pl-2 md:pl-0 flex-shrink-0">
-                    <button @click="logoutUser()" class="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white px-3 py-2.5 rounded-xl font-bold transition flex items-center justify-center gap-2 text-left"><i class="fa fa-power-off"></i> Keluar</button>
+                <div class="pt-4 border-t border-slate-800">
+                    <button @click="logoutUser()" class="w-full bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white px-3 py-2 rounded-xl font-bold transition flex items-center justify-center gap-2"><i class="fa fa-power-off"></i> Keluar Aplikasi</button>
                 </div>
             </nav>
         </aside>
 
-        <!-- Area Pengisian Aplikasi Utama (Diatur Luas Frame agar Responsif Maksimal) -->
-        <main class="flex-1 p-4 md:p-6 overflow-y-auto bg-slate-50 w-full min-w-0">
+        <main class="flex-1 p-4 md:p-6 overflow-y-auto h-screen bg-slate-50">
             
             <div x-show="adminTab === 'profil'" class="bg-white p-6 rounded-2xl border shadow-sm max-w-xl" x-transition>
                 <div class="flex justify-between items-center mb-4 border-b pb-2">
@@ -121,6 +115,33 @@
                                 <i class="fa-brands fa-whatsapp text-green-500 text-sm"></i>
                                 <span x-text="profilToko.wa || '-'"></span>
                             </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Fitur Pengeditan Struk (Teks, Ukuran, Posisi/Tata Letak) -->
+                    <div class="bg-slate-50 border p-4 rounded-xl space-y-3 shadow-sm mt-4">
+                        <h4 class="font-bold text-slate-700 flex items-center gap-2"><i class="fa fa-print text-green-600"></i> Pengaturan & Kustomisasi Struk Kasir</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Ukuran Teks Struk</label>
+                                <select x-model="strukConfig.ukuranFont" class="w-full p-2 border rounded-xl bg-white font-semibold text-xs">
+                                    <option value="10px">Kecil (10px)</option>
+                                    <option value="12px">Sedang (12px)</option>
+                                    <option value="14px">Besar (14px)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Tata Letak / Posisi</label>
+                                <select x-model="strukConfig.posisiTeks" class="w-full p-2 border rounded-xl bg-white font-semibold text-xs">
+                                    <option value="center">Rata Tengah (Center)</option>
+                                    <option value="left">Rata Kiri (Left)</option>
+                                    <option value="right">Rata Kanan (Right)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Teks Terima Kasih</label>
+                                <input type="text" x-model="strukConfig.teksTerimaKasih" class="w-full p-2 border rounded-xl bg-white font-semibold text-xs">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -318,7 +339,7 @@
                     </div>
                     <div class="md:col-span-2 bg-white rounded-2xl border table-responsive">
                         <table class="w-full text-xs text-left">
-                            <thead class="bg-slate-50 border-b text-slate-500 font-bold"><tr><th class="p-3">Tanggal</th><th class="p-3">Shift Kasir</th><th class="p-3 text-right">Nominal Laci</th><th class="p-3 text-center">Aksi</th></tr></thead>
+                            <thead class="bg-slate-50 font-bold border-b text-slate-500"><tr><th class="p-3">Tanggal</th><th class="p-3">Shift Kasir</th><th class="p-3 text-right">Nominal Laci</th><th class="p-3 text-center">Aksi</th></tr></thead>
                             <tbody>
                                 <template x-for="item in masterSaldos" :key="item.id">
                                     <tr class="border-b font-medium">
@@ -481,7 +502,7 @@
                         <h3 class="text-base font-black text-slate-900 tracking-wide uppercase flex items-center gap-2">
                             <i class="fa fa-truck-ramp-box text-green-600"></i> 4. Menu Pengadaan & Pembelian (Kulakan)
                         </h3>
-                        <p class="text-[11px] text-slate-400 mt-0.5">Kelola rantai pasokan komoditas grosir, manajemen utang dagang, retur barang rusak, dan validasi fisik barang masuk.</p>
+                        <p class="text-xs text-slate-400 mt-0.5">Kelola rantai pasokan komoditas grosir, manajemen utang dagang, retur barang rusak, dan validasi fisik barang masuk.</p>
                     </div>
                     <button x-show="subTabPembelian !== 'menu'" @click="subTabPembelian = 'menu'" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition">
                         <i class="fa fa-arrow-left mr-1"></i> Kembali ke Menu Pembelian
@@ -665,27 +686,17 @@
                 </div>
             </div>
 
-            <!-- TAB TRANSAKSI KASIR -->
             <div x-show="adminTab === 'pos'" class="space-y-4">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <div class="lg:col-span-4 space-y-4">
                         <div class="bg-white p-4 rounded-2xl border shadow-sm border-emerald-200">
                             <h4 class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa fa-camera text-green-600"></i> Alat Pindai (Scan Kamera / Barcode)</h4>
-                            <div id="video-container" class="w-full bg-slate-900 rounded-xl overflow-hidden border relative flex flex-col items-center justify-center" style="min-height: 180px;">
-                                <!-- Komponen Video Aliran Gambar Kamera Mentah untuk Komputasi Model AI (Disembunyikan secara visual, dibaca via kanvas) -->
-                                <video id="webcam" autoplay playsinline muted class="absolute w-full h-full object-cover z-0" style="display: none;"></video>
-                                <canvas id="capture-canvas" class="hidden"></canvas>
-                                <!-- Komponen Reader html5-qrcode bawaan Anda untuk Scan Barcode Garis Fisik 100% Berfungsi Kembali -->
-                                <div id="reader" class="w-full z-10"></div>
+                            <div id="video-container" class="w-full bg-slate-900 rounded-xl overflow-hidden border relative" style="min-height: 140px;">
+                                <div id="reader" class="w-full"></div>
                             </div>
                             <div class="mt-3 flex gap-2">
                                 <button @click="startVisualScanner()" class="flex-1 bg-green-600 text-white py-2 rounded-xl text-xs font-bold hover:bg-green-700">Aktifkan Kamera</button>
-                                <button @click="ambilFotoDanDeteksiAI()" class="flex-1 bg-blue-600 text-white py-2 rounded-xl text-xs font-bold hover:bg-blue-700">Pindai Foto AI</button>
-                                <button @click="stopScanner()" class="bg-rose-50 text-rose-600 border border-rose-200 px-3 rounded-xl text-xs font-bold">Stop</button>
-                            </div>
-                            <!-- Indikator teks status respon pemrosesan gambar -->
-                            <div id="ai-status" class="text-[10px] text-slate-400 mt-1.5 font-medium italic text-center">
-                                Kamera belum aktif.
+                                <button @click="stopScanner()" class="bg-rose-50 text-white px-3 rounded-xl text-xs font-bold">Stop</button>
                             </div>
                         </div>
 
@@ -816,7 +827,7 @@
                         <h3 class="text-base font-black text-slate-900 tracking-wide uppercase flex items-center gap-2">
                             <i class="fa fa-scale-balanced text-green-600"></i> 6. Sistem Administrasi & Manajemen Keuangan
                         </h3>
-                        <p class="text-[11px] text-slate-400 mt-0.5">Kelola penuh buku besar pembukuan, pelunasan utang piutang, kasbon pelanggan, serta pos anggaran mutasi operasional.</p>
+                        <p class="text-xs text-slate-400 mt-0.5">Kelola penuh buku besar pembukuan, pelunasan utang piutang, kasbon pelanggan, serta pos anggaran mutasi operasional.</p>
                     </div>
                     <button x-show="subTabKeuangan !== 'menu'" @click="subTabKeuangan = 'menu'; resetKeuanganForm()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition">
                         <i class="fa fa-arrow-left mr-1"></i> Kembali ke Menu Keuangan
@@ -1115,7 +1126,6 @@
         </main>
     </div>
 
-    <!-- MODAL POP-UP DI SINI -->
     <div x-show="modalEditItemOpen" class="fixed inset-0 z-[6000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
             <h3 class="text-sm font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-tags text-amber-500 mr-1"></i> Sesuaikan Item Belanja</h3>
@@ -1157,15 +1167,16 @@
         </div>
     </div>
 
-    <div id="print-receipt-area" class="hidden p-4 bg-white text-black font-mono text-[10px] w-64">
-        <center>
-            <h2 style="font-size:14px; font-weight:bold;" x-text="profilToko.nama || 'WIINMART POS'"></h2>
-            <p x-text="profilToko.alamat || 'Alamat Toko'"></p>
-            <p x-text="'Telp: ' + (profilToko.wa || '-')"></p>
+    <!-- Area Cetak Struk Yang Terhubung Dinamis dengan Setelan Kustomisasi -->
+    <div id="print-receipt-area" class="hidden p-4 bg-white text-black font-mono w-64" :style="{ fontSize: strukConfig.ukuranFont, textAlign: strukConfig.posisiTeks }">
+        <div>
+            <h2 style="font-size:14px; font-weight:bold; text-align:center;" x-text="profilToko.nama || 'WIINMART POS'"></h2>
+            <p style="text-align:center;" x-text="profilToko.alamat || 'Alamat Toko'"></p>
+            <p style="text-align:center;" x-text="'Telp: ' + (profilToko.wa || '-')"></p>
             <p x-text="'Nota: ' + receiptPrintData.idNota"></p>
             <p x-text="'Bayar: ' + receiptPrintData.metodeBayar"></p>
-            <p>===============================</p>
-        </center>
+            <p style="text-align:center;">===============================</p>
+        </div>
         <div class="space-y-1">
             <template x-for="item in receiptPrintData.items">
                 <div class="flex justify-between">
@@ -1174,14 +1185,14 @@
                 </div>
             </template>
         </div>
-        <center>
-            <p>===============================</p>
+        <div>
+            <p style="text-align:center;">===============================</p>
             <div class="flex justify-between font-bold" style="font-size:12px;">
                 <span>TOTAL:</span>
                 <span x-text="formatRupiah(receiptPrintData.totalOmset)"></span>
             </div>
-            <p style="margin-top:10px; font-size:9px;">Terima Kasih Atas<br>Kunjungan Anda</p>
-        </center>
+            <p style="margin-top:10px; font-size:9px; text-align:center;" x-text="strukConfig.teksTerimaKasih"></p>
+        </div>
     </div>
 
     <div x-show="categoryModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
@@ -1213,7 +1224,7 @@
 
     <div x-show="stockOpnameModalOpen" class="fixed inset-0 z-[4000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" x-cloak x-transition>
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
-            <h3 class="text-base font-black text-sky-600 mb-3 uppercase tracking-wide"><i class="fa fa-boxes-packing mr-1"></i> Form Stock Opname</h3>
+            <h3 class="text-base font-black text-slate-800 mb-3 uppercase tracking-wide"><i class="fa fa-boxes-packing text-sky-600 mr-1"></i> Form Stock Opname</h3>
             <div class="space-y-3 text-xs">
                 <div>
                     <label class="block font-bold text-slate-500 mb-1">Pilih Produk</label>
@@ -1394,21 +1405,6 @@
             });
         }
 
-        let streamVideoGlobal = null;
-        let modelAiMobileNet = null;
-        let html5QrcodeScannerInstance = null;
-
-        const kamusSinonimAI = {
-            "safety pin": ["peniti", "sabun", "bumbu", "sembako"],
-            "packet": ["snack", "mie", "kopi", "renceng", "pak", "mie instant"],
-            "bottle": ["minuman", "botol", "kecap", "saus"],
-            "can": ["susu", "minuman", "kaleng"],
-            "soap": ["sabun", "shampoo", "deterjen"],
-            "instant noodle": ["mie", "indomie", "mie instant"],
-            "snack": ["snack", "chiki", "biskuit"],
-            "grocery": ["sembako", "beras", "gula", "minyak"]
-        };
-
         function posApp() {
             return {
                 userLoggedIn: false, currentUid: null, adminTab: 'pos', adminModal: false, editMode: false,
@@ -1454,6 +1450,13 @@
                 lapCustomMulai: '',
                 lapCustomSelesai: '',
 
+                // Properti internal untuk menyimpan kustomisasi teks, ukuran, dan posisi struk belanja
+                strukConfig: {
+                    teksTerimaKasih: 'Terima Kasih Atas Kunjungan Anda',
+                    ukuranFont: '10px',
+                    posisiTeks: 'center'
+                },
+
                 get posCartTotal() {
                     return this.posCart.reduce((acc, item) => acc + ((item.hargaTerpilih - item.diskonItem) * item.qty), 0);
                 },
@@ -1489,44 +1492,6 @@
                             persen: (total / totalPengeluaran) * 100
                         };
                     }).sort((a, b) => b.total - a.total);
-                },
-
-                bunyikanSuaraBeepKasir(type = 'success') {
-                    try {
-                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                        const oscillator = audioCtx.createOscillator();
-                        const gainNode = audioCtx.createGain();
-                        
-                        oscillator.connect(gainNode);
-                        gainNode.connect(audioCtx.destination);
-                        
-                        if (type === 'success') {
-                            oscillator.type = 'sine';
-                            oscillator.frequency.setValueAtTime(1100, audioCtx.currentTime); 
-                            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                            oscillator.start();
-                            oscillator.stop(audioCtx.currentTime + 0.12);
-                        } else if (type === 'pay') {
-                            oscillator.type = 'triangle';
-                            oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
-                            gainNode.gain.setValueAtTime(0.25, audioCtx.currentTime);
-                            oscillator.start();
-                            oscillator.stop(audioCtx.currentTime + 0.08);
-                            
-                            setTimeout(() => {
-                                const osc2 = audioCtx.createOscillator();
-                                const gain2 = audioCtx.createGain();
-                                osc2.connect(gain2);
-                                gain2.connect(audioCtx.destination);
-                                osc2.frequency.setValueAtTime(1320, audioCtx.currentTime);
-                                gain2.gain.setValueAtTime(0.25, audioCtx.currentTime);
-                                osc2.start();
-                                osc2.stop(audioCtx.currentTime + 0.15);
-                            }, 90);
-                        }
-                    } catch (e) {
-                        console.log("Audio context issue");
-                    }
                 },
 
                 jalankanAutoCompleteQuery() {
@@ -1616,7 +1581,6 @@
                     };
 
                     db.ref('users/' + this.currentUid + '/transaksi/penjualan').push(dataTransaksi).then(() => {
-                        this.bunyikanSuaraBeepKasir('pay');
                         this.receiptPrintData = dataTransaksi;
                         setTimeout(() => { window.print(); }, 400);
                         this.posCart = []; 
@@ -1869,151 +1833,13 @@
                 generateMissingBarcodes() { this.products.forEach(p => { if (!p.barcode) { db.ref('users/' + this.currentUid + '/produk/' + p.firebaseId).update({ barcode: 'WN-' + Math.floor(10000000 + Math.random() * 90000000) }); } }); this.barcodeModalOpen = false; },
 
                 startVisualScanner() {
-                    const video = document.getElementById('webcam');
-                    const statusStatus = document.getElementById('ai-status');
-                    statusStatus.innerText = "Menginisialisasi lensa & modul AI multifungsi...";
-
-                    if (!modelAiMobileNet) {
-                        mobilenet.load().then(model => {
-                            modelAiMobileNet = model;
-                            this.jalankanStreamHardwareKamera(video);
-                        }).catch(err => {
-                            statusStatus.innerText = "Neural network gagal dimuat.";
-                            alert("Eror Komputasi AI: " + err.message);
-                        });
-                    } else {
-                        this.jalankanStreamHardwareKamera(video);
-                    }
+                    let scanner = new Html5Qrcode("reader");
+                    scanner.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (text) => {
+                        let p = this.products.find(i => (i.barcode && i.barcode === text) || i.nama.toLowerCase().includes(text.toLowerCase()));
+                        if(p) { this.triggerVisualMatch(p); }
+                    }).catch(e => { console.log("Kamera aktif simulasi"); });
                 },
-
-                jalankanStreamHardwareKamera(videoElement) {
-                    const statusStatus = document.getElementById('ai-status');
-                    
-                    navigator.mediaDevices.getUserMedia({
-                        video: { facingMode: "environment" },
-                        audio: false
-                    })
-                    .then(stream => {
-                        streamVideoGlobal = stream;
-                        videoElement.srcObject = stream;
-                        videoElement.style.display = "inline-block";
-                        
-                        if (!html5QrcodeScannerInstance) {
-                            html5QrcodeScannerInstance = new Html5Qrcode("reader");
-                        }
-                        
-                        html5QrcodeScannerInstance.start(
-                            { facingMode: "environment" }, 
-                            { fps: 20, qrbox: { width: 220, height: 130 } },
-                            (barcodeText) => {
-                                let p = this.products.find(i => i.barcode && i.barcode.trim() === barcodeText.trim());
-                                if (p) {
-                                    this.bunyikanSuaraBeepKasir('success');
-                                    this.triggerVisualMatch(p);
-                                }
-                            },
-                            (errorMessage) => {
-                                // Scan continuous feedback bypass
-                            }
-                        ).then(() => {
-                            statusStatus.innerText = "Multifungsi Aktif! Barcode otomatis terbaca, atau klik 'Pindai Foto AI' untuk deteksi fisik.";
-                        });
-                    })
-                    .catch(err => {
-                        statusStatus.innerText = "Gagal memuat modul kamera.";
-                        alert("Akses perangkat keras ditolak: " + err.message);
-                    });
-                },
-
-                stopScanner() {
-                    if (html5QrcodeScannerInstance) {
-                        html5QrcodeScannerInstance.stop().then(() => {
-                            html5QrcodeScannerInstance = null;
-                        }).catch(e => console.log(e));
-                    }
-                    if (streamVideoGlobal) {
-                        streamVideoGlobal.getTracks().forEach(track => track.stop());
-                        streamVideoGlobal = null;
-                    }
-                    const video = document.getElementById('webcam');
-                    if(video) {
-                        video.srcObject = null;
-                        video.style.display = "none";
-                    }
-                    document.getElementById('ai-status').innerText = "Kamera dinonaktifkan.";
-                },
-
-                ambilFotoDanDeteksiAI() {
-                    if (!modelAiMobileNet || !streamVideoGlobal) {
-                        return alert("Silakan aktifkan kamera kasir terlebih dahulu!");
-                    }
-
-                    const video = document.getElementById('webcam');
-                    const canvas = document.getElementById('capture-canvas');
-                    const context = canvas.getContext('2d');
-                    const statusStatus = document.getElementById('ai-status');
-
-                    statusStatus.innerText = "Mengekstrak bentuk visual objek...";
-
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                    modelAiMobileNet.classify(canvas).then(predictions => {
-                        if (predictions && predictions.length > 0) {
-                            let kataKunciAI = predictions[0].className.toLowerCase();
-                            statusStatus.innerText = `Objek: ${predictions[0].className} (${(predictions[0].probability * 100).toFixed(1)}%)`;
-
-                            let sinonimLokalList = [];
-                            Object.keys(kamusSinonimAI).forEach(key => {
-                                if (kataKunciAI.includes(key) || key.includes(kataKunciAI)) {
-                                    sinonimLokalList = sinonimLokalList.concat(kamusSinonimAI[key]);
-                                }
-                            });
-
-                            let produkCocok = this.products.find(p => {
-                                let namaProd = p.nama.toLowerCase();
-                                let kategoriProd = (p.kategori || '').toLowerCase();
-                                
-                                let cocokLangsung = kataKunciAI.split(', ').some(kw => 
-                                    namaProd.includes(kw) || kw.includes(namaProd) || kategoriProd.includes(kw)
-                                );
-                                if (cocokLangsung) return true;
-
-                                return sinonimLokalList.some(sinonim => 
-                                    namaProd.includes(sinonim) || kategoriProd.includes(sinonim)
-                                );
-                            });
-
-                            if (produkCocok) {
-                                this.bunyikanSuaraBeepKasir('success');
-                                this.triggerVisualMatch(produkCocok);
-                            } else {
-                                let fallbackProd = this.products.find(p => 
-                                    kataKunciAI.split(' ').some(word => word.length > 2 && p.nama.toLowerCase().includes(word))
-                                );
-
-                                if (fallbackProd) {
-                                    this.bunyikanSuaraBeepKasir('success');
-                                    this.triggerVisualMatch(fallbackProd);
-                                } else {
-                                    if (this.products.length > 0) {
-                                        this.bunyikanSuaraBeepKasir('success');
-                                        this.triggerVisualMatch(this.products[0]);
-                                    } else {
-                                        alert(`AI mendeteksi objek "${predictions[0].className}", namun database barang Anda kosong.`);
-                                    }
-                                }
-                            }
-                        } else {
-                            statusStatus.innerText = "Objek tidak terbaca, dekatkan lagi.";
-                        }
-                    }).catch(err => {
-                        statusStatus.innerText = "Gagal memproses gambar visual.";
-                        console.error(err);
-                    });
-                },
-
+                stopScanner() { document.getElementById("reader").innerHTML = ""; },
                 triggerVisualMatch(produk) { this.scannedProduct = produk; this.conversionModalOpen = true; },
                 
                 selectConversionSatuan(satuan, harga, isiKonversi) {
